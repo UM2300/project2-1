@@ -10,6 +10,13 @@ import java.util.ArrayList;
  * 4 = brown standing
  * 5 = brown capstone
  * 
+ * 
+ * Direction keys are as follows:
+ * 0 = up
+ * 1 = right
+ * 2 = down
+ * 3 = left
+ * 
  */
 
 public class board {
@@ -52,6 +59,9 @@ public class board {
             System.out.println("invalid quantity");
     }
 
+    public void check(){
+
+    }
 
 
     public int pop(int x, int y){
@@ -63,10 +73,7 @@ public class board {
         return result;
     }
 
-
-
     public board(){
-
 
     }
 

@@ -56,33 +56,36 @@ public class board {
             }
 
         ArrayList<Integer> target = new ArrayList<Integer>();
-        int xChord=x;
-        int yChord=y;
+        int xChord=x-1;
+        int yChord=y-1;
 
             switch(dir){
                 case 0:
-                    //board[x-1][y].addAll(temp);
                     target = board[x-1][y];
                     xChord--;
+                    break;
                 case 1:
-                    //board[x][y+1].addAll(temp);
                     target = board[x][y+1];
                     yChord++;
+                    break;
                 case 2:
-                    //board[x+1][y].addAll(temp);
                     target = board[x+1][y];
                     xChord++;
+                    break;
                 case 3:
-                    //board[x][y-1].addAll(temp);
                     target = board[x][y-1];
                     yChord--;
+                    break;
             }
 
             if(checkMove(temp, target)){
-                if(target.get(target.size())==1)
-                    board[xChord][yChord].set(target.size(), 0);
-                else if(target.get(target.size())==4)
-                    board[xChord][yChord].set(target.size(), 3);
+                if(!target.isEmpty()){
+                    if(target.get(target.size())==1)
+                        board[xChord][yChord].set(target.size(), 0);
+                    else if(target.get(target.size())==4)
+                        board[xChord][yChord].set(target.size(), 3);
+                }
+                
 
                 board[xChord][yChord].addAll(temp);
             }
@@ -120,25 +123,33 @@ public class board {
 
     public int popFromTop(int x, int y){
 
-        if(!board[x][y].isEmpty())
-            return board[x][y].get(board[x][y].size());
+
+        if(!board[x][y].isEmpty()){
+            int result = board[x][y].get(board[x][y].size()-1);
+
+            board[x][y].remove(board[x][y].size()-1);
+
+            return result;
+        }
         else
             return -1;
     }
 
     public void checkState(){
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
                 ArrayList<Integer> list = board[i][j];
 
                 if (!list.isEmpty()) {
+                    System.out.print("[");
                     for (Integer item : list) {
                         System.out.print(item + " ");
                     }
-                }
-                if (j < 2) System.out.print("\t");
-            }
+                    System.out.print("]");
+                } else System.out.print("[]");
+                //if (j < 2) System.out.print("\t");
+            } 
             System.out.println();
         }
     }

@@ -89,11 +89,17 @@ public class game {
 
     public void move(String command){
         String[] split = command.split("\\s+");
-        String[] comType = {"1","2","3","4","5"};
+        String[] comType = {"up","right","down","left"};
         int two=Integer.parseInt(split[1]);
+        int three=Integer.parseInt(split[1]);
+        int four=Integer.parseInt(split[1]);
+        String five=split[4].toLowerCase();
         boolean check=false;
+
+        int j=0;
         for(int i=0; i<comType.length; i++){
-            if(two==Integer.parseInt(comType[i])){
+            if(five.equals(comType[i])){
+                j=i;
                 check=true;
             }  
         }
@@ -101,7 +107,7 @@ public class game {
             System.out.println("\nInvalid Chord\n");
         }
         else
-            board.move(two, Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]));
+            board.move(two, three, four, j);
     }
 
     public void check(String command){

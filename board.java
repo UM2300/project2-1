@@ -46,9 +46,13 @@ public class board {
     public void move(int x, int y, int quant, int dir){
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
-        if(board[x][y].size()>=quant && quant<5){
+        int big = board[x-1][y-1].size();
+
+        if(board[x-1][y-1].size()>=quant && quant<5){
             while(quant>0){
-                temp.add(popFromTop(x, y),quant-1);
+                //temp.add(popFromTop(x-1, y-1),quant-1);
+                temp.add(quant-1, popFromTop(x-1, y-1));
+                quant--;
             }
 
         ArrayList<Integer> target = new ArrayList<Integer>();
@@ -79,13 +83,16 @@ public class board {
                     board[xChord][yChord].set(target.size(), 0);
                 else if(target.get(target.size())==4)
                     board[xChord][yChord].set(target.size(), 3);
-                    
+
                 board[xChord][yChord].addAll(temp);
             }
 
         }
-        else
+        else{
             System.out.println("invalid quantity");
+        }
+
+        System.out.println("moved");
     }
 
     public boolean checkMove(ArrayList<Integer> pile, ArrayList<Integer> target){
@@ -112,12 +119,28 @@ public class board {
 
 
     public int popFromTop(int x, int y){
-        int result=-1;
-        for(int i=0; i<board[x][y].size(); i++){
-            if(board[x][y].get(i+1)==null)
-                result = board[x][y].get(i);
+
+        if(!board[x][y].isEmpty())
+            return board[x][y].get(board[x][y].size());
+        else
+            return -1;
+    }
+
+    public void checkState(){
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                ArrayList<Integer> list = board[i][j];
+
+                if (!list.isEmpty()) {
+                    for (Integer item : list) {
+                        System.out.print(item + " ");
+                    }
+                }
+                if (j < 2) System.out.print("\t");
+            }
+            System.out.println();
         }
-        return result;
     }
 
     public static void main(String[] args) {

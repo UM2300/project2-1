@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 /*
@@ -22,6 +23,10 @@ import java.util.ArrayList;
 public class board {
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
+    /**
+     * Constructor:
+     * initialises an ArrayList within each cell of a 5x5 grid, creating a board
+     */
     public board(){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
@@ -31,6 +36,13 @@ public class board {
     }
 
 
+    /**
+     * Adds a piece (white or brown) to an empty cell on the board.
+     *
+     * @param num the type of piece described by a number
+     * @param x the x coordinate on the board
+     * @param y the y coordinate on the board
+     */
     public void addPiece(int num,int x, int y){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
@@ -43,6 +55,14 @@ public class board {
 
     }
 
+
+    /**
+     * Moves a specific piece / pieces to a new cell on the board
+     * @param x new x coordinate
+     * @param y new y coordinate
+     * @param quant the quantity of pieces to move
+     * @param dir the direction the piece is moving (up, down, left, right)
+     */
     public void move(int x, int y, int quant, int dir){
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -98,6 +118,11 @@ public class board {
         System.out.println("moved");
     }
 
+    /**
+     * Checks if a move is valid
+     * @param pile the pile of pieces to move
+     * @param target the target cell
+     */
     public boolean checkMove(ArrayList<Integer> pile, ArrayList<Integer> target){
 
         if(target.isEmpty()){
@@ -121,6 +146,11 @@ public class board {
     }
 
 
+    /**
+     * Removes and returns the top piece from a pile of a specified cell 
+     * @param x the x coordinate on the board
+     * @param y the y coordinate on the board
+     */
     public int popFromTop(int x, int y){
 
 
@@ -135,6 +165,9 @@ public class board {
             return -1;
     }
 
+    /**
+     * Prints out the current state of the board, including where and how pieces are placed
+     */
     public void checkState(){
 
         for (int i = 0; i < board.length; i++) {

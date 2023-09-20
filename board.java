@@ -22,12 +22,15 @@ import java.util.ArrayList;
 public class board {
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
+    //public ArrayList<Integer> height = new ArrayList<Integer>(null);
+
 
     public void addPiece(int num,int x, int y){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
-                if(x==i && y==j){
+                if(x-1==i && y-1==j){
                     board[i][j].add(num);
+                    System.out.println("done");
                 }
             }
         }
@@ -42,16 +45,31 @@ public class board {
                 temp.add(popFromTop(x, y),quant-1);
             }
 
+        ArrayList<Integer> target = new ArrayList<Integer>();
+        int xChord=x;
+        int yChord=y;
 
             switch(dir){
                 case 0:
-                    board[x-1][y].addAll(temp);
+                    //board[x-1][y].addAll(temp);
+                    target = board[x-1][y];
+                    xChord--;
                 case 1:
-                    board[x][y+1].addAll(temp);
+                    //board[x][y+1].addAll(temp);
+                    target = board[x][y+1];
+                    yChord++;
                 case 2:
-                    board[x+1][y].addAll(temp);
+                    //board[x+1][y].addAll(temp);
+                    target = board[x+1][y];
+                    xChord++;
                 case 3:
-                    board[x][y-1].addAll(temp);
+                    //board[x][y-1].addAll(temp);
+                    target = board[x][y-1];
+                    yChord--;
+            }
+
+            if(checkMove(temp, target)){
+                board[xChord][yChord].addAll(temp);
             }
 
         }
@@ -59,8 +77,26 @@ public class board {
             System.out.println("invalid quantity");
     }
 
-    public void check(){
+    public boolean checkMove(ArrayList<Integer> pile, ArrayList<Integer> target){
 
+        if(target.isEmpty()){
+            return true;
+        }
+        else{
+            int top = target.get(target.size()-1);
+
+            if(top==0||top==3)
+                return true;
+            else if(top==2||top==5)
+                return false;
+            else{
+                if(pile.get(0)==2||pile.get(0)==5)
+                    return true;
+                else
+                    return false;
+            }            
+
+        }
     }
 
 
@@ -74,7 +110,11 @@ public class board {
     }
 
     public board(){
-
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board.length; j++){
+                board[i][j] = new ArrayList<Integer>();
+            }
+        }
     }
 
     public static void main(String[] args) {

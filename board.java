@@ -22,7 +22,13 @@ import java.util.ArrayList;
 public class board {
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
-    //public ArrayList<Integer> height = new ArrayList<Integer>(null);
+    public board(){
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board.length; j++){
+                board[i][j] = new ArrayList<Integer>();
+            }
+        }
+    }
 
 
     public void addPiece(int num,int x, int y){
@@ -69,6 +75,11 @@ public class board {
             }
 
             if(checkMove(temp, target)){
+                if(target.get(target.size())==1)
+                    board[xChord][yChord].set(target.size(), 0);
+                else if(target.get(target.size())==4)
+                    board[xChord][yChord].set(target.size(), 3);
+                    
                 board[xChord][yChord].addAll(temp);
             }
 
@@ -107,14 +118,6 @@ public class board {
                 result = board[x][y].get(i);
         }
         return result;
-    }
-
-    public board(){
-        for(int i=0; i<board.length; i++){
-            for(int j=0; j<board.length; j++){
-                board[i][j] = new ArrayList<Integer>();
-            }
-        }
     }
 
     public static void main(String[] args) {

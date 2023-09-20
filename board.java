@@ -39,7 +39,7 @@ public class board {
 
         if(board[x][y].size()>=quant && quant<5){
             while(quant>0){
-                temp.add(pop(x, y),quant-1);
+                temp.add(popFromTop(x, y),quant-1);
             }
 
 
@@ -64,7 +64,7 @@ public class board {
     }
 
 
-    public int pop(int x, int y){
+    public int popFromTop(int x, int y){
         int result=-1;
         for(int i=0; i<board[x][y].size(); i++){
             if(board[x][y].get(i+1)==null)

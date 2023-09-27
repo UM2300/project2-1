@@ -96,6 +96,7 @@ public class game {
         int three=Integer.parseInt(split[2]);
         int four=Integer.parseInt(split[3]);
         String five=split[4].toLowerCase();
+        int six=Integer.parseInt(split[5]);
         boolean check=false;
 
         int j=0;
@@ -109,7 +110,7 @@ public class game {
             System.out.println("\nInvalid Chord\n");
         }
         else
-            board.move(two, three, four, j);
+            board.move(two, three, four, j, six);
     }
 
     public void check(String command){

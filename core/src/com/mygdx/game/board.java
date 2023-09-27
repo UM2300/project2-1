@@ -1,6 +1,10 @@
 package com.mygdx.game;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import com.badlogic.gdx.utils.Array;
 
 /*
  * Piece keys are as follows:
@@ -45,18 +49,16 @@ public class board {
 
     }
 
-    public void move(int x, int y, int quant, int dir){
+    public void move(int x, int y, int quant, int dir, int dropNum){
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
         x--;
         y--;
 
-        int big = board[x][y].size();
 
         if(board[x][y].size()>=quant && quant<5){
             while(quant>0){
-                //temp.add(popFromTop(x-1, y-1),quant-1);
-                temp.add(quant-1, popFromTop(x, y));
+                temp.add(0, popFromTop(x, y));
                 quant--;
             }
 
@@ -66,8 +68,6 @@ public class board {
 
             switch(dir){
                 case 0:
-                System.out.println(xChord);
-                System.out.println(yChord);
                     target = board[x-1][y];
                     xChord--;
                     break;
@@ -87,23 +87,135 @@ public class board {
 
             if(checkMove(temp, target)){
                 if(!target.isEmpty()){
-                    if(target.get(target.size())==1)
-                        board[xChord][yChord].set(target.size(), 0);
-                    else if(target.get(target.size())==4)
-                        board[xChord][yChord].set(target.size(), 3);
+                    if(target.get(target.size()-1)==1)
+                        board[xChord][yChord].set(target.size()-1, 0);
+                    else if(target.get(target.size()-1)==4)
+                        board[xChord][yChord].set(target.size()-1, 3);
                 }
                 
 
-                board[xChord][yChord].addAll(temp);
+                ArrayList<Integer> drop = dropOff(temp, dropNum);
+
+
+                board[xChord][yChord].addAll(drop);
+                System.out.println("moved");
+
+                if(temp.size()>0){
+                    continueMove(xChord, yChord, temp, dir, 0);
+                }
+                
             }
+            else{
+                System.out.println("Invalid move");
+                board[x][y].addAll(temp);
+            }
+
 
         }
         else{
             System.out.println("invalid quantity");
         }
 
-        System.out.println("moved");
     }
+
+    public void continueMove(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
+        System.out.println("continue move");
+        
+        
+         
+        Scanner in = new Scanner(System.in);
+        System.out.println("please give drop number");
+        System.out.print(">");
+        
+        /*
+        String input = in.nextLine();
+
+        String[] split = input.split("\\s+");
+        String[] comType = {"up","right","down","left"};
+
+        String one = split[0];
+        
+        for(int i=0; i<comType.length; i++){
+            if(one.equals(comType[i])){
+                dir=i;
+            }  
+        }*/
+
+        dropNum = Integer.parseInt(in.nextLine());
+
+
+        ArrayList<Integer> target = new ArrayList<Integer>();
+        int xChord=x;
+        int yChord=y;
+
+            switch(dir){
+                case 0:
+                    target = board[x-1][y];
+                    xChord--;
+                    break;
+                case 1:
+                    target = board[x][y+1];
+                    yChord++;
+                    break;
+                case 2:
+                    target = board[x+1][y];
+                    xChord++;
+                    break;
+                case 3:
+                    target = board[x][y-1];
+                    yChord--;
+                    break;
+            }
+
+            if(checkMove(temp, target)){
+                if(!target.isEmpty()){
+                    if(target.get(target.size()-1)==1)
+                        board[xChord][yChord].set(target.size()-1, 0);
+                    else if(target.get(target.size()-1)==4)
+                        board[xChord][yChord].set(target.size()-1, 3);
+                }
+                
+
+                ArrayList<Integer> drop = dropOff(temp, dropNum);
+
+
+                board[xChord][yChord].addAll(drop);
+                System.out.println("moved");
+
+                if(temp.size()>0){
+                    continueMove(xChord, yChord, temp, 0, 0);
+                }
+                
+            }
+            else{
+                System.out.println("Invalid move");
+                board[x][y].addAll(temp);
+            }
+
+
+    }
+
+
+    public ArrayList<Integer> dropOff(ArrayList<Integer> temp, int quant){
+
+        
+
+        if(quant>temp.size()){
+            System.out.println("invalid quantity");
+            return null;
+        }
+        else{
+            ArrayList<Integer> drop = new ArrayList<Integer>();
+            for(int i=0; i<quant; i++){
+                drop.add(temp.get(0));
+                temp.remove(0);
+            }
+            return drop;
+        }
+
+
+    }
+    
 
     public boolean checkMove(ArrayList<Integer> pile, ArrayList<Integer> target){
 

@@ -43,7 +43,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		startTexture = new Texture(Gdx.files.internal("startnew.png"));
+		startTexture = new Texture(Gdx.files.internal("startlast.png"));
 
 		batch = new SpriteBatch();
 

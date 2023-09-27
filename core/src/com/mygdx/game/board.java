@@ -1,3 +1,5 @@
+package com.mygdx.game;
+
 import java.util.ArrayList;
 
 /*
@@ -46,21 +48,26 @@ public class board {
     public void move(int x, int y, int quant, int dir){
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
-        int big = board[x-1][y-1].size();
+        x--;
+        y--;
 
-        if(board[x-1][y-1].size()>=quant && quant<5){
+        int big = board[x][y].size();
+
+        if(board[x][y].size()>=quant && quant<5){
             while(quant>0){
                 //temp.add(popFromTop(x-1, y-1),quant-1);
-                temp.add(quant-1, popFromTop(x-1, y-1));
+                temp.add(quant-1, popFromTop(x, y));
                 quant--;
             }
 
         ArrayList<Integer> target = new ArrayList<Integer>();
-        int xChord=x-1;
-        int yChord=y-1;
+        int xChord=x;
+        int yChord=y;
 
             switch(dir){
                 case 0:
+                System.out.println(xChord);
+                System.out.println(yChord);
                     target = board[x-1][y];
                     xChord--;
                     break;

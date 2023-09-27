@@ -1,3 +1,5 @@
+package com.mygdx.game;
+
 import java.util.Scanner;
 
 public class game {
@@ -91,8 +93,8 @@ public class game {
         String[] split = command.split("\\s+");
         String[] comType = {"up","right","down","left"};
         int two=Integer.parseInt(split[1]);
-        int three=Integer.parseInt(split[1]);
-        int four=Integer.parseInt(split[1]);
+        int three=Integer.parseInt(split[2]);
+        int four=Integer.parseInt(split[3]);
         String five=split[4].toLowerCase();
         boolean check=false;
 

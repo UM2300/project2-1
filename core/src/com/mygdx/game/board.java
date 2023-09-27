@@ -56,7 +56,7 @@ public class board {
         y--;
 
 
-        if(board[x][y].size()>=quant && quant<5){
+        if(board[x][y].size()>=quant && quant<=5){
             while(quant>0){
                 temp.add(0, popFromTop(x, y));
                 quant--;
@@ -68,24 +68,26 @@ public class board {
 
             switch(dir){
                 case 0:
-                    target = board[x-1][y];
+                    //target = board[x-1][y];
                     xChord--;
                     break;
                 case 1:
-                    target = board[x][y+1];
+                    //target = board[x][y+1];
                     yChord++;
                     break;
                 case 2:
-                    target = board[x+1][y];
+                    //target = board[x+1][y];
                     xChord++;
                     break;
                 case 3:
-                    target = board[x][y-1];
+                    //target = board[x][y-1];
                     yChord--;
                     break;
             }
 
-            if(checkMove(temp, target)){
+            if(checkSpace(xChord, yChord)){
+
+                if(checkMove(temp, target)){
                 if(!target.isEmpty()){
                     if(target.get(target.size()-1)==1)
                         board[xChord][yChord].set(target.size()-1, 0);
@@ -104,17 +106,25 @@ public class board {
                     continueMove(xChord, yChord, temp, dir, 0);
                 }
                 
+                }
+                else{
+                    System.out.println("Invalid move");
+                    board[x][y].addAll(temp);
+                }
+
+
             }
             else{
-                System.out.println("Invalid move");
+                System.out.println("Invalid space");
                 board[x][y].addAll(temp);
             }
 
+        }
+        else
+            System.out.println("Invalid quantity");
 
-        }
-        else{
-            System.out.println("invalid quantity");
-        }
+
+            
 
     }
 
@@ -150,24 +160,24 @@ public class board {
 
             switch(dir){
                 case 0:
-                    target = board[x-1][y];
                     xChord--;
                     break;
                 case 1:
-                    target = board[x][y+1];
                     yChord++;
                     break;
                 case 2:
-                    target = board[x+1][y];
                     xChord++;
                     break;
                 case 3:
-                    target = board[x][y-1];
                     yChord--;
                     break;
             }
 
-            if(checkMove(temp, target)){
+            if(checkSpace(xChord, yChord)){
+
+                target = board[xChord][yChord];
+
+                if(checkMove(temp, target)){
                 if(!target.isEmpty()){
                     if(target.get(target.size()-1)==1)
                         board[xChord][yChord].set(target.size()-1, 0);
@@ -183,14 +193,23 @@ public class board {
                 System.out.println("moved");
 
                 if(temp.size()>0){
-                    continueMove(xChord, yChord, temp, 0, 0);
+                    continueMove(xChord, yChord, temp, dir, 0);
+                }
+                
+                }
+                else{
+                    System.out.println("Invalid move");
+                    board[x][y].addAll(temp);
                 }
                 
             }
-            else{
-                System.out.println("Invalid move");
+            else
+                System.out.println("Invalid space");
                 board[x][y].addAll(temp);
-            }
+                
+            
+
+            
 
 
     }
@@ -214,6 +233,14 @@ public class board {
         }
 
 
+    }
+
+    public boolean checkSpace(int x, int y){
+
+        if(x<0||y<0||x>4||y>4)
+            return false;
+        else
+            return true;
     }
     
 

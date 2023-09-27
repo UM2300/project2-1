@@ -184,25 +184,19 @@ public class board {
                         else if(target.get(target.size()-1)==4)
                             board[xChord][yChord].set(target.size()-1, 3);
                     }
-                    
 
                     ArrayList<Integer> drop = dropOff(temp, dropNum);
-
-
                     board[xChord][yChord].addAll(drop);
                     System.out.println("moved");
 
                     if(temp.size()>0){
-                        continueMove(xChord, yChord, temp, dir, 0);
-                        
+                        continueMove(xChord, yChord, temp, dir, 0);   
                     }
-                
                 }
                 else{
                     System.out.println("Invalid move");
                     board[x][y].addAll(temp);
                 }
-                
             }
             else{
                 System.out.println("Invalid space");

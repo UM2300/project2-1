@@ -1,0 +1,7 @@
+Add command: "add" followed by piece number, then both x and y coordinates
+
+Move command: "move" followed by x and y coordinates, number of pieces to move, direction, number of pieces to drop first
+
+            followups to the move command only require to specify how many more pieces to leave at each space
+
+Check command: "check"

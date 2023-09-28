@@ -18,6 +18,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class TakGameGUI extends ApplicationAdapter {
+	boolean isHoveringOverStart = false;
+
+	Texture startColoredTexture;
 	private OrthographicCamera guiCam;
 	private int boardSize = 5; 
 	private float squareSize = 1.5f;
@@ -43,7 +46,8 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		startTexture = new Texture(Gdx.files.internal("startnew.png"));
+		startColoredTexture = new Texture(Gdx.files.internal("startcolored.png"));
+		startTexture = new Texture(Gdx.files.internal("startuncolored.png"));
 
 		batch = new SpriteBatch();
 
@@ -67,7 +71,7 @@ public class TakGameGUI extends ApplicationAdapter {
 		modelBatch = new ModelBatch();
 		ModelBuilder modelBuilder = new ModelBuilder();
 
-		// Chessboard creation
+
 		modelBuilder.begin();
 		Material whiteMat = new Material(ColorAttribute.createDiffuse(Color.WHITE));
 		Material blackMat = new Material(ColorAttribute.createDiffuse(Color.BLACK));
@@ -98,16 +102,16 @@ public class TakGameGUI extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.35f, 0.2f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+		Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guiCam.unproject(touchPos, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+
+		float imgWidth = startTexture.getWidth() * imageScale;
+		float imgHeight = startTexture.getHeight() * imageScale;
+		float imgX = (VIRTUAL_WIDTH - imgWidth) / 2;
+		float imgY = (VIRTUAL_HEIGHT - imgHeight) / 2;
+
+
 		if (Gdx.input.justTouched()) {
-			Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-			guiCam.unproject(touchPos, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
-
-			float imgWidth = startTexture.getWidth() * imageScale;
-			float imgHeight = startTexture.getHeight() * imageScale;
-			float imgX = (VIRTUAL_WIDTH - imgWidth) / 2;
-			float imgY = (VIRTUAL_HEIGHT - imgHeight) / 2;
-
-			
 			if (touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
 					touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) {
 				displayTitle = false;
@@ -115,29 +119,31 @@ public class TakGameGUI extends ApplicationAdapter {
 		}
 
 
+		if (touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
+				touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) {
+			isHoveringOverStart = true;
+		} else {
+			isHoveringOverStart = false;
+		}
 
-		
+
 		modelBatch.begin(cam);
 		modelBatch.render(boardInstance, environment);
 		modelBatch.end();
 
-		
+
 		batch.setProjectionMatrix(guiCam.combined);
 		batch.begin();
 
 		if (displayTitle) {
-			float imgWidth = startTexture.getWidth() * imageScale;
-			float imgHeight = startTexture.getHeight() * imageScale;
-			float imgX = (VIRTUAL_WIDTH - imgWidth) / 2;
-			float imgY = (VIRTUAL_HEIGHT - imgHeight) / 2;
 
-			batch.draw(startTexture, imgX, imgY, imgWidth, imgHeight);
+			Texture currentTexture = isHoveringOverStart ? startColoredTexture : startTexture;
+			batch.draw(currentTexture, imgX, imgY, imgWidth, imgHeight);
 		}
-
-
 
 		batch.end();
 	}
+
 
 
 	@Override
@@ -149,5 +155,6 @@ public class TakGameGUI extends ApplicationAdapter {
 
 		modelBatch.dispose();
 		boardModel.dispose();
+		startColoredTexture.dispose();
 	}
 }

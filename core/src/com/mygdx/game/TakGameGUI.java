@@ -18,7 +18,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class TakGameGUI extends ApplicationAdapter {
+	boolean displayOptions = true;
+	boolean isHoveringOverOptions = false;
 	boolean isHoveringOverStart = false;
+	Texture optionsUncoloredTexture;
+	Texture optionsColoredTexture;
 
 	Texture startColoredTexture;
 	private OrthographicCamera guiCam;
@@ -46,6 +50,9 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		optionsUncoloredTexture = new Texture(Gdx.files.internal("optionsuncolored.png"));
+		optionsColoredTexture = new Texture(Gdx.files.internal("optionscolored.png"));
+
 		startColoredTexture = new Texture(Gdx.files.internal("startcolored.png"));
 		startTexture = new Texture(Gdx.files.internal("startuncolored.png"));
 
@@ -110,15 +117,22 @@ public class TakGameGUI extends ApplicationAdapter {
 		float imgX = (VIRTUAL_WIDTH - imgWidth) / 2;
 		float imgY = (VIRTUAL_HEIGHT - imgHeight) / 2;
 
+		float optionsImgWidth = optionsUncoloredTexture.getWidth() * imageScale;
+		float optionsImgHeight = optionsUncoloredTexture.getHeight() * imageScale;
+		float optionsImgX = (VIRTUAL_WIDTH - optionsImgWidth) / 2;
+		float optionsImgY = imgY - optionsImgHeight - 10;  // 10 units padding
 
+		// Check for touch
 		if (Gdx.input.justTouched()) {
-			if (touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
-					touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) {
+			if ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
+					touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) ||
+					(touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
+							touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight)) {
 				displayTitle = false;
 			}
 		}
 
-
+		// Check if mouse is hovering over the start button
 		if (touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
 				touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) {
 			isHoveringOverStart = true;
@@ -126,23 +140,33 @@ public class TakGameGUI extends ApplicationAdapter {
 			isHoveringOverStart = false;
 		}
 
+		// Check if mouse is hovering over the options button
+		if (touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
+				touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight) {
+			isHoveringOverOptions = true;
+		} else {
+			isHoveringOverOptions = false;
+		}
 
 		modelBatch.begin(cam);
 		modelBatch.render(boardInstance, environment);
 		modelBatch.end();
 
-
 		batch.setProjectionMatrix(guiCam.combined);
 		batch.begin();
 
 		if (displayTitle) {
+			Texture currentStartTexture = isHoveringOverStart ? startColoredTexture : startTexture;
+			batch.draw(currentStartTexture, imgX, imgY, imgWidth, imgHeight);
 
-			Texture currentTexture = isHoveringOverStart ? startColoredTexture : startTexture;
-			batch.draw(currentTexture, imgX, imgY, imgWidth, imgHeight);
+			Texture currentOptionsTexture = isHoveringOverOptions ? optionsColoredTexture : optionsUncoloredTexture;
+			batch.draw(currentOptionsTexture, optionsImgX, optionsImgY, optionsImgWidth, optionsImgHeight);
 		}
 
 		batch.end();
 	}
+
+
 
 
 
@@ -156,5 +180,7 @@ public class TakGameGUI extends ApplicationAdapter {
 		modelBatch.dispose();
 		boardModel.dispose();
 		startColoredTexture.dispose();
+		optionsUncoloredTexture.dispose();
+		optionsColoredTexture.dispose();
 	}
 }

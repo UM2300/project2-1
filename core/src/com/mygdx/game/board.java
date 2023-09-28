@@ -291,6 +291,39 @@ public class board {
         }
     }
 
+    public boolean checkIfFull(ArrayList<Integer>[][] board) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void winBoardFull() {
+
+        int wCounter = 0;
+        int bCounter = 0;
+
+        if (checkIfFull(board)) {
+            for (int i = 0; i < board.length; i++) {
+                for (int j = 0; j < board[i].length; j++) {
+
+                    ArrayList<Integer> arrayList = board[i][j];
+                    int lastElement = arrayList.get(arrayList.size() - 1);
+
+                    if (lastElement == 0 || lastElement == 1 || lastElement == 2) wCounter += 1;
+                    else bCounter += 1;
+                }
+            }
+            if (wCounter > bCounter) System.out.println("White Wins.");
+            else if (wCounter < bCounter) System.out.println("Brown Wins.");
+            else System.out.println("It's a Draw.");
+        }
+    }
+
     public static void main(String[] args) {
         board board = new board();
         board.addPiece(0, 1, 1);

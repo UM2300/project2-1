@@ -36,7 +36,7 @@ public class game {
 
     public boolean comCheck(String command){
         String[] split = command.split("\\s+");
-        String[] comType = {"add","move","check"};
+        String[] comType = {"add","move","check","full"};
         boolean stat=false;
         String one=split[0].toLowerCase();
         for(int i=0; i<comType.length; i++){
@@ -48,7 +48,7 @@ public class game {
 
     public void comStart(String command){
         String[] split = command.split("\\s+");
-        String[] comType = {"add","move","check"};
+        String[] comType = {"add","move","check","full"};
         String one=split[0].toLowerCase();
         int num=0;
         for(int i=0; i<comType.length; i++){
@@ -65,7 +65,10 @@ public class game {
                 move(command);
                 break;
             case 2:
-                check(command);
+                check();
+                break;
+            case 3:
+                full();
                 break;
         }
     }
@@ -113,8 +116,12 @@ public class game {
             board.move(two, three, four, j, six);
     }
 
-    public void check(String command){
+    public void check(){
         board.checkState();
     }
     
+    public void full(){
+        board.winBoardFull();
+    }
+
 }

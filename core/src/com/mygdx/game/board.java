@@ -1,10 +1,7 @@
 package com.mygdx.game;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import com.badlogic.gdx.utils.Array;
 
 /*
  * Piece keys are as follows:
@@ -68,19 +65,15 @@ public class board {
 
             switch(dir){
                 case 0:
-                    //target = board[x-1][y];
                     xChord--;
                     break;
                 case 1:
-                    //target = board[x][y+1];
                     yChord++;
                     break;
                 case 2:
-                    //target = board[x+1][y];
                     xChord++;
                     break;
                 case 3:
-                    //target = board[x][y-1];
                     yChord--;
                     break;
             }
@@ -285,7 +278,6 @@ public class board {
                     }
                     System.out.print("]");
                 } else System.out.print("[]");
-                //if (j < 2) System.out.print("\t");
             } 
             System.out.println();
         }
@@ -314,13 +306,18 @@ public class board {
                     ArrayList<Integer> arrayList = board[i][j];
                     int lastElement = arrayList.get(arrayList.size() - 1);
 
-                    if (lastElement == 0 || lastElement == 1 || lastElement == 2) wCounter += 1;
-                    else bCounter += 1;
+                    if (lastElement == 0 || lastElement == 2) 
+                        wCounter += 1;
+                    else if (lastElement == 3 || lastElement == 5) 
+                        bCounter += 1;
                 }
             }
-            if (wCounter > bCounter) System.out.println("White Wins.");
-            else if (wCounter < bCounter) System.out.println("Brown Wins.");
-            else System.out.println("It's a Draw.");
+            if (wCounter > bCounter) 
+                System.out.println("White Wins.");
+            else if (wCounter < bCounter) 
+                System.out.println("Brown Wins.");
+            else 
+                System.out.println("It's a Draw.");
         }
     }
 

@@ -17,7 +17,12 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TakGameGUI extends ApplicationAdapter {
+	private List<TakPiece> pieces;
+	private ArrayList<TakPiece> pieces1;
 	boolean displayOptions = true;
 	boolean isHoveringOverOptions = false;
 	boolean isHoveringOverStart = false;
@@ -50,52 +55,78 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		pieces = new ArrayList<>();
+
+		ModelBuilder modelBuilder = new ModelBuilder();
+
+		Model stoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
+				new Material(ColorAttribute.createDiffuse(Color.GRAY)),
+				Usage.Position | Usage.Normal);
+		for (int i = 0; i < 21; i++) {
+			pieces.add(new TakPiece(TakPiece.Type.STONE, stoneModel));
+		}
+
+		Model capstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
+				new Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
+				Usage.Position | Usage.Normal);
+		pieces.add(new TakPiece(TakPiece.Type.CAPSTONE, capstoneModel));
+
+		float startingX = boardSize * squareSize + 1;  // Starting position of the first stone on the X-axis.
+		float startingZ = 0;  // Starting position of the first stone on the Z-axis.
+		float rowOffset = 1.2f;  // Distance between two pieces in the same row.
+		float nextRowZ = 1.5f;  // Distance to the next row on the Z-axis.
+
+		int piecesPerRow = 12;  // Number of pieces in each row.
+
+		// Position stones
+		for (int i = 0; i < 21; i++) {
+			int x = i % piecesPerRow;  // Calculate X position based on the number of pieces per row.
+			int y = i / piecesPerRow;  // Calculate which row the piece is in.
+
+			pieces.get(i).instance.transform.setToTranslation(startingX + x * rowOffset, 0.1f, startingZ + y * nextRowZ);
+		}
+
+		// Position capstone
+		pieces.get(21).instance.transform.setToTranslation(startingX, 0.25f, startingZ + 2 * nextRowZ);  // Placing the capstone below the stones.
+
 		optionsUncoloredTexture = new Texture(Gdx.files.internal("optionsuncolored.png"));
 		optionsColoredTexture = new Texture(Gdx.files.internal("optionscolored.png"));
-
 		startColoredTexture = new Texture(Gdx.files.internal("startcolored.png"));
 		startTexture = new Texture(Gdx.files.internal("startuncolored.png"));
 
 		batch = new SpriteBatch();
-
 		guiCam = new OrthographicCamera();
 		viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, guiCam);
-
 		img = new Texture("badlogic.jpg");
 		font = new BitmapFont();
 
-		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(7f, 12f, 7f);  
-		cam.lookAt(boardSize * squareSize / 2, 0, boardSize * squareSize / 2);  // Adjusted lookAt to center of the board
+		cam.position.set(15f, 20f, 15f);
+		cam.lookAt(boardSize * squareSize / 2, 0, boardSize * squareSize / 2);
 		cam.near = 1f;
-		cam.far = 300f;
+		cam.far = 500f;
 		cam.update();
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-
 		modelBatch = new ModelBatch();
-		ModelBuilder modelBuilder = new ModelBuilder();
 
-
+		// Board creation
 		modelBuilder.begin();
 		Material whiteMat = new Material(ColorAttribute.createDiffuse(Color.WHITE));
 		Material blackMat = new Material(ColorAttribute.createDiffuse(Color.BLACK));
-
-		float squareSize = 1.5f;  
-		int boardSize = 5;       
 
 		for (int x = 0; x < boardSize; x++) {
 			for (int z = 0; z < boardSize; z++) {
 				Material mat = (x + z) % 2 == 0 ? whiteMat : blackMat;
 				modelBuilder.part("square_" + x + "_" + z, GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, mat)
-						.box(squareSize * x, 0, squareSize * z, squareSize, 0.15f, squareSize);  // Made the height a bit taller for visual appeal
+						.box(squareSize * x, 0, squareSize * z, squareSize, 0.15f, squareSize);
 			}
 		}
 		boardModel = modelBuilder.end();
 		boardInstance = new ModelInstance(boardModel);
 	}
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -106,6 +137,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		// Clear the background first
 		Gdx.gl.glClearColor(0.35f, 0.2f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -148,10 +180,15 @@ public class TakGameGUI extends ApplicationAdapter {
 			isHoveringOverOptions = false;
 		}
 
+		// Render 3D objects
 		modelBatch.begin(cam);
 		modelBatch.render(boardInstance, environment);
+		for (TakPiece piece : pieces) {
+			modelBatch.render(piece.instance, environment);
+		}
 		modelBatch.end();
 
+		// Render 2D objects
 		batch.setProjectionMatrix(guiCam.combined);
 		batch.begin();
 
@@ -165,6 +202,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
 		batch.end();
 	}
+
 
 
 

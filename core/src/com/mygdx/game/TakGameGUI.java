@@ -71,16 +71,16 @@ public class TakGameGUI extends ApplicationAdapter {
 				Usage.Position | Usage.Normal);
 		pieces.add(new TakPiece(TakPiece.Type.CAPSTONE, capstoneModel));
 
-		float startingX = boardSize * squareSize + 1;  // Starting position of the first stone on the X-axis.
-		float startingZ = 0;  // Starting position of the first stone on the Z-axis.
-		float rowOffset = 1.2f;  // Distance between two pieces in the same row.
-		float nextRowZ = 1.5f;  // Distance to the next row on the Z-axis.
+		float startingX = boardSize * squareSize + 1;
+		float startingZ = 0;
+		float rowOffset = 1.2f;
+		float nextRowZ = 1.5f;
 
 		int piecesPerRow = 12;  // Number of pieces in each row.
 
 		// Position stones
 		for (int i = 0; i < 21; i++) {
-			int x = i % piecesPerRow;  // Calculate X position based on the number of pieces per row.
+			int x = i % piecesPerRow;
 			int y = i / piecesPerRow;  // Calculate which row the piece is in.
 
 			pieces.get(i).instance.transform.setToTranslation(startingX + x * rowOffset, 0.1f, startingZ + y * nextRowZ);
@@ -110,6 +110,22 @@ public class TakGameGUI extends ApplicationAdapter {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		modelBatch = new ModelBatch();
+		float startingXLeft = -2;
+
+// Position stones for the left side
+		for (int i = 0; i < 21; i++) {
+			int x = i % piecesPerRow;
+			int y = i / piecesPerRow;
+
+			TakPiece piece = new TakPiece(TakPiece.Type.STONE, stoneModel);
+			piece.instance.transform.setToTranslation(startingXLeft - x * rowOffset, 0.1f, startingZ + y * nextRowZ);
+			pieces.add(piece);
+		}
+
+
+		TakPiece capstoneLeft = new TakPiece(TakPiece.Type.CAPSTONE, capstoneModel);
+		capstoneLeft.instance.transform.setToTranslation(startingXLeft, 0.25f, startingZ + 2 * nextRowZ);
+		pieces.add(capstoneLeft);
 
 		// Board creation
 		modelBuilder.begin();
@@ -137,7 +153,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		// Clear the background first
+
 		Gdx.gl.glClearColor(0.35f, 0.2f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -154,7 +170,7 @@ public class TakGameGUI extends ApplicationAdapter {
 		float optionsImgX = (VIRTUAL_WIDTH - optionsImgWidth) / 2;
 		float optionsImgY = imgY - optionsImgHeight - 10;  // 10 units padding
 
-		// Check for touch
+
 		if (Gdx.input.justTouched()) {
 			if ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
 					touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) ||
@@ -180,7 +196,7 @@ public class TakGameGUI extends ApplicationAdapter {
 			isHoveringOverOptions = false;
 		}
 
-		// Render 3D objects
+
 		modelBatch.begin(cam);
 		modelBatch.render(boardInstance, environment);
 		for (TakPiece piece : pieces) {
@@ -188,7 +204,7 @@ public class TakGameGUI extends ApplicationAdapter {
 		}
 		modelBatch.end();
 
-		// Render 2D objects
+
 		batch.setProjectionMatrix(guiCam.combined);
 		batch.begin();
 

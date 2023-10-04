@@ -33,6 +33,14 @@ public class board {
         return isGameEnded;
     }
 
+    public void setTurn(int turn){
+        this.turn = turn;
+    }
+
+    public int getTurn(){
+        return turn;
+    }
+
     public board(){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
@@ -47,12 +55,13 @@ public class board {
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
 
-                    if(turn==0&&(num==3||num==4||num==5))
+                    if(getTurn()%2==0&&(num==3||num==4||num==5))
                         System.out.println("Not browns turn");
-                    else if(turn==1&&(num==0||num==1||num==2))
+                    else if(getTurn()%2==1&&(num==0||num==1||num==2))
                         System.out.println("Not whites turn");
                     else{
                         board[i][j].add(num);
+                        setTurn(getTurn()+1);
                         System.out.println("done");
                     }
                 }

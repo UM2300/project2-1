@@ -25,6 +25,8 @@ import java.util.Scanner;
 public class board {
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
+    private int turn = 0;
+
     private boolean isGameEnded = false;
 
     public boolean isGameEnded() {
@@ -44,8 +46,15 @@ public class board {
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
-                    board[i][j].add(num);
-                    System.out.println("done");
+
+                    if(turn==0&&(num==3||num==4||num==5))
+                        System.out.println("Not browns turn");
+                    else if(turn==1&&(num==0||num==1||num==2))
+                        System.out.println("Not whites turn");
+                    else{
+                        board[i][j].add(num);
+                        System.out.println("done");
+                    }
                 }
             }
         }

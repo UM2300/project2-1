@@ -83,93 +83,75 @@ public class board {
                 quant--;
             }
 
-        ArrayList<Integer> target = new ArrayList<Integer>();
-        int xChord=x;
-        int yChord=y;
-
-            switch(dir){
-                case 0:
-                    xChord--;
-                    break;
-                case 1:
-                    yChord++;
-                    break;
-                case 2:
-                    xChord++;
-                    break;
-                case 3:
-                    yChord--;
-                    break;
+            if(getTurn()%2==0 && (temp.get(temp.size()-1)==3||temp.get(temp.size()-1)==4||temp.get(temp.size()-1)==5)){
+                System.out.println("Not browns turn");
             }
-
-            if(checkSpace(xChord, yChord)){
-
-                if(checkMove(temp, target)){
-                if(!target.isEmpty()){
-                    if(target.get(target.size()-1)==1)
-                        board[xChord][yChord].set(target.size()-1, 0);
-                    else if(target.get(target.size()-1)==4)
-                        board[xChord][yChord].set(target.size()-1, 3);
-                }
-                
-
-                ArrayList<Integer> drop = dropOff(temp, dropNum);
-
-
-                board[xChord][yChord].addAll(drop);
-                System.out.println("moved");
-
-                if(temp.size()>0){
-                    continueMove(xChord, yChord, temp, dir, 0);
-                }
-                
-                }
-                else{
-                    System.out.println("Invalid move");
-                    board[x][y].addAll(temp);
-                }
-
-
+            else if(getTurn()%2==1 && (temp.get(temp.size()-1)==0||temp.get(temp.size()-1)==1||temp.get(temp.size()-1)==2)){
+                System.out.println("Not whites turn");
             }
             else{
-                System.out.println("Invalid space");
-                board[x][y].addAll(temp);
-            }
+                ArrayList<Integer> target = new ArrayList<Integer>();
+                int xChord=x;
+                int yChord=y;
 
+                switch(dir){
+                    case 0:
+                        xChord--;
+                        break;
+                    case 1:
+                        yChord++;
+                        break;
+                    case 2:
+                        xChord++;
+                        break;
+                    case 3:
+                        yChord--;
+                        break;
+                }
+
+                if(checkSpace(xChord, yChord)){
+
+                    if(checkMove(temp, target)){
+
+                        if(!target.isEmpty()){
+                            if(target.get(target.size()-1)==1)
+                                board[xChord][yChord].set(target.size()-1, 0);
+                            else if(target.get(target.size()-1)==4)
+                                board[xChord][yChord].set(target.size()-1, 3);
+                        }
+                
+                        ArrayList<Integer> drop = dropOff(temp, dropNum);
+
+                        board[xChord][yChord].addAll(drop);
+                        System.out.println("moved");
+
+                        if(temp.size()>0){
+                            continueMove(xChord, yChord, temp, dir, 0);
+                        }
+                        setTurn(getTurn()+1);
+                    }
+                    else{
+                        System.out.println("Invalid move");
+                        board[x][y].addAll(temp);
+                    }
+                }
+                else{
+                    System.out.println("Invalid space");
+                    board[x][y].addAll(temp);
+                }
+            }            
         }
         else
             System.out.println("Invalid quantity");
-
-
-
-
     }
 
     public void continueMove(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
         System.out.println("continue move");
-        
-        
-         
+                 
         Scanner in = new Scanner(System.in);
         System.out.println("please give drop number");
         System.out.print(">");
-        
-        /*
-        String input = in.nextLine();
-
-        String[] split = input.split("\\s+");
-        String[] comType = {"up","right","down","left"};
-
-        String one = split[0];
-        
-        for(int i=0; i<comType.length; i++){
-            if(one.equals(comType[i])){
-                dir=i;
-            }  
-        }*/
-
         dropNum = Integer.parseInt(in.nextLine());
-
 
         ArrayList<Integer> target = new ArrayList<Integer>();
         int xChord=x;
@@ -218,14 +200,11 @@ public class board {
             else{
                 System.out.println("Invalid space");
                 board[x][y].addAll(temp);
-            }
-                
+            }      
     }
 
 
     public ArrayList<Integer> dropOff(ArrayList<Integer> temp, int quant){
-
-        
 
         if(quant>temp.size()){
             System.out.println("invalid quantity");
@@ -239,8 +218,6 @@ public class board {
             }
             return drop;
         }
-
-
     }
 
     public boolean checkSpace(int x, int y){
@@ -276,7 +253,6 @@ public class board {
 
 
     public int popFromTop(int x, int y){
-
 
         if(!board[x][y].isEmpty()){
             int result = board[x][y].get(board[x][y].size()-1);

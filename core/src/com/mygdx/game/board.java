@@ -25,6 +25,12 @@ import java.util.Scanner;
 public class board {
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
+    private boolean isGameEnded = false;
+
+    public boolean isGameEnded() {
+        return isGameEnded;
+    }
+
     public board(){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
@@ -117,7 +123,7 @@ public class board {
             System.out.println("Invalid quantity");
 
 
-            
+
 
     }
 
@@ -278,7 +284,7 @@ public class board {
                     }
                     System.out.print("]");
                 } else System.out.print("[]");
-            } 
+            }
             System.out.println();
         }
     }
@@ -306,9 +312,9 @@ public class board {
                     ArrayList<Integer> arrayList = board[i][j];
                     int lastElement = arrayList.get(arrayList.size() - 1);
 
-                    if (lastElement == 0 || lastElement == 2) 
+                    if (lastElement == 0 || lastElement == 2)
                         wCounter += 1;
-                    else if (lastElement == 3 || lastElement == 5) 
+                    else if (lastElement == 3 || lastElement == 5)
                         bCounter += 1;
                 }
             }
@@ -318,6 +324,46 @@ public class board {
                 System.out.println("Brown Wins.");
             else 
                 System.out.println("It's a Draw.");
+        }
+    }
+
+    // Add these to the board class
+    private boolean dfs(int x, int y, int player, boolean[][] visited) {
+        if (x < 0 || y < 0 || x >= board.length || y >= board[0].length || visited[x][y]) return false;
+        ArrayList<Integer> stack = board[x][y];
+        if (stack.isEmpty()) return false;
+
+        int topPiece = stack.get(stack.size() - 1);
+        if (player == 0 && (topPiece != 0 && topPiece != 2)) return false;
+        if (player == 1 && (topPiece != 3 && topPiece != 5)) return false;
+
+        if ((player == 0 && y == board[0].length - 1) || (player == 1 && x == board.length - 1)) return true;
+
+        visited[x][y] = true;
+
+        if (dfs(x + 1, y, player, visited) || dfs(x - 1, y, player, visited) || dfs(x, y + 1, player, visited) || dfs(x, y - 1, player, visited))
+            return true;
+
+        return false;
+    }
+
+    public void checkWinCondition() {
+        // For white player
+        for (int i = 0; i < board.length; i++) {
+            if (dfs(i, 0, 0, new boolean[5][5])) {
+                System.out.println("White Wins!");
+                isGameEnded = true;
+                return;
+            }
+        }
+
+        // For brown player
+        for (int j = 0; j < board[0].length; j++) {
+            if (dfs(0, j, 1, new boolean[5][5])) {
+                System.out.println("Brown Wins!");
+                isGameEnded = true;
+                return;
+            }
         }
     }
 

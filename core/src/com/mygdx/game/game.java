@@ -4,33 +4,37 @@ import java.util.Scanner;
 
 public class game {
     board board = new board();
+    static boolean running = true;
+    private static String currentPlayer = "WHITE";
 
     public static void main(String[] args){
-        
+
         game game = new game();
 
         String input;
         boolean choice;
 
-        boolean running = true;
-
         Scanner scanner = new Scanner(System.in);
 
 
-        do{ 
+        while (!game.isGameOver()) {
+            System.out.println(currentPlayer + "'s turn.");  // Displaying the current player's turn
             System.out.print("> ");
-            input=scanner.nextLine();
-            //scanner.close();
+            input = scanner.nextLine();
+
             choice = game.comCheck(input);
 
-            if(choice==false)
+            if(choice == false)
                 System.out.println("\nI don't recognize that command\n");
             else
                 game.comStart(input);
         }
-        while(running==true);
 
+        scanner.close();
+    }
 
+    private boolean isGameOver() {
+        return board.isGameEnded();
     }
 
 
@@ -39,9 +43,11 @@ public class game {
         String[] comType = {"add","move","check","full"};
         boolean stat=false;
         String one=split[0].toLowerCase();
-        for(int i=0; i<comType.length; i++){
-            if(one.equals(comType[i]))
-                stat=true;
+        for (String s : comType) {
+            if (one.equals(s)) {
+                stat = true;
+                break;
+            }
         }
         return stat;
     }
@@ -71,6 +77,13 @@ public class game {
                 full();
                 break;
         }
+        board.checkState();
+        togglePlayer();
+
+
+
+
+
     }
 
 
@@ -79,16 +92,17 @@ public class game {
         String[] comType = {"0","1","2","3","4","5"};
         int two=Integer.parseInt(split[1]);
         boolean check=false;
-        for(int i=0; i<comType.length; i++){
-            if(two==Integer.parseInt(comType[i])){
-                check=true;
-            }  
+        for (String s : comType) {
+            if (two == Integer.parseInt(s)) {
+                check = true;
+            }
         }
-        if(check==false){
+        if(!check){
             System.out.println("\nInvalid Piece\n");
         }
         else
             board.addPiece(two, Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+        board.checkWinCondition();
     }
 
 
@@ -109,12 +123,23 @@ public class game {
                 check=true;
             }  
         }
-        if(check==false){
+        if(!check){
             System.out.println("\nInvalid Chord\n");
         }
         else
             board.move(two, three, four, j, six);
+        board.checkWinCondition();
     }
+
+
+    public void togglePlayer() {
+        if (currentPlayer.equals("WHITE")) {
+            currentPlayer = "BROWN";
+        } else {
+            currentPlayer = "WHITE";
+        }
+    }
+
 
     public void check(){
         board.checkState();

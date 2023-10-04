@@ -29,6 +29,8 @@ public class board {
 
     private boolean isGameEnded = false;
 
+    private static String currentPlayer = "WHITE";
+
     public boolean isGameEnded() {
         return isGameEnded;
     }
@@ -39,6 +41,14 @@ public class board {
 
     public int getTurn(){
         return turn;
+    }
+
+    public void togglePlayer() {
+        if (currentPlayer.equals("WHITE")) {
+            currentPlayer = "BROWN";
+        } else {
+            currentPlayer = "WHITE";
+        }
     }
 
     public board(){
@@ -55,13 +65,13 @@ public class board {
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
 
-                    if(getTurn()%2==0&&(num==3||num==4||num==5))
+                    if(currentPlayer.equals("WHITE")&&(num==3||num==4||num==5))
                         System.out.println("Not browns turn");
-                    else if(getTurn()%2==1&&(num==0||num==1||num==2))
+                    else if(currentPlayer.equals("BROWN")&&(num==0||num==1||num==2))
                         System.out.println("Not whites turn");
                     else{
                         board[i][j].add(num);
-                        setTurn(getTurn()+1);
+                        togglePlayer();
                         System.out.println("done");
                     }
                 }
@@ -83,10 +93,10 @@ public class board {
                 quant--;
             }
 
-            if(getTurn()%2==0 && (temp.get(temp.size()-1)==3||temp.get(temp.size()-1)==4||temp.get(temp.size()-1)==5)){
+            if(currentPlayer.equals("WHITE") && (temp.get(temp.size()-1)==3||temp.get(temp.size()-1)==4||temp.get(temp.size()-1)==5)){
                 System.out.println("Not browns turn");
             }
-            else if(getTurn()%2==1 && (temp.get(temp.size()-1)==0||temp.get(temp.size()-1)==1||temp.get(temp.size()-1)==2)){
+            else if(currentPlayer.equals("BROWN") && (temp.get(temp.size()-1)==0||temp.get(temp.size()-1)==1||temp.get(temp.size()-1)==2)){
                 System.out.println("Not whites turn");
             }
             else{
@@ -128,7 +138,7 @@ public class board {
                         if(temp.size()>0){
                             continueMove(xChord, yChord, temp, dir, 0);
                         }
-                        setTurn(getTurn()+1);
+                        togglePlayer();
                     }
                     else{
                         System.out.println("Invalid move");

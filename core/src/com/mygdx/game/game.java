@@ -78,7 +78,7 @@ public class game {
                 break;
         }
         board.checkState();
-        togglePlayer();
+        //togglePlayer();
 
 
 

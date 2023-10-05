@@ -97,35 +97,64 @@ public class TakGameGUI extends ApplicationAdapter {
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Model stoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
-                new Material(ColorAttribute.createDiffuse(Color.GRAY)),
+        Material rightStoneMat = new Material(ColorAttribute.createDiffuse(Color.GRAY));
+        Material leftStoneMat = new Material(ColorAttribute.createDiffuse(Color.RED));
+
+        Model rightStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
+                rightStoneMat,
                 Usage.Position | Usage.Normal);
         for (int i = 0; i < 21; i++) {
-            pieces.add(new TakPiece(TakPiece.Type.STONE, stoneModel));
+            pieces.add(new TakPiece(TakPiece.Type.STONE, rightStoneModel));
         }
 
-        Model capstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
-                new Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
+        Model leftStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
+                leftStoneMat,
                 Usage.Position | Usage.Normal);
-        pieces.add(new TakPiece(TakPiece.Type.CAPSTONE, capstoneModel));
+        for (int i = 0; i < 21; i++) {
+            TakPiece piece = new TakPiece(TakPiece.Type.STONE, leftStoneModel);
+            pieces.add(piece);
+        }
 
-        float startingX = boardSize * squareSize + 1;
+        Material rightCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.SKY));
+        Material leftCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.BLUE));
+
+        Model rightCapstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
+                rightCapstoneMat,
+                Usage.Position | Usage.Normal);
+        pieces.add(new TakPiece(TakPiece.Type.CAPSTONE, rightCapstoneModel));
+
+        Model leftCapstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
+                leftCapstoneMat,
+                Usage.Position | Usage.Normal);
+        TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel);
+        pieces.add(leftCapstone);
+
+        float startingXRight = boardSize * squareSize + 1;
+        float startingXLeft = -2;
         float startingZ = 0;
         float rowOffset = 1.2f;
         float nextRowZ = 1.5f;
 
         int piecesPerRow = 12;  // Number of pieces in each row.
 
-        // Position stones
+        // Position right stones
         for (int i = 0; i < 21; i++) {
             int x = i % piecesPerRow;
             int y = i / piecesPerRow;  // Calculate which row the piece is in.
-
-            pieces.get(i).instance.transform.setToTranslation(startingX + x * rowOffset, 0.1f, startingZ + y * nextRowZ);
+            pieces.get(i).instance.transform.setToTranslation(startingXRight + x * rowOffset, 0.1f, startingZ + y * nextRowZ);
         }
 
-        // Position capstone
-        pieces.get(21).instance.transform.setToTranslation(startingX, 0.25f, startingZ + 2 * nextRowZ);  // Placing the capstone below the stones.
+        // Position left stones
+        for (int i = 21; i < 42; i++) {
+            int x = (i - 21) % piecesPerRow;  // Adjusted for left stones
+            int y = (i - 21) / piecesPerRow;
+            pieces.get(i).instance.transform.setToTranslation(startingXLeft - x * rowOffset, 0.1f, startingZ + y * nextRowZ);
+        }
+
+        // Position right capstone
+        pieces.get(42).instance.transform.setToTranslation(startingXRight, 0.25f, startingZ + 2 * nextRowZ);
+        // Position left capstone
+        leftCapstone.instance.transform.setToTranslation(startingXLeft, 0.25f, startingZ + 2 * nextRowZ);
 
         optionsUncoloredTexture = new Texture(Gdx.files.internal("optionsuncolored.png"));
         optionsColoredTexture = new Texture(Gdx.files.internal("optionscolored.png"));
@@ -148,22 +177,6 @@ public class TakGameGUI extends ApplicationAdapter {
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         modelBatch = new ModelBatch();
-        float startingXLeft = -2;
-
-// Position stones for the left side
-        for (int i = 0; i < 21; i++) {
-            int x = i % piecesPerRow;
-            int y = i / piecesPerRow;
-
-            TakPiece piece = new TakPiece(TakPiece.Type.STONE, stoneModel);
-            piece.instance.transform.setToTranslation(startingXLeft - x * rowOffset, 0.1f, startingZ + y * nextRowZ);
-            pieces.add(piece);
-        }
-
-
-        TakPiece capstoneLeft = new TakPiece(TakPiece.Type.CAPSTONE, capstoneModel);
-        capstoneLeft.instance.transform.setToTranslation(startingXLeft, 0.25f, startingZ + 2 * nextRowZ);
-        pieces.add(capstoneLeft);
 
         // Board creation
         modelBuilder.begin();
@@ -175,12 +188,12 @@ public class TakGameGUI extends ApplicationAdapter {
                 Material mat = (x + z) % 2 == 0 ? whiteMat : blackMat;
                 modelBuilder.part("square_" + x + "_" + z, GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, mat)
                         .box(squareSize * x + squareSize/2, 0.075f, squareSize * z + squareSize/2, squareSize, 0.15f, squareSize);
-
             }
         }
         boardModel = modelBuilder.end();
         boardInstance = new ModelInstance(boardModel);
     }
+
 
 
     @Override

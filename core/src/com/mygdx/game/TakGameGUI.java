@@ -242,11 +242,26 @@ public class TakGameGUI extends ApplicationAdapter {
                         int boardX = (int) (boardPos.x / squareSize);
                         int boardZ = (int) (boardPos.z / squareSize);
 
-                        boardHeights[boardX][boardZ] += 0.2f;  // assuming each piece has a height of 0.2f
-                        boardPos.y = boardHeights[boardX][boardZ];
+                        // Check if there is a CAPSTONE at the target position
+                        boolean hasCapstone = false;
+                        for (TakPiece piece : pieces) {
+                            if (piece.type == TakPiece.Type.CAPSTONE && piece.boardX == boardX && piece.boardZ == boardZ) {
+                                hasCapstone = true;
+                                break;
+                            }
+                        }
 
-                        selectedPiece.instance.transform.setTranslation(boardPos.x, boardPos.y, boardPos.z);
-                        selectedPiece = null;
+                        // Only move the selected piece to the target position if there's no CAPSTONE
+                        if (!hasCapstone) {
+                            boardHeights[boardX][boardZ] += selectedPiece.getHeight();
+                            boardPos.y = boardHeights[boardX][boardZ] - selectedPiece.getHeight() / 2; // Subtract half of the piece's height
+
+                            selectedPiece.instance.transform.setTranslation(boardPos.x, boardPos.y, boardPos.z);
+                            selectedPiece.boardX = boardX;  // Update the piece's board position
+                            selectedPiece.boardZ = boardZ;
+
+                            selectedPiece = null;
+                        }
                     }
                 }
             }

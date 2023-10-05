@@ -8,7 +8,18 @@ public class TakPiece {
     public enum Type {
         STONE, CAPSTONE
     }
-
+    public float getHeight() {
+        switch (this.type) {
+            case STONE:
+                return 0.2f;
+            case CAPSTONE:
+                return 0.8f;
+            default:
+                return 0f;
+        }
+    }
+    public int boardX = -1;
+    public int boardZ = -1;
     public Type type;
     public Model model;
     public ModelInstance instance;

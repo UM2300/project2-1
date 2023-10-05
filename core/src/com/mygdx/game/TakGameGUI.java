@@ -22,6 +22,8 @@ import java.util.List;
 
 public class TakGameGUI extends ApplicationAdapter {
     private TakPiece selectedPiece;
+    private float[][] boardHeights;
+
 
     private List<TakPiece> pieces;
     private ArrayList<TakPiece> pieces1;
@@ -77,22 +79,25 @@ public class TakGameGUI extends ApplicationAdapter {
 
         for (int x = 0; x < boardSize; x++) {
             for (int z = 0; z < boardSize; z++) {
-                Vector3 squareCenterWorld = new Vector3(x * squareSize + squareSize / 2, 0, z * squareSize + squareSize / 2);
+                Vector3 squareCenterWorld = new Vector3(x * squareSize + squareSize / 2, boardHeights[x][z], z * squareSize + squareSize / 2);
                 Vector3 squareCenterScreen = getScreenCoords(squareCenterWorld);
                 float distance = squareCenterScreen.dst(screenX, screenY, 0);
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestPos = squareCenterWorld;
-
                 }
             }
         }
 
-        return (minDistance < 50) ? closestPos : null;  // This checks if the clicked point is within 50 units of a square's center.
+        return (minDistance < 50) ? closestPos : null;
     }
+
 
     @Override
     public void create() {
+
+        boardHeights = new float[boardSize][boardSize];
+
         pieces = new ArrayList<>();
 
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -234,7 +239,13 @@ public class TakGameGUI extends ApplicationAdapter {
                 } else {
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
                     if (boardPos != null) {
-                        selectedPiece.instance.transform.setTranslation(boardPos.x, 0.2f, boardPos.z);
+                        int boardX = (int) (boardPos.x / squareSize);
+                        int boardZ = (int) (boardPos.z / squareSize);
+
+                        boardHeights[boardX][boardZ] += 0.2f;  // assuming each piece has a height of 0.2f
+                        boardPos.y = boardHeights[boardX][boardZ];
+
+                        selectedPiece.instance.transform.setTranslation(boardPos.x, boardPos.y, boardPos.z);
                         selectedPiece = null;
                     }
                 }
@@ -269,6 +280,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
         batch.end();
     }
+
 
 
 

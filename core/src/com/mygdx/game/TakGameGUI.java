@@ -77,8 +77,23 @@ public class TakGameGUI extends ApplicationAdapter {
         Vector3 closestPos = null;
         float minDistance = Float.MAX_VALUE;
 
-        for (int x = 0; x < boardSize; x++) {
-            for (int z = 0; z < boardSize; z++) {
+        int startX = 0, endX = boardSize, startZ = 0, endZ = boardSize;
+
+        // If a piece is selected, only check its adjacent squares
+        if (selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1) {
+            startX = Math.max(0, selectedPiece.boardX - 1);
+            endX = Math.min(boardSize, selectedPiece.boardX + 2);
+            startZ = Math.max(0, selectedPiece.boardZ - 1);
+            endZ = Math.min(boardSize, selectedPiece.boardZ + 2);
+        }
+
+        for (int x = startX; x < endX; x++) {
+            for (int z = startZ; z < endZ; z++) {
+                // Exclude diagonally adjacent squares
+                if (selectedPiece != null && Math.abs(selectedPiece.boardX - x) == 1 && Math.abs(selectedPiece.boardZ - z) == 1) {
+                    continue;
+                }
+
                 Vector3 squareCenterWorld = new Vector3(x * squareSize + squareSize / 2, boardHeights[x][z], z * squareSize + squareSize / 2);
                 Vector3 squareCenterScreen = getScreenCoords(squareCenterWorld);
                 float distance = squareCenterScreen.dst(screenX, screenY, 0);
@@ -93,8 +108,10 @@ public class TakGameGUI extends ApplicationAdapter {
     }
 
 
+
     @Override
     public void create() {
+
 
         boardHeights = new float[boardSize][boardSize];
 

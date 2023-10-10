@@ -23,6 +23,9 @@ import java.util.List;
 public class TakGameGUI extends ApplicationAdapter {
     private TakPiece selectedPiece;
     private float[][] boardHeights;
+    public enum PlayerTurn {
+        RED, GRAY
+    }
 
 
     private List<TakPiece> pieces;
@@ -74,12 +77,19 @@ public class TakGameGUI extends ApplicationAdapter {
     }
 
     private Vector3 getClickedBoardPosition(float screenX, float screenY) {
+        //the screenX and screenY values are the position of the screen touch
         Vector3 closestPos = null;
         float minDistance = Float.MAX_VALUE;
 
         int startX = 0, endX = boardSize, startZ = 0, endZ = boardSize;
-
+        //startX is for iterating through the board, value 0 means topmost row(first row of board)
+        //endX: This is the last X index to be used while iterating over the board. When boardSize is specified
+        //the iteration will take into account the whole board in the X direction. The real last index, but,
+        //would be boardSize - 1 since array or matrix indices are 0-based. In other words, the rows will be
+        //indexed from 0 to 7 if boardSize is set to 8 (for an 8x8 board ).
         // If a piece is selected, only check its adjacent squares
+        //StartZ is the sam thing but for column
+        //These values cover the entire game board
         if (selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1) {
             startX = Math.max(0, selectedPiece.boardX - 1);
             endX = Math.min(boardSize, selectedPiece.boardX + 2);

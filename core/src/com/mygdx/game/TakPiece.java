@@ -5,6 +5,12 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
 public class TakPiece {
+    public enum Owner {
+        LEFT, RIGHT, NONE
+    }
+
+    public Owner owner = Owner.NONE;
+
     public enum Type {
         STONE, CAPSTONE
     }

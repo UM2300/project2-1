@@ -70,12 +70,17 @@ public class TakGameGUI extends ApplicationAdapter {
         for (TakPiece piece : pieces) {
             Vector3 piecePosScreen = getScreenCoords(piece.instance.transform.getTranslation(new Vector3()));
             float distance = piecePosScreen.dst(touchPosScreen);
-            if (distance < 50) { // 50 is just an example threshold in screen space, adjust accordingly
-                return piece;
+            if (distance < 50) {
+                if ((currentTurn == PlayerTurn.RED && piece.owner == TakPiece.Owner.LEFT) ||
+                        (currentTurn == PlayerTurn.GRAY && piece.owner == TakPiece.Owner.RIGHT)) {
+                    return piece;
+                }
             }
         }
         return null;
     }
+
+
 
     private Vector3 getClickedBoardPosition(float screenX, float screenY) {
 
@@ -94,9 +99,10 @@ public class TakGameGUI extends ApplicationAdapter {
         //would be boardSize - 1 since array or matrix indices are 0-based. In other words, the rows will be
         //indexed from 0 to 7 if boardSize is set to 8 (for an 8x8 board ).
         // If a piece is selected, only check its adjacent squares
-        //StartZ is the sam thing but for column
+        //StartZ is the same thing but for column
         //These values cover the entire game board
         if (selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1) {
+            //checking for invalid values like -1
             startX = Math.max(0, selectedPiece.boardX - 1);
             endX = Math.min(boardSize, selectedPiece.boardX + 2);
             startZ = Math.max(0, selectedPiece.boardZ - 1);
@@ -113,6 +119,7 @@ public class TakGameGUI extends ApplicationAdapter {
                 Vector3 squareCenterWorld = new Vector3(x * squareSize + squareSize / 2, boardHeights[x][z], z * squareSize + squareSize / 2);
                 Vector3 squareCenterScreen = getScreenCoords(squareCenterWorld);
                 float distance = squareCenterScreen.dst(screenX, screenY, 0);
+                //the computation for the difference between two points
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestPos = squareCenterWorld;
@@ -126,6 +133,7 @@ public class TakGameGUI extends ApplicationAdapter {
         return (minDistance < 50) ? closestPos : null;
     }
 
+    private PlayerTurn currentTurn = PlayerTurn.RED; // Start the game with RED's turn.
 
 
     @Override
@@ -145,7 +153,9 @@ public class TakGameGUI extends ApplicationAdapter {
                 rightStoneMat,
                 Usage.Position | Usage.Normal);
         for (int i = 0; i < 21; i++) {
-            pieces.add(new TakPiece(TakPiece.Type.STONE, rightStoneModel));
+            TakPiece piece = new TakPiece(TakPiece.Type.STONE, rightStoneModel);
+            piece.owner = TakPiece.Owner.RIGHT;
+            pieces.add(piece);
         }
 
         Model leftStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
@@ -153,11 +163,13 @@ public class TakGameGUI extends ApplicationAdapter {
                 Usage.Position | Usage.Normal);
         for (int i = 0; i < 21; i++) {
             TakPiece piece = new TakPiece(TakPiece.Type.STONE, leftStoneModel);
+            piece.owner = TakPiece.Owner.LEFT;
             pieces.add(piece);
         }
 
-        Material rightCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.SKY));
-        Material leftCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.BLUE));
+
+        Material rightCapstoneMat =new Material(ColorAttribute.createDiffuse(Color.GRAY));
+        Material leftCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.RED));
 
         Model rightCapstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
                 rightCapstoneMat,
@@ -270,15 +282,15 @@ public class TakGameGUI extends ApplicationAdapter {
                                     touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight))) {
                 displayTitle = false;
             } else if (!displayTitle) {
-                if (selectedPiece == null) {
-                    selectedPiece = getClickedPiece(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+                TakPiece clickedPiece = getClickedPiece(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+                if (clickedPiece != null) {
+                    selectedPiece = clickedPiece;
                 } else {
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-                    if (boardPos != null) {
+                    if (boardPos != null && selectedPiece != null) {
                         int boardX = (int) (boardPos.x / squareSize);
                         int boardZ = (int) (boardPos.z / squareSize);
 
-                        // Check if there is a CAPSTONE at the target position
                         boolean hasCapstone = false;
                         for (TakPiece piece : pieces) {
                             if (piece.type == TakPiece.Type.CAPSTONE && piece.boardX == boardX && piece.boardZ == boardZ) {
@@ -287,16 +299,13 @@ public class TakGameGUI extends ApplicationAdapter {
                             }
                         }
 
-                        // Only move the selected piece to the target position if there's no CAPSTONE
                         if (!hasCapstone) {
-                            boardHeights[boardX][boardZ] += selectedPiece.getHeight();
-                            boardPos.y = boardHeights[boardX][boardZ] - selectedPiece.getHeight() / 2; // Subtract half of the piece's height
-
-                            selectedPiece.instance.transform.setTranslation(boardPos.x, boardPos.y, boardPos.z);
-                            selectedPiece.boardX = boardX;  // Update the piece's board position
+                            boardHeights[boardX][boardZ] += 0.2f;
+                            selectedPiece.instance.transform.setToTranslation(boardPos.x, boardHeights[boardX][boardZ], boardPos.z);
+                            selectedPiece.boardX = boardX;
                             selectedPiece.boardZ = boardZ;
-
-                            selectedPiece = null;
+                            currentTurn = (currentTurn == PlayerTurn.RED) ? PlayerTurn.GRAY : PlayerTurn.RED; // Switch the turn
+                            selectedPiece = null; // Deselect the piece
                         }
                     }
                 }

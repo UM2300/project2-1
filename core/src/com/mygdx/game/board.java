@@ -64,6 +64,7 @@ public class board {
 
 
     public void addPiece(int num,int x, int y){
+        System.out.println("this method ran: "+x+" "+y);
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
@@ -75,7 +76,9 @@ public class board {
                     else{
                         board[i][j].add(num);
                         togglePlayer();
-                        System.out.println("done");
+                        int inum= i+1;
+                        int jnum=j+1;
+                        System.out.println("added at: ["+inum+"]["+jnum+"]");
                     }
                 }
             }

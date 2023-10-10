@@ -62,6 +62,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
     boolean displayTitle = true;
 
+
     private Vector3 getScreenCoords(Vector3 worldCoords) {
         return cam.project(new Vector3(worldCoords));
     }
@@ -140,7 +141,9 @@ public class TakGameGUI extends ApplicationAdapter {
                 }
             }
         }
-
+        if (boardHeights[closestX][closestY] != 0 && selectedPiece != null && selectedPiece.boardX == -1 && selectedPiece.boardZ == -1) {
+            return null;  // If there's already a stack and the selected piece is not on the board, then we don't allow placement.
+        }
         // Check if the position already has a piece and the selected piece is not on the board
 
 

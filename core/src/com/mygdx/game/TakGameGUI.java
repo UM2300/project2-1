@@ -14,16 +14,21 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TakGameGUI extends ApplicationAdapter {
     private TakPiece selectedPiece;
     private float[][] boardHeights;
 
+    public board board;
+
+    private final double DOUBLE_CLICK_THRESHOLD = 0.3 * 1000000000;
 
     private List<TakPiece> pieces;
     private ArrayList<TakPiece> pieces1;
@@ -50,6 +55,8 @@ public class TakGameGUI extends ApplicationAdapter {
 
     ModelBatch modelBatch;
     Model boardModel;
+    Model standingStoneModel;
+    ModelInstance standingStoneInstance;
     ModelInstance boardInstance;
     PerspectiveCamera cam;
     Environment environment;
@@ -112,7 +119,6 @@ public class TakGameGUI extends ApplicationAdapter {
     @Override
     public void create() {
 
-
         boardHeights = new float[boardSize][boardSize];
 
         pieces = new ArrayList<>();
@@ -121,6 +127,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
         Material rightStoneMat = new Material(ColorAttribute.createDiffuse(Color.GRAY));
         Material leftStoneMat = new Material(ColorAttribute.createDiffuse(Color.RED));
+        Material standingStoneMat = new Material(ColorAttribute.createDiffuse(Color.GRAY));
 
         Model rightStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
                 rightStoneMat,
@@ -150,6 +157,15 @@ public class TakGameGUI extends ApplicationAdapter {
                 Usage.Position | Usage.Normal);
         TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel);
         pieces.add(leftCapstone);
+
+        //attempt to add standing stones
+        standingStoneModel = modelBuilder.createCone(0.5f, 1.0f, 0.5f, 20,
+            standingStoneMat,
+            Usage.Position | Usage.Normal);
+        TakPiece standingStone = new TakPiece(TakPiece.Type.STANDINGSTONE, standingStoneModel);
+        standingStoneInstance = new ModelInstance(standingStoneModel);
+
+        
 
         float startingXRight = boardSize * squareSize + 1;
         float startingXLeft = -2;
@@ -209,7 +225,7 @@ public class TakGameGUI extends ApplicationAdapter {
             for (int z = 0; z < boardSize; z++) {
                 Material mat = (x + z) % 2 == 0 ? whiteMat : blackMat;
                 modelBuilder.part("square_" + x + "_" + z, GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, mat)
-                        .box(squareSize * x + squareSize/2, 0.075f, squareSize * z + squareSize/2, squareSize, 0.15f, squareSize);
+                     .box(squareSize * x + squareSize/2, 0.075f, squareSize * z + squareSize/2, squareSize, 0.15f, squareSize);
             }
         }
         boardModel = modelBuilder.end();
@@ -242,18 +258,29 @@ public class TakGameGUI extends ApplicationAdapter {
         float optionsImgHeight = optionsUncoloredTexture.getHeight() * imageScale;
         float optionsImgX = (VIRTUAL_WIDTH - optionsImgWidth) / 2;
         float optionsImgY = imgY - optionsImgHeight - 10;  // 10 units padding
+        
+        double lastClickedTime = 0;
+        Vector3 lastClickedPos = new Vector3();
 
         if (Gdx.input.justTouched()) {
-            if (displayTitle &&
-                    ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
-                            touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) ||
-                            (touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
-                                    touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight))) {
-                displayTitle = false;
+            if (displayTitle) {
+                if (touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
+                            touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) {
+                                displayTitle = false;
+                                return;
+                            }
+                if (touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
+                            touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight) {
+                                    //options button click 
+                    return;
+                }
+
             } else if (!displayTitle) {
                 if (selectedPiece == null) {
                     selectedPiece = getClickedPiece(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-                } else {
+                } 
+                else {
+                    double currentTime = System.nanoTime();
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
                     if (boardPos != null) {
                         int boardX = (int) (boardPos.x / squareSize);
@@ -267,7 +294,27 @@ public class TakGameGUI extends ApplicationAdapter {
                                 break;
                             }
                         }
-
+                        
+                        // Double-click detected
+                        if (currentTime - lastClickedTime < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
+                            
+                            if (selectedPiece != null && selectedPiece.type != TakPiece.Type.CAPSTONE) {
+                                // Check if the stone is standing or lying down and toggle its state
+                        
+                                if (selectedPiece.type == TakPiece.Type.STONE) {
+                                    selectedPiece.type = TakPiece.Type.STANDINGSTONE;
+                                } else if (selectedPiece.type == TakPiece.Type.STANDINGSTONE) {
+                                    selectedPiece.type = TakPiece.Type.STONE;
+                                }
+                    
+                                // Update the piece's model and instance
+                                if (selectedPiece.type == TakPiece.Type.STANDINGSTONE) {
+                                    selectedPiece.model = standingStoneModel;
+                                    selectedPiece.instance = new ModelInstance(selectedPiece.model);
+                                }
+                            }
+                        }
+                        
                         // Only move the selected piece to the target position if there's no CAPSTONE
                         if (!hasCapstone) {
                             boardHeights[boardX][boardZ] += selectedPiece.getHeight();

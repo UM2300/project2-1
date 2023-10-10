@@ -23,6 +23,9 @@ import java.util.Scanner;
  */
 
 public class board {
+
+    public TakPiece piece;
+
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
 
     private int turn = 0;
@@ -79,6 +82,8 @@ public class board {
         }
 
     }
+
+    
 
     public void move(int x, int y, int quant, int dir, int dropNum){
         ArrayList<Integer> temp = new ArrayList<Integer>();

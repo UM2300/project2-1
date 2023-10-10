@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
 public class TakPiece {
     public enum Type {
-        STONE, CAPSTONE
+        STONE, STANDINGSTONE, CAPSTONE
     }
     public float getHeight() {
         switch (this.type) {
             case STONE:
                 return 0.2f;
+            case STANDINGSTONE:
+                return 1.0f;
             case CAPSTONE:
                 return 0.8f;
             default:

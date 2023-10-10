@@ -27,6 +27,7 @@ public class TakGameGUI extends ApplicationAdapter {
         RED, GRAY
     }
 
+    board logicBoard = new board();
 
     private List<TakPiece> pieces;
     private ArrayList<TakPiece> pieces1;
@@ -77,6 +78,11 @@ public class TakGameGUI extends ApplicationAdapter {
     }
 
     private Vector3 getClickedBoardPosition(float screenX, float screenY) {
+
+
+        int closestX=0;
+        int closestY=0;
+
         //the screenX and screenY values are the position of the screen touch
         Vector3 closestPos = null;
         float minDistance = Float.MAX_VALUE;
@@ -110,10 +116,13 @@ public class TakGameGUI extends ApplicationAdapter {
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestPos = squareCenterWorld;
+                    closestX=x;
+                    closestY=z;
                 }
             }
         }
 
+        logicBoard.addPiece(0, closestX+1, closestY+1);
         return (minDistance < 50) ? closestPos : null;
     }
 

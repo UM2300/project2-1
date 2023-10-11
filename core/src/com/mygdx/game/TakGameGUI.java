@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -53,6 +54,8 @@ public class TakGameGUI extends ApplicationAdapter {
     private static final int VIRTUAL_WIDTH = 1280;
     private static final int VIRTUAL_HEIGHT = 720;
     private FitViewport viewport;
+
+    public boolean wasRightButtonPressed = false;
 
 
     SpriteBatch batch;
@@ -342,16 +345,33 @@ public class TakGameGUI extends ApplicationAdapter {
         float optionsImgX = (VIRTUAL_WIDTH - optionsImgWidth) / 2;
         float optionsImgY = imgY - optionsImgHeight - 10;  // 10 units padding
 
-        //for the double click for standingstone conversion
-        double lastClickedTime = 0;
-        Vector3 lastClickedPosition = new Vector3();
+        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+            if (!wasRightButtonPressed) {  // New right-click detected
+                TakPiece clickedPiece = getClickedPiece(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+                if (clickedPiece != null) {
+                    // Change the piece's color to blue
+                    if(clickedPiece.getIdNum()==0){
+                        clickedPiece.instance.materials.first().set(ColorAttribute.createDiffuse(Color.BLUE));
+                        clickedPiece.setIdNum(1);
+                        clickedPiece.setType(TakPiece.Type.STAND);
+                    }
+                    if(clickedPiece.getIdNum()==3){
+                        clickedPiece.instance.materials.first().set(ColorAttribute.createDiffuse(Color.GREEN));
+                        clickedPiece.setIdNum(4);
+                        clickedPiece.setType(TakPiece.Type.STAND);
+                    }
+                    
+                }
+            }
+            wasRightButtonPressed = true;
+        } else {
+            wasRightButtonPressed = false;  // Reset the flag if right button isn't pressed
+        }
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched() && !wasRightButtonPressed) {
             if (displayTitle &&
-                    ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
-                            touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) ||
-                            (touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
-                                    touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight))) {
+                    ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth && touchPos.y >= imgY && touchPos.y <= imgY + imgHeight) ||
+                            (touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth && touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight))) {
                 displayTitle = false;
             } else if (!displayTitle) {
                 TakPiece clickedPiece = getClickedPiece(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
@@ -359,12 +379,11 @@ public class TakGameGUI extends ApplicationAdapter {
                     selectedPiece = clickedPiece;
                     pieceSelected = true;
                 } else {
-                    
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-                    lastClickedTime++;
                     if (boardPos != null && selectedPiece != null) {
                         int boardX = (int) (boardPos.x / squareSize);
                         int boardZ = (int) (boardPos.z / squareSize);
+
 
                         int stackedPiecesCount = countPiecesAtPosition(boardX, boardZ);
                         if(stackedPiecesCount > 1) {
@@ -382,28 +401,6 @@ public class TakGameGUI extends ApplicationAdapter {
                             }
                         }
 
-                    
-                        System.out.println("if reached");
-                        //double click detection for standing stone conversion
-                        double currentTime = System.nanoTime();
-                        if (Gdx.input.isKeyPressed(Keys.R)) {
-                        System.out.println("if passed");
-                            if(selectedPiece != null){
-                                System.out.println("Piece passed");
-                                if(selectedPiece.getIdNum()==0){
-                                    System.out.println("White passed");
-                                    selectedPiece.setIdNum(1);
-                                    selectedPiece.setType(TakPiece.Type.STAND);
-                                    selectedPiece.setModel(leftStand);
-                                }
-                                else if(selectedPiece.getIdNum()==3){
-                                    selectedPiece.setIdNum(4);
-                                    selectedPiece.setType(TakPiece.Type.STAND);
-                                    selectedPiece.setModel(rightStand);
-                                }
-                            }
-                        }
-
                         if (!hasCapstone) {
                             boardHeights[boardX][boardZ] += 0.2f;
                             selectedPiece.instance.transform.setToTranslation(boardPos.x, boardHeights[boardX][boardZ], boardPos.z);
@@ -418,13 +415,8 @@ public class TakGameGUI extends ApplicationAdapter {
             }
         }
 
-        // Check if mouse is hovering over the start button
-        isHoveringOverStart = touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
-                touchPos.y >= imgY && touchPos.y <= imgY + imgHeight;
-
-        // Check if mouse is hovering over the options button
-        isHoveringOverOptions = touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth &&
-                touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight;
+        isHoveringOverStart = touchPos.x >= imgX && touchPos.x <= imgX + imgWidth && touchPos.y >= imgY && touchPos.y <= imgY + imgHeight;
+        isHoveringOverOptions = touchPos.x >= optionsImgX && touchPos.x <= optionsImgX + optionsImgWidth && touchPos.y >= optionsImgY && touchPos.y <= optionsImgY + optionsImgHeight;
 
         modelBatch.begin(cam);
         modelBatch.render(boardInstance, environment);

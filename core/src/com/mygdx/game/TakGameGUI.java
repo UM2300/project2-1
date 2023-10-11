@@ -149,6 +149,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
         boardPieces[closestX][closestY].add(selectedPiece);
 
+        logicBoard.addPiece(0, closestX+1, closestY+1);
         return (minDistance < 50) ? closestPos : null;
 
 

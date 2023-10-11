@@ -21,7 +21,7 @@ public class TakPiece {
     }
 
     public enum Type {
-        STONE, CAPSTONE
+        STONE, CAPSTONE, STAND
     }
     public float getHeight() {
         switch (this.type) {
@@ -50,4 +50,25 @@ public class TakPiece {
     public int getIdNum(){
         return idNum;
     }
+
+    public void setIdNum(int idNum){
+        this.idNum=idNum;
+    }
+
+    public Type getType(){
+        return type;
+    }
+
+    public void setType(Type type){
+        this.type=type;
+    }
+
+    public Model getModel(){
+        return model;
+    }
+
+    public void setModel(Model model){
+        this.model=model;
+    }
+
 }

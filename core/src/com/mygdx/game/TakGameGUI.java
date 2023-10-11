@@ -195,8 +195,8 @@ public class TakGameGUI extends ApplicationAdapter {
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Material rightStoneMat = new Material(ColorAttribute.createDiffuse(Color.GRAY));
-        Material leftStoneMat = new Material(ColorAttribute.createDiffuse(Color.RED));
+        Material rightStoneMat = new Material(ColorAttribute.createDiffuse(Color.BROWN));
+        Material leftStoneMat = new Material(ColorAttribute.createDiffuse(Color.LIGHT_GRAY));
 
         Model rightStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
                 rightStoneMat,
@@ -217,20 +217,24 @@ public class TakGameGUI extends ApplicationAdapter {
         }
 
 
-        Material rightCapstoneMat =new Material(ColorAttribute.createDiffuse(Color.GRAY));
-        Material leftCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.RED));
+        Material rightCapstoneMat =new Material(ColorAttribute.createDiffuse(Color.RED));
+        Material leftCapstoneMat = new Material(ColorAttribute.createDiffuse(Color.GRAY));
 
-        Model rightCapstoneModel = modelBuilder.createCylinder(1f, 0.8f, 1f, 20,
-                rightStoneMat,
+        Model rightCapstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
+                rightCapstoneMat,
                 Usage.Position | Usage.Normal);
 
         TakPiece rightCapstone = new TakPiece(TakPiece.Type.CAPSTONE, rightCapstoneModel, 5);
         rightCapstone.owner = TakPiece.Owner.RIGHT;
         pieces.add(rightCapstone);
 
-        Model leftCapstoneModel = modelBuilder.createCylinder(1f, 0.8f, 1f, 20,
-                leftStoneMat,
+        Model leftCapstoneModel = modelBuilder.createCylinder(0.5f, 0.8f, 0.5f, 20,
+                leftCapstoneMat,
                 Usage.Position | Usage.Normal);
+
+        Model rightStandingModel = modelBuilder.createCone(1f, 1f, 1f, 20, rightStoneMat, Usage.Position | Usage.Normal);
+
+        Model leftStandingModel = modelBuilder.createCone(1f, 1f, 1f, 20, leftStoneMat, Usage.Position | Usage.Normal);
 
         TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel, 2);
         leftCapstone.owner = TakPiece.Owner.LEFT;

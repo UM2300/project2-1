@@ -187,6 +187,8 @@ else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boa
     private PlayerTurn currentTurn = PlayerTurn.RED; // Start the game with RED's turn.
 
 
+
+
     @Override
     public void create() {
 
@@ -203,6 +205,7 @@ else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boa
         Model rightStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
                 rightStoneMat,
                 Usage.Position | Usage.Normal);
+
         for (int i = 0; i < 21; i++) {
             TakPiece piece = new TakPiece(TakPiece.Type.STONE, rightStoneModel, 3);
             piece.owner = TakPiece.Owner.RIGHT;
@@ -212,6 +215,7 @@ else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boa
         Model leftStoneModel = modelBuilder.createCylinder(1f, 0.2f, 1f, 20,
                 leftStoneMat,
                 Usage.Position | Usage.Normal);
+
         for (int i = 0; i < 21; i++) {
             TakPiece piece = new TakPiece(TakPiece.Type.STONE, leftStoneModel, 0);
             piece.owner = TakPiece.Owner.LEFT;

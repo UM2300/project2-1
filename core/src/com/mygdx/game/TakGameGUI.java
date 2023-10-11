@@ -33,7 +33,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
     board logicBoard = new board();
 
-    private final double DOUBLE_CLICK_THRESHOLD = 0.3 * 1000;
+    private final double DOUBLE_CLICK_THRESHOLD = 0.03;
 
 
     private List<TakPiece> pieces;
@@ -344,7 +344,6 @@ public class TakGameGUI extends ApplicationAdapter {
         //for the double click for standingstone conversion
         double lastClickedTime = 0;
         Vector3 lastClickedPosition = new Vector3();
-        
 
         if (Gdx.input.justTouched()) {
             if (displayTitle &&
@@ -359,7 +358,9 @@ public class TakGameGUI extends ApplicationAdapter {
                     selectedPiece = clickedPiece;
                     pieceSelected = true;
                 } else {
+                    double currentTime = System.nanoTime();
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+                    lastClickedTime++;
                     if (boardPos != null && selectedPiece != null) {
                         int boardX = (int) (boardPos.x / squareSize);
                         int boardZ = (int) (boardPos.z / squareSize);
@@ -381,9 +382,8 @@ public class TakGameGUI extends ApplicationAdapter {
                         }
 
                         System.out.println("if reached");
-                        //double click detection for standing stone conversion
-                        double currentTime = System.nanoTime();
-                        if (currentTime - lastClickedTime < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
+                        
+                        if ((currentTime - lastClickedTime) < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
                         System.out.println("if passed");
                             if(selectedPiece != null){
                                 if(selectedPiece.getIdNum()==0){

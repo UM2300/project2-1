@@ -158,7 +158,7 @@ public class TakGameGUI extends ApplicationAdapter {
         if(selectedPiece != null && selectedPiece.boardX == -1 && selectedPiece.boardZ == -1){
             logicBoard.addPiece(selectedPiece.getIdNum(), closestX+1, closestY+1);
         }
-else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1){
+        else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1){
             logicBoard.move(selectedPiece.boardX+1, selectedPiece.boardZ+1, 1, targetDir(selectedPiece.boardX+1, selectedPiece.boardZ+1, closestX+1, closestY+1), 1);
         }
         

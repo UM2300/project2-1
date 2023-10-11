@@ -33,7 +33,7 @@ public class TakGameGUI extends ApplicationAdapter {
 
     board logicBoard = new board();
 
-    private final double DOUBLE_CLICK_THRESHOLD = 0.3 * 1000000000;
+    private final double DOUBLE_CLICK_THRESHOLD = 0.3 * 1000;
 
 
     private List<TakPiece> pieces;
@@ -65,6 +65,8 @@ public class TakGameGUI extends ApplicationAdapter {
     PerspectiveCamera cam;
     Environment environment;
     float imageScale = 0.5f;
+    Model rightStand;
+    Model leftStand;
 
     boolean displayTitle = true;
 
@@ -238,9 +240,9 @@ public class TakGameGUI extends ApplicationAdapter {
                 leftCapstoneMat,
                 Usage.Position | Usage.Normal);
 
-        Model rightStandingModel = modelBuilder.createCone(1f, 1f, 1f, 20, rightStoneMat, Usage.Position | Usage.Normal);
+        rightStand = modelBuilder.createCone(1f, 1f, 1f, 20, rightStoneMat, Usage.Position | Usage.Normal);
 
-        Model leftStandingModel = modelBuilder.createCone(1f, 1f, 1f, 20, leftStoneMat, Usage.Position | Usage.Normal);
+        leftStand = modelBuilder.createCone(1f, 1f, 1f, 20, leftStoneMat, Usage.Position | Usage.Normal);
 
         TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel, 2);
         leftCapstone.owner = TakPiece.Owner.LEFT;
@@ -342,7 +344,7 @@ public class TakGameGUI extends ApplicationAdapter {
         //for the double click for standingstone conversion
         double lastClickedTime = 0;
         Vector3 lastClickedPosition = new Vector3();
-        double currentTime = System.nanoTime();
+        
 
         if (Gdx.input.justTouched()) {
             if (displayTitle &&
@@ -378,9 +380,23 @@ public class TakGameGUI extends ApplicationAdapter {
                             }
                         }
 
+                        System.out.println("if reached");
                         //double click detection for standing stone conversion
+                        double currentTime = System.nanoTime();
                         if (currentTime - lastClickedTime < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
-                            
+                        System.out.println("if passed");
+                            if(selectedPiece != null){
+                                if(selectedPiece.getIdNum()==0){
+                                    selectedPiece.setIdNum(1);
+                                    selectedPiece.setType(TakPiece.Type.STAND);
+                                    selectedPiece.setModel(leftStand);
+                                }
+                                else if(selectedPiece.getIdNum()==3){
+                                    selectedPiece.setIdNum(4);
+                                    selectedPiece.setType(TakPiece.Type.STAND);
+                                    selectedPiece.setModel(rightStand);
+                                }
+                            }
                         }
 
                         if (!hasCapstone) {

@@ -33,6 +33,8 @@ public class TakGameGUI extends ApplicationAdapter {
 
     board logicBoard = new board();
 
+    private final double DOUBLE_CLICK_THRESHOLD = 0.3 * 1000000000;
+
 
     private List<TakPiece> pieces;
     private ArrayList<TakPiece> pieces1;
@@ -156,7 +158,7 @@ public class TakGameGUI extends ApplicationAdapter {
         if(selectedPiece != null && selectedPiece.boardX == -1 && selectedPiece.boardZ == -1){
             logicBoard.addPiece(selectedPiece.getIdNum(), closestX+1, closestY+1);
         }
-        else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1){
+else if(selectedPiece != null && selectedPiece.boardX != -1 && selectedPiece.boardZ != -1){
             logicBoard.move(selectedPiece.boardX+1, selectedPiece.boardZ+1, 1, targetDir(selectedPiece.boardX+1, selectedPiece.boardZ+1, closestX+1, closestY+1), 1);
         }
         
@@ -329,6 +331,11 @@ public class TakGameGUI extends ApplicationAdapter {
         float optionsImgX = (VIRTUAL_WIDTH - optionsImgWidth) / 2;
         float optionsImgY = imgY - optionsImgHeight - 10;  // 10 units padding
 
+        //for the double click for standingstone conversion
+        double lastClickedTime = 0;
+        Vector3 lastClickedPosition = new Vector3();
+        double currentTime = System.nanoTime();
+
         if (Gdx.input.justTouched()) {
             if (displayTitle &&
                     ((touchPos.x >= imgX && touchPos.x <= imgX + imgWidth &&
@@ -361,6 +368,11 @@ public class TakGameGUI extends ApplicationAdapter {
                                 hasCapstone = true;
                                 break;
                             }
+                        }
+
+                        //double click detection for standing stone conversion
+                        if (currentTime - lastClickedTime < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
+                            
                         }
 
                         if (!hasCapstone) {

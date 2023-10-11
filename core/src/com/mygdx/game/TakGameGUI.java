@@ -168,7 +168,7 @@ public class TakGameGUI extends ApplicationAdapter {
             logicBoard.move(selectedPiece.boardX+1, selectedPiece.boardZ+1, 1, targetDir(selectedPiece.boardX+1, selectedPiece.boardZ+1, closestX+1, closestY+1), 1);
         }
         
-        
+        logicBoard.checkState();
         return (minDistance < 50) ? closestPos : null;
     }
 

@@ -82,7 +82,7 @@ public class board {
                         togglePlayer();
                         int inum= i+1;
                         int jnum=j+1;
-                        System.out.println("added at: ["+inum+"]["+jnum+"]");
+                        System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
                     }
                 }
             }
@@ -132,6 +132,8 @@ public class board {
                 }
 
                 if(checkSpace(xChord, yChord)){
+
+                    target = board[xChord][yChord];
 
                     if(checkMove(temp, target)){
 
@@ -200,8 +202,9 @@ public class board {
 
                 if(checkMove(temp, target)){
                     if(!target.isEmpty()){
-                        if(target.get(target.size()-1)==1)
+                        if(target.get(target.size()-1)==1){
                             board[xChord][yChord].set(target.size()-1, 0);
+                        }
                         else if(target.get(target.size()-1)==4)
                             board[xChord][yChord].set(target.size()-1, 3);
                     }

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -240,9 +241,9 @@ public class TakGameGUI extends ApplicationAdapter {
                 leftCapstoneMat,
                 Usage.Position | Usage.Normal);
 
-        rightStand = modelBuilder.createCone(1f, 1f, 1f, 20, rightStoneMat, Usage.Position | Usage.Normal);
+        rightStand = modelBuilder.createCone(1f, 2f, 1f, 20, rightCapstoneMat, Usage.Position | Usage.Normal);
 
-        leftStand = modelBuilder.createCone(1f, 1f, 1f, 20, leftStoneMat, Usage.Position | Usage.Normal);
+        leftStand = modelBuilder.createCone(1f, 2f, 1f, 20, leftCapstoneMat, Usage.Position | Usage.Normal);
 
         TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel, 2);
         leftCapstone.owner = TakPiece.Owner.LEFT;
@@ -358,7 +359,7 @@ public class TakGameGUI extends ApplicationAdapter {
                     selectedPiece = clickedPiece;
                     pieceSelected = true;
                 } else {
-                    double currentTime = System.nanoTime();
+                    
                     Vector3 boardPos = getClickedBoardPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
                     lastClickedTime++;
                     if (boardPos != null && selectedPiece != null) {
@@ -381,12 +382,16 @@ public class TakGameGUI extends ApplicationAdapter {
                             }
                         }
 
+                    
                         System.out.println("if reached");
-                        
-                        if ((currentTime - lastClickedTime) < DOUBLE_CLICK_THRESHOLD && boardPos != null) {
+                        //double click detection for standing stone conversion
+                        double currentTime = System.nanoTime();
+                        if (Gdx.input.isKeyPressed(Keys.R)) {
                         System.out.println("if passed");
                             if(selectedPiece != null){
+                                System.out.println("Piece passed");
                                 if(selectedPiece.getIdNum()==0){
+                                    System.out.println("White passed");
                                     selectedPiece.setIdNum(1);
                                     selectedPiece.setType(TakPiece.Type.STAND);
                                     selectedPiece.setModel(leftStand);

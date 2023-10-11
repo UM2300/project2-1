@@ -74,6 +74,9 @@ public class board {
                         System.out.println("Not browns turn");
                     else if(currentPlayer.equals("BROWN")&&(num==0||num==1||num==2))
                         System.out.println("Not whites turn");
+                    else if(!board[i][j].isEmpty()){
+                        System.out.println("Not empty space");
+                    }
                     else{
                         board[i][j].add(num);
                         togglePlayer();

@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class game {
     board board = new board();
     static boolean running = true;
-    private static String currentPlayer = "WHITE";
+    public static String currentPlayer = "WHITE";
 
     public static void main(String[] args){
 

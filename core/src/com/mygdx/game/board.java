@@ -9,6 +9,7 @@ import java.util.Scanner;
  * 0 = white road
  * 1 = white standing
  * 2 = white capstone
+ * 
  * 3 = brown road
  * 4 = brown standing
  * 5 = brown capstone

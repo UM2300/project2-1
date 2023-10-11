@@ -38,10 +38,16 @@ public class TakPiece {
     public Type type;
     public Model model;
     public ModelInstance instance;
+    public int idNum;
 
-    public TakPiece(Type type, Model model) {
+    public TakPiece(Type type, Model model, int idNum) {
         this.type = type;
         this.model = model;
         this.instance = new ModelInstance(model);
+        this.idNum = idNum;
+    }
+
+    public int getIdNum(){
+        return idNum;
     }
 }

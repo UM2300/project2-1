@@ -20,6 +20,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.ArrayList;
 import java.util.List;
 
+// left pieces are white
+// right pieces are brown
+
+
 public class TakGameGUI extends ApplicationAdapter {
     private TakPiece selectedPiece;
     private float[][] boardHeights;
@@ -149,10 +153,12 @@ public class TakGameGUI extends ApplicationAdapter {
 
         boardPieces[closestX][closestY].add(selectedPiece);
 
-        logicBoard.addPiece(0, closestX+1, closestY+1);
+        if(selectedPiece != null && selectedPiece.boardX == -1 && selectedPiece.boardZ == -1){
+            logicBoard.addPiece(selectedPiece.getIdNum(), closestX+1, closestY+1);
+        }
+        
+        
         return (minDistance < 50) ? closestPos : null;
-
-
     }
 
 
@@ -176,7 +182,7 @@ public class TakGameGUI extends ApplicationAdapter {
                 rightStoneMat,
                 Usage.Position | Usage.Normal);
         for (int i = 0; i < 21; i++) {
-            TakPiece piece = new TakPiece(TakPiece.Type.STONE, rightStoneModel);
+            TakPiece piece = new TakPiece(TakPiece.Type.STONE, rightStoneModel, 3);
             piece.owner = TakPiece.Owner.RIGHT;
             pieces.add(piece);
         }
@@ -185,7 +191,7 @@ public class TakGameGUI extends ApplicationAdapter {
                 leftStoneMat,
                 Usage.Position | Usage.Normal);
         for (int i = 0; i < 21; i++) {
-            TakPiece piece = new TakPiece(TakPiece.Type.STONE, leftStoneModel);
+            TakPiece piece = new TakPiece(TakPiece.Type.STONE, leftStoneModel, 0);
             piece.owner = TakPiece.Owner.LEFT;
             pieces.add(piece);
         }
@@ -198,7 +204,7 @@ public class TakGameGUI extends ApplicationAdapter {
                 rightStoneMat,
                 Usage.Position | Usage.Normal);
 
-        TakPiece rightCapstone = new TakPiece(TakPiece.Type.CAPSTONE, rightCapstoneModel);
+        TakPiece rightCapstone = new TakPiece(TakPiece.Type.CAPSTONE, rightCapstoneModel, 5);
         rightCapstone.owner = TakPiece.Owner.RIGHT;
         pieces.add(rightCapstone);
 
@@ -206,7 +212,7 @@ public class TakGameGUI extends ApplicationAdapter {
                 leftStoneMat,
                 Usage.Position | Usage.Normal);
 
-        TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel);
+        TakPiece leftCapstone = new TakPiece(TakPiece.Type.CAPSTONE, leftCapstoneModel, 2);
         leftCapstone.owner = TakPiece.Owner.LEFT;
         pieces.add(leftCapstone);
 

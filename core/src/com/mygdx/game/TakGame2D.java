@@ -1,11 +1,14 @@
 package com.mygdx.game;
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TakGame2D {
+
+    private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
+
 
     private JFrame frame;
     private JFrame optionFrame;
@@ -25,11 +28,22 @@ public class TakGame2D {
         return currentChords;
     }
 
+    public int stones = 21;
+    public int capstone = 1;
+    public int stones2 = 21;
+    public int capstone2 = 1;
     board logicBoard = new board();
 
     boardButton boardButton;
 
     public TakGame2D() {
+
+        leftStonesLabel = new JLabel(stones + " Stones");
+        leftCapstoneLabel = new JLabel(capstone + " Capstone");
+        rightStonesLabel = new JLabel(stones2 + " Stones");
+        rightCapstoneLabel = new JLabel(capstone2 + " Capstone");
+
+
         frame = new JFrame("TakGame2D");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -40,6 +54,22 @@ public class TakGame2D {
         rightPanel = new JPanel();
         boardPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
 
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.add(Box.createVerticalGlue());
+        leftPanel.add(leftStonesLabel);
+        leftPanel.add(Box.createVerticalStrut(5));
+        leftPanel.add(leftCapstoneLabel);
+        leftPanel.add(Box.createVerticalGlue());
+
+
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.add(Box.createVerticalGlue());
+        rightPanel.add(rightStonesLabel);
+        rightPanel.add(Box.createVerticalStrut(5));
+        rightPanel.add(rightCapstoneLabel);
+        rightPanel.add(Box.createVerticalGlue());
+
+
         boardButtons = new boardButton[BOARD_SIZE][BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -49,9 +79,6 @@ public class TakGame2D {
                 boardButtons[i][j] = new boardButton(chords,true);
 
                 boardButtons[i][j].setOpaque(true); // This is to make sure the background color is visible
-                //boardButtons[i][j].setContentAreaFilled(false);
-                boardButtons[i][j].setBorderPainted(false);
-
 
                 boardButtons[i][j].addActionListener(new ActionListener() {
                     
@@ -84,9 +111,9 @@ public class TakGame2D {
 
                 boardPanel.add(boardButtons[i][j]);
                 if ((i + j) % 2 == 0) {
-                    boardButtons[i][j].setBackground(new Color(152, 228, 255));
+                    boardButtons[i][j].setBackground(Color.LIGHT_GRAY);
                 } else {
-                    boardButtons[i][j].setBackground(new Color(104, 126, 255));
+                    boardButtons[i][j].setBackground(Color.BLACK);
                 }
             }
         }
@@ -99,8 +126,8 @@ public class TakGame2D {
         // Optional: Setting some preferred sizes and colors for visualization purposes
         leftPanel.setPreferredSize(new Dimension(100, 400));
         rightPanel.setPreferredSize(new Dimension(100, 400));
-        leftPanel.setBackground(new Color(255, 242, 216));
-        rightPanel.setBackground(new Color(255, 242, 216));
+        leftPanel.setBackground(Color.GRAY);
+        rightPanel.setBackground(Color.GRAY);
 
         frame.setVisible(true);
     }
@@ -121,78 +148,69 @@ public class TakGame2D {
 
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                ImageIcon icon;
-                int xChord = getCurrentChords()[0] - 1;
-                int yChord = getCurrentChords()[1] - 1;
-
-                int width = (int)(boardButtons[xChord][yChord].getWidth() * 0.30);
-                int height = (int)(boardButtons[xChord][yChord].getHeight() * 0.30);
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/WhitePiece.png");
+                    if (stones > 0) {
+                        stones--;
+                        leftStonesLabel.setText(stones + " Stones");
+                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
+                } else {
+                    if (stones2 > 0) {
+                        stones2--;
+                        rightStonesLabel.setText(stones2 + " Stones");
+                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
                 }
-                else{
-                    logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/BlackPiece.png");
-                }
-
-                Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                boardButtons[xChord][yChord].setIcon(new ImageIcon(scaledImage));
-                optionFrame.dispose();
             }
         });
 
 
         standingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                ImageIcon icon;
-                int xChord = getCurrentChords()[0] - 1;
-                int yChord = getCurrentChords()[1] - 1;
-
-                int width = (int)(boardButtons[xChord][yChord].getWidth() * 0.30);
-                int height = (int)(boardButtons[xChord][yChord].getHeight() * 0.30);
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/WhiteStanding.png");
-                }
-                else{
-                    logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/BlackStanding.png");
+                    if (stones > 0) {
+                        stones--;  // Decrease stone count
+                        leftStonesLabel.setText(stones + " Stones");  // Update label
+                        logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
+                } else {
+                    if (stones2 > 0) {
+                        stones2--;
+                        rightStonesLabel.setText(stones2 + " Stones");
+                        logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
                 }
 
-                Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                boardButtons[xChord][yChord].setIcon(new ImageIcon(scaledImage));
-                optionFrame.dispose();
             }
         });
-
 
         capstoneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                ImageIcon icon;
-                int xChord = getCurrentChords()[0] - 1;
-                int yChord = getCurrentChords()[1] - 1;
-
-                int width = (int)(boardButtons[xChord][yChord].getWidth() * 0.30);
-                int height = (int)(boardButtons[xChord][yChord].getHeight() * 0.30);
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/WhiteCapstone.png");
-                }
-                else{
-                    logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
-                    icon = new ImageIcon("/Users/alexandruvalah/Desktop/project2-1/assets/BlackCapstone.png");
+                    if (capstone > 0) {
+                        capstone--;
+                        leftCapstoneLabel.setText(capstone + " Capstone");
+                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
+                } else {
+                    if (capstone2 > 0) {
+                        capstone2--;
+                        rightCapstoneLabel.setText(capstone2 + " Capstone");
+                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
                 }
 
-                Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                boardButtons[xChord][yChord].setIcon(new ImageIcon(scaledImage));
-                optionFrame.dispose();
             }
         });
-
 
         JPanel topOptionPanel = new JPanel();
         topOptionPanel.setBounds(0, 0, 300, 100);

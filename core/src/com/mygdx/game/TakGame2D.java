@@ -45,9 +45,18 @@ public class TakGame2D {
                     
                     public void actionPerformed(ActionEvent e){
 
+
+                        
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
+
+
+                        if(source.getIsEmpty()){
+                            addPiece();
+                            source.setIsEmpty(false);
+                        }
+
                         System.out.println(xChord+" "+yChord);
                     }
 
@@ -95,7 +104,7 @@ public class TakGame2D {
 
 
         optionFrame = new JFrame("Choose Piece");
-        optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         optionFrame.setSize(300, 200);
         optionFrame.setLayout(new BorderLayout());
         optionFrame.add(topOptionPanel, BorderLayout.NORTH);

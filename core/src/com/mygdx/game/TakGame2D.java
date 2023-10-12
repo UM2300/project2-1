@@ -6,7 +6,9 @@ import java.awt.*;
 public class TakGame2D {
 
     private JFrame frame;
+    private JFrame optionFrame;
     private JLabel[][] boardLabels;
+    private JLabel optionLabel;
     private JPanel leftPanel, rightPanel, boardPanel;
     private final int BOARD_SIZE = 5;
 
@@ -47,6 +49,35 @@ public class TakGame2D {
         rightPanel.setBackground(Color.GRAY);
 
         frame.setVisible(true);
+    }
+
+    public void addPiece() {
+        
+        optionLabel = new JLabel("Choose a piece to add:");
+
+        JRadioButton standingButton = new JRadioButton("add Flat Piece");
+        JRadioButton capstoneButton = new JRadioButton("add Capstone");
+
+        JPanel topOptionPanel = new JPanel();
+        topOptionPanel.setBounds(0, 0, 300, 100);
+        JPanel bottomOptionPanel = new JPanel();
+        topOptionPanel.setBounds(0, 0, 300, 100);
+        
+        topOptionPanel.add(optionLabel);
+        bottomOptionPanel.add(standingButton);
+        bottomOptionPanel.add(capstoneButton);
+
+
+
+        optionFrame = new JFrame("Choose Piece");
+        optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        optionFrame.setSize(300, 200);
+        optionFrame.setLayout(new BorderLayout());
+        optionFrame.add(topOptionPanel, BorderLayout.NORTH);
+        optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
+
+        
+        optionFrame.setVisible(true);
     }
 
     public static void main(String[] args) {

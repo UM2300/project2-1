@@ -38,6 +38,48 @@ public class TakGame2D {
 
     boardButton boardButton;
 
+    public void startingWindow() {
+        
+        JLabel startLabel = new JLabel("Tak");
+        Font newFont = new Font("Georgia", Font.BOLD, 50);
+        startLabel.setFont(newFont);
+
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        topPanel.add(startLabel);
+
+        JButton startButton = new JButton("Start");
+        startButton.setSize(100, 50);
+
+        startButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TakGame2D();
+                frame.setVisible(true);
+            }
+
+            
+        });
+        
+        JButton instructionsButton = new JButton("Instructions");
+        startButton.setSize(100, 50);
+    
+        JPanel bottomPanel1 = new JPanel();
+        bottomPanel1.setLayout(new FlowLayout());
+        bottomPanel1.add(startButton);
+        bottomPanel1.add(instructionsButton);
+        
+        JFrame startFrame = new JFrame();
+        startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        startFrame.setSize(400, 400);
+        startFrame.setLayout(new GridLayout(2, 1));
+        startFrame.add(topPanel);
+        startFrame.add(bottomPanel1);
+        startFrame.setVisible(true);
+
+    }
+
     public TakGame2D() {
 
         leftStonesLabel = new JLabel(stones + " Stones");
@@ -131,7 +173,7 @@ public class TakGame2D {
         leftPanel.setBackground(Color.GRAY);
         rightPanel.setBackground(Color.GRAY);
 
-        frame.setVisible(true);
+        frame.setVisible(false);
     }
 
     public void addPiece() {
@@ -261,12 +303,14 @@ public class TakGame2D {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new TakGame2D();
-            }
-        });
+        // SwingUtilities.invokeLater(new Runnable() {
+        //     @Override
+        //     public void run() {
+        //         new TakGame2D();
+        //     }
+        // });
 
+        TakGame2D t2 = new TakGame2D();
+        t2.startingWindow();
     }
 }

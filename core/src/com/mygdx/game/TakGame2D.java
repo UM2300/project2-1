@@ -12,13 +12,29 @@ public class TakGame2D {
 
     private JFrame frame;
     private JFrame optionFrame;
-    private JLabel[][] boardLabels;
     private JLabel optionLabel;
     private boardButton[][] boardButtons;
     private JPanel leftPanel, rightPanel, boardPanel;
     private final int BOARD_SIZE = 5;
 
+    Draw draw = new Draw();
+
     private int[] currentChords;
+    private int[] moveToChords;
+
+    private boolean midTurn = false;
+
+    board logicBoard = new board();
+
+    boardButton boardButton;
+
+    public boolean getMidTurn(){
+        return midTurn;
+    }
+
+    public void setMidTurn(boolean midTurn){
+        this.midTurn = midTurn;
+    }
 
     public void setCurrentChords(int[] chords){
         this.currentChords = chords;
@@ -28,13 +44,38 @@ public class TakGame2D {
         return currentChords;
     }
 
+    public void setMoveToChords(int[] chords){
+        this.moveToChords = chords;
+    }
+
+    public int[] getMoveToChords(){
+        return moveToChords;
+    }
+
+    
+
+
+    public int targetDir(int[] currentChords, int[] moveToChords){
+
+        if(currentChords[0]!=moveToChords[0]){
+            if(moveToChords[0]>currentChords[0])
+                return 2;
+            else
+                return 0;
+        }
+        else{
+            if(moveToChords[1]>currentChords[1])
+                return 1;
+            else
+                return 3;
+        }
+
+    }
+
     public int stones = 21;
     public int capstone = 1;
     public int stones2 = 21;
     public int capstone2 = 1;
-    board logicBoard = new board();
-
-    boardButton boardButton;
 
     public TakGame2D() {
 
@@ -90,19 +131,31 @@ public class TakGame2D {
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
+                        int[] buttonChords = {xChord,yChord};
 
+                        
 
-                        if(source.getIsEmpty()){
-                            int[] buttonChords = {xChord,yChord};
-                            setCurrentChords(buttonChords);
-                            addPiece();
+                        if(getMidTurn()){
+                            setMoveToChords(buttonChords);
+                            int dir = targetDir(getCurrentChords(), getMoveToChords());
+                            
+                            logicBoard.move(currentChords[0], currentChords[1], 1, dir, 1);
+                            setMidTurn(false);
                             source.setIsEmpty(false);
                         }
                         else{
-                            int[] buttonChords = {xChord,yChord};
-                            setCurrentChords(buttonChords);
-
+                            if(source.getIsEmpty()){                             
+                                setCurrentChords(buttonChords);
+                                addPiece();
+                                source.setIsEmpty(false);
+                            }
+                            else{
+                                setCurrentChords(buttonChords);
+                                setMidTurn(true);
+                            }
                         }
+
+                        
 
                         System.out.println(xChord+" "+yChord);
                     }
@@ -234,6 +287,28 @@ public class TakGame2D {
 
         
         optionFrame.setVisible(true);
+    }
+
+    public void movePiece() {
+        
+        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
+
+        JTextField textField = new JTextField();
+
+        JPanel topMovePanel = new JPanel();
+        topMovePanel.setLayout(new GridLayout(2, 1));
+        topMovePanel.add(moveLabel);
+        topMovePanel.add(textField);
+        
+        
+        JFrame moveFrame = new JFrame("Move Piece");
+        moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        moveFrame.setSize(300, 200);
+        moveFrame.setLayout(new BorderLayout());
+        moveFrame.add(topMovePanel);
+
+        moveFrame.setVisible(true);
+
     }
 
     public static void main(String[] args) {

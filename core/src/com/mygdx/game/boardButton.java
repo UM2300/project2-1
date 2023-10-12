@@ -6,9 +6,18 @@ import javax.swing.JButton;
 public class boardButton extends JButton{
     
     private int[] chords;
+    private boolean isEmpty;
 
-    boardButton(){super();}
-    boardButton(int[] chords){super();this.chords=chords;}
+    boardButton(){
+        super();
+        isEmpty = true;
+    }
+
+    boardButton(int[] chords, boolean isEmpty){
+        super();
+        this.chords=chords;
+        this.isEmpty = isEmpty;
+    }
 
 
     public int getXChord(){

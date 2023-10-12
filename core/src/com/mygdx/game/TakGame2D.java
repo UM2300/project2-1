@@ -34,7 +34,7 @@ public class TakGame2D {
 
                 int[] chords = {i+1,j+1};
 
-                boardButtons[i][j] = new boardButton(chords);
+                boardButtons[i][j] = new boardButton(chords,true);
 
                 boardButtons[i][j].setOpaque(true); // This is to make sure the background color is visible
 

@@ -344,6 +344,7 @@ public class board {
             else 
                 System.out.println("It's a Draw.");
         }
+        isGameEnded = true;
     }
 
     // Add these to the board class
@@ -353,8 +354,8 @@ public class board {
         if (stack.isEmpty()) return false;
 
         int topPiece = stack.get(stack.size() - 1);
-        if (player == 0 && (topPiece != 0 && topPiece != 2)) return false;
-        if (player == 1 && (topPiece != 3 && topPiece != 5)) return false;
+        if (player == 0 && (topPiece != 0 && topPiece != 2 && topPiece != 1)) return false;
+        if (player == 1 && (topPiece != 3 && topPiece != 5 && topPiece != 4)) return false;
 
         if ((player == 0 && y == board[0].length - 1) || (player == 1 && x == board.length - 1)) return true;
 

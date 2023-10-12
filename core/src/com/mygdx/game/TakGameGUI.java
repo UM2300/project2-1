@@ -169,6 +169,8 @@ public class TakGameGUI extends ApplicationAdapter {
         }
         
         logicBoard.checkState();
+        logicBoard.checkWinCondition();
+        logicBoard.winBoardFull();
         return (minDistance < 50) ? closestPos : null;
     }
 

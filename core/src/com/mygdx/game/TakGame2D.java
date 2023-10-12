@@ -15,6 +15,18 @@ public class TakGame2D {
     private JPanel leftPanel, rightPanel, boardPanel;
     private final int BOARD_SIZE = 5;
 
+    private int[] currentChords;
+
+    public void setCurrentChords(int[] chords){
+        this.currentChords = chords;
+    }
+
+    public int[] getCurrentChords(){
+        return currentChords;
+    }
+
+    board logicBoard = new board();
+
     boardButton boardButton;
 
     public TakGame2D() {
@@ -51,6 +63,8 @@ public class TakGame2D {
 
 
                         if(source.getIsEmpty()){
+                            int[] buttonChords = {xChord,yChord};
+                            setCurrentChords(buttonChords);
                             addPiece();
                             source.setIsEmpty(false);
                         }
@@ -91,6 +105,45 @@ public class TakGame2D {
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
         JRadioButton capstoneButton = new JRadioButton("add Capstone");
        
+        flatButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                    logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+                else{
+                    logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+            }
+        });
+
+
+        standingButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                    logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+                else{
+                    logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+            }
+        });
+
+        capstoneButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                    logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+                else{
+                    logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                    optionFrame.dispose();
+                }
+            }
+        });
 
         JPanel topOptionPanel = new JPanel();
         topOptionPanel.setBounds(0, 0, 300, 100);
@@ -123,8 +176,5 @@ public class TakGame2D {
                 new TakGame2D();
             }
         });
-
-        TakGame2D t = new TakGame2D();
-        t.addPiece();
     }
 }

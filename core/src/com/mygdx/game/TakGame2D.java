@@ -15,6 +15,8 @@ public class TakGame2D {
     private JPanel leftPanel, rightPanel, boardPanel;
     private final int BOARD_SIZE = 5;
 
+    Draw draw = new Draw();
+
     private int[] currentChords;
 
     public void setCurrentChords(int[] chords){
@@ -172,6 +174,28 @@ public class TakGame2D {
 
         
         optionFrame.setVisible(true);
+    }
+
+    public void movePiece() {
+        
+        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
+
+        JTextField textField = new JTextField();
+
+        JPanel topMovePanel = new JPanel();
+        topMovePanel.setLayout(new GridLayout(2, 1));
+        topMovePanel.add(moveLabel);
+        topMovePanel.add(textField);
+        
+        
+        JFrame moveFrame = new JFrame("Move Piece");
+        moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        moveFrame.setSize(300, 200);
+        moveFrame.setLayout(new BorderLayout());
+        moveFrame.add(topMovePanel);
+
+        moveFrame.setVisible(true);
+
     }
 
     public static void main(String[] args) {

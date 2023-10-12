@@ -82,6 +82,11 @@ public class TakGame2D {
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
         JRadioButton capstoneButton = new JRadioButton("add Capstone");
        
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(flatButton);
+        buttonGroup.add(standingButton);
+        buttonGroup.add(capstoneButton);
+
 
         JPanel topOptionPanel = new JPanel();
         topOptionPanel.setBounds(0, 0, 300, 100);
@@ -115,7 +120,5 @@ public class TakGame2D {
             }
         });
 
-        TakGame2D t = new TakGame2D();
-        t.addPiece();
     }
 }

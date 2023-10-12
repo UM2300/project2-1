@@ -105,6 +105,11 @@ public class TakGame2D {
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
         JRadioButton capstoneButton = new JRadioButton("add Capstone");
        
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(flatButton);
+        buttonGroup.add(standingButton);
+        buttonGroup.add(capstoneButton);
+
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
@@ -176,5 +181,6 @@ public class TakGame2D {
                 new TakGame2D();
             }
         });
+
     }
 }

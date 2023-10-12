@@ -27,4 +27,12 @@ public class boardButton extends JButton{
     public int getYChord(){
         return chords[1];
     }
+
+    public boolean getIsEmpty(){
+        return isEmpty;
+    }
+
+    public void setIsEmpty(boolean isEmpty){
+        this.isEmpty=isEmpty;
+    }
 }

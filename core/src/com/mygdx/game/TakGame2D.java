@@ -43,9 +43,18 @@ public class TakGame2D {
                     
                     public void actionPerformed(ActionEvent e){
 
+
+                        
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
+
+
+                        if(source.getIsEmpty()){
+                            addPiece();
+                            source.setIsEmpty(false);
+                        }
+
                         System.out.println(xChord+" "+yChord);
                     }
 

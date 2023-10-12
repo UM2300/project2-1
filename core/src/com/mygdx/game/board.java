@@ -43,8 +43,8 @@ public class board {
         this.turn = turn;
     }
 
-    public int getTurn(){
-        return turn;
+    public String getCurrentPlayer(){
+        return currentPlayer;
     }
 
     public void togglePlayer() {

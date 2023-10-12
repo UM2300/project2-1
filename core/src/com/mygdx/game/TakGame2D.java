@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.awt.EventQueue;
-
 public class TakGame2D {
 
     private JFrame frame;
@@ -80,22 +78,26 @@ public class TakGame2D {
         
         optionLabel = new JLabel("Choose a piece to add:");
 
-        JRadioButton standingButton = new JRadioButton("add Flat Piece");
+        JRadioButton flatButton = new JRadioButton("add Flat Stone");
+        JRadioButton standingButton = new JRadioButton("add Standing Stone");
         JRadioButton capstoneButton = new JRadioButton("add Capstone");
+       
 
         JPanel topOptionPanel = new JPanel();
         topOptionPanel.setBounds(0, 0, 300, 100);
         JPanel bottomOptionPanel = new JPanel();
-        topOptionPanel.setBounds(0, 0, 300, 100);
+        bottomOptionPanel.setBounds(0, 0, 300, 100);
+        bottomOptionPanel.setLayout(new GridLayout(3, 1)); 
         
         topOptionPanel.add(optionLabel);
+        bottomOptionPanel.add(flatButton);
         bottomOptionPanel.add(standingButton);
         bottomOptionPanel.add(capstoneButton);
 
 
 
         optionFrame = new JFrame("Choose Piece");
-        optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         optionFrame.setSize(300, 200);
         optionFrame.setLayout(new BorderLayout());
         optionFrame.add(topOptionPanel, BorderLayout.NORTH);
@@ -112,5 +114,8 @@ public class TakGame2D {
                 new TakGame2D();
             }
         });
+
+        TakGame2D t = new TakGame2D();
+        t.addPiece();
     }
 }

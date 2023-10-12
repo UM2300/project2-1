@@ -68,6 +68,11 @@ public class TakGame2D {
                             addPiece();
                             source.setIsEmpty(false);
                         }
+                        else{
+                            int[] buttonChords = {xChord,yChord};
+                            setCurrentChords(buttonChords);
+
+                        }
 
                         System.out.println(xChord+" "+yChord);
                     }
@@ -109,6 +114,7 @@ public class TakGame2D {
         buttonGroup.add(flatButton);
         buttonGroup.add(standingButton);
         buttonGroup.add(capstoneButton);
+
 
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){

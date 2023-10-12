@@ -13,8 +13,10 @@ public class TakGame2D {
     private JFrame frame;
     private JFrame optionFrame;
     private JLabel optionLabel;
+    private JFrame moveFrame;
     private boardButton[][] boardButtons;
     private JPanel leftPanel, rightPanel, boardPanel;
+    private int pieceQuantity = 1;
     private final int BOARD_SIZE = 5;
 
     Draw draw = new Draw();
@@ -50,6 +52,14 @@ public class TakGame2D {
 
     public int[] getMoveToChords(){
         return moveToChords;
+    }
+
+    public int getPieceQuantity(){
+        return pieceQuantity;
+    }
+
+    public void setPieceQuantity(int pieceQuantity){
+        this.pieceQuantity = pieceQuantity;
     }
 
     
@@ -118,14 +128,18 @@ public class TakGame2D {
                 int[] chords = {i+1,j+1};
 
                 boardButtons[i][j] = new boardButton(chords,true);
-
                 boardButtons[i][j].setOpaque(true); // This is to make sure the background color is visible
-
                 boardButtons[i][j].addActionListener(new ActionListener() {
                     
                     
                     public void actionPerformed(ActionEvent e){
 
+                        for(int i=0; i< boardButtons.length; i++){
+                            for(int j=0; j<boardButtons.length; j++){
+                                if(logicBoard.getBoard()[i][j].isEmpty())
+                                    boardButtons[i][j].setIsEmpty(true);
+                            }
+                        }
 
                         
                         boardButton source = (boardButton) e.getSource();
@@ -134,12 +148,12 @@ public class TakGame2D {
                         int[] buttonChords = {xChord,yChord};
 
                         
-
                         if(getMidTurn()){
+                            
                             setMoveToChords(buttonChords);
                             int dir = targetDir(getCurrentChords(), getMoveToChords());
                             
-                            logicBoard.move(currentChords[0], currentChords[1], 1, dir, 1);
+                            logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
                             setMidTurn(false);
                             source.setIsEmpty(false);
                         }
@@ -150,13 +164,16 @@ public class TakGame2D {
                                 source.setIsEmpty(false);
                             }
                             else{
+                                movePiece();
                                 setCurrentChords(buttonChords);
                                 setMidTurn(true);
                             }
                         }
 
                         
-
+                        //logicBoard.checkWinCondition();
+                        //logicBoard.winBoardFull();
+                        //logicBoard.checkState();
                         System.out.println(xChord+" "+yChord);
                     }
 
@@ -206,28 +223,6 @@ public class TakGame2D {
                     if (stones > 0) {
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
-                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
-                        optionFrame.dispose();
-                    }
-                } else {
-                    if (stones2 > 0) {
-                        stones2--;
-                        rightStonesLabel.setText(stones2 + " Stones");
-                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
-                        optionFrame.dispose();
-                    }
-                }
-            }
-        });
-
-
-        standingButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-
-                if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        stones--;  // Decrease stone count
-                        leftStonesLabel.setText(stones + " Stones");  // Update label
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
                         optionFrame.dispose();
                     }
@@ -239,6 +234,35 @@ public class TakGame2D {
                         optionFrame.dispose();
                     }
                 }
+                logicBoard.checkWinCondition();
+                logicBoard.winBoardFull();
+                logicBoard.checkState();
+            }
+            
+        });
+
+
+        standingButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                    if (stones > 0) {
+                        stones--;  // Decrease stone count
+                        leftStonesLabel.setText(stones + " Stones");  // Update label
+                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
+                } else {
+                    if (stones2 > 0) {
+                        stones2--;
+                        rightStonesLabel.setText(stones2 + " Stones");
+                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                        optionFrame.dispose();
+                    }
+                }
+                logicBoard.checkWinCondition();
+                logicBoard.winBoardFull();
+                logicBoard.checkState();
 
             }
         });
@@ -261,6 +285,9 @@ public class TakGame2D {
                         optionFrame.dispose();
                     }
                 }
+                logicBoard.checkWinCondition();
+                logicBoard.winBoardFull();
+                logicBoard.checkState();
 
             }
         });
@@ -287,28 +314,43 @@ public class TakGame2D {
 
         
         optionFrame.setVisible(true);
+
+        
     }
 
     public void movePiece() {
         
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
+        final JTextField textField = new JTextField();
+        JButton button = new JButton("Confirm");
 
-        JTextField textField = new JTextField();
+
+        button.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e){
+
+                String txt = textField.getText();
+                int quantity = Integer.parseInt(txt);
+                setPieceQuantity(quantity);
+                moveFrame.dispose();
+            }
+
+        });
 
         JPanel topMovePanel = new JPanel();
-        topMovePanel.setLayout(new GridLayout(2, 1));
+        topMovePanel.setLayout(new GridLayout(3, 1));
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
+        topMovePanel.add(button);
         
         
-        JFrame moveFrame = new JFrame("Move Piece");
+        moveFrame = new JFrame("Move Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.add(topMovePanel);
 
         moveFrame.setVisible(true);
-
     }
 
     public static void main(String[] args) {

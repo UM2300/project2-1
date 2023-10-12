@@ -26,13 +26,9 @@ import java.util.Scanner;
 public class board {
 
     public TakPiece piece;
-
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
-
     private int turn = 0;
-
     private boolean isGameEnded = false;
-
     private static String currentPlayer = "WHITE";
 
     public boolean isGameEnded() {
@@ -45,6 +41,10 @@ public class board {
 
     public String getCurrentPlayer(){
         return currentPlayer;
+    }
+
+    public ArrayList<Integer>[][] getBoard(){
+        return board;
     }
 
     public void togglePlayer() {

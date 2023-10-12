@@ -7,9 +7,6 @@ import javax.swing.JFrame;
 public class NewGUI {
 
 
-    
-    
-
     public static void main(String[] args) {
 
         

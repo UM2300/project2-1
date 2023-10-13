@@ -1,0 +1,51 @@
+TAK:
+
+Welcome to Group 02's game of Tak!
+
+Tak is a two-player abstract strategy board game. It's a simple yet deep game that can be played with a standard chess or checkerboard. Here are the basic rules to get you started:
+
+Objective: Create a "road" from one side of the board to the other, whether it be from top to bottom, or from left to right. The road must be a continuous line of your own pieces, and it can be vertical, horizontal, but not diagonal. The first player to achieve this wins the game.
+
+Setup:
+
+A 5x5 board will be displayed (a standard sized board) with a counter on either side of how many pieces each player gets. 
+
+Each player will have their own set of pieces. A set typically consists of flat "stones" (used to build roads) and "capstones" (which can be used as both road pieces and to exert control over other pieces). The number of pieces in a set varies depending on the board size, but a typical set for a 5x5 board includes 21 stones and 1 capstone per player.
+Flat stones are denoted by a black or white rectangle. 
+Standing stones have an "X" marked on the rectangle. 
+Capstones have a "C" marked on the rectangle.
+
+Gameplay:
+
+After pressing "Start", players take turns, with the first player usually being determined by a colour displayed in the top right hand corder of the window.
+
+On your turn, you can do one of the following:
+
+- Place one of your flat stones on an empty square: You can either add the stone as a "flat stone", or as a "standing stone".
+
+- Move one or more of your own flat stones: A stone can move in a straight line (horizontally, vertically, but not diagonally) as far as you like, but it must stop when it encounters a standing stone, a capstone or the edge of the board. You can only move your own pieces. Moving ends your turn.
+
+- Moving a stack: Flat pieces can be stacked on top of each other. When moving a stack, you can only move as many places as there are stones in the stack. The colour of the top stone denotes which player "controlls" the stack and only they can move it. As you move a stack, you have to drop off at least one stone every tile you cross. 
+
+Capstone use: The capstone is more versatile. You can play it like a normal flat stone, or you can use it to change the ownership of a stack of pieces. To do this, you place your capstone on top of an existing stack of stones, and now that entire stack belongs to you. Capstones are also the only pieces that can flatten standing stones.
+
+Control:
+
+A stack of stones is "controlled" by the player who has the top piece in the stack.
+
+A player can only move or manipulate pieces they control.
+
+Winning:
+The game is won by the first player to create a continuous road from one side of the board to the other with their pieces. (from either top to bottom, or from left to right 
+
+Additional Rules:
+
+In the case of a player placing a piece to create a road of their pieces, but in turn completes a road for the opponent as well, the player whose last turn it was, wins.
+
+The game can end in a draw if both players agree or if a specific number of moves is reached without a clear winner.
+
+If the board becomes full, ie. there are no more open tiles, the player who owns the most stacks is declared the winner.
+
+If the a player plays their last piece, the game ends and the opponent is declared the winner. 
+
+Have fun and good luck!

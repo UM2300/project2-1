@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class TakGame2D {
 
@@ -89,13 +93,17 @@ public class TakGame2D {
 
     public void startingWindow() {
         
+        final JFrame startFrame = new JFrame();
+
         JLabel startLabel = new JLabel("Tak");
-        Font newFont = new Font("Georgia", Font.BOLD, 50);
+        Font newFont = new Font("Georgia", Font.BOLD, 60);
         startLabel.setFont(newFont);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        topPanel.setBackground(Color.LIGHT_GRAY);
         topPanel.add(startLabel);
+
 
         JButton startButton = new JButton("Start");
         startButton.setSize(100, 50);
@@ -106,6 +114,7 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e) {
                 new TakGame2D();
                 frame.setVisible(true);
+                startFrame.dispose();
             }
 
             
@@ -113,15 +122,35 @@ public class TakGame2D {
         
         JButton instructionsButton = new JButton("Instructions");
         startButton.setSize(100, 50);
+
+        instructionsButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File instructionsFile = new File("Instructions.txt");
+
+                    if (Desktop.isDesktopSupported() && instructionsFile.exists()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.open(instructionsFile);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Unable to open instructions.");
+                    }
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error opening instructions.");
+                    exception.printStackTrace();
+                }
+            }
+        });
     
         JPanel bottomPanel1 = new JPanel();
         bottomPanel1.setLayout(new FlowLayout());
         bottomPanel1.add(startButton);
         bottomPanel1.add(instructionsButton);
         
-        JFrame startFrame = new JFrame();
         startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        startFrame.setSize(400, 400);
+        startFrame.setSize(400, 300);
+        startFrame.setLocationRelativeTo(null);
         startFrame.setLayout(new GridLayout(2, 1));
         startFrame.add(topPanel);
         startFrame.add(bottomPanel1);
@@ -142,7 +171,6 @@ public class TakGame2D {
         frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
 
-        // Initialize the left, right, and board panels
         leftPanel = new JPanel();
         rightPanel = new JPanel();
         boardPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
@@ -241,6 +269,7 @@ public class TakGame2D {
         leftPanel.setBackground(Color.GRAY);
         rightPanel.setBackground(Color.GRAY);
 
+        frame.setLocationRelativeTo(null);
         frame.setVisible(false);
     }
 
@@ -345,12 +374,11 @@ public class TakGame2D {
         bottomOptionPanel.add(standingButton);
         bottomOptionPanel.add(capstoneButton);
 
-
-
         optionFrame = new JFrame("Choose Piece");
         optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         optionFrame.setSize(300, 200);
         optionFrame.setLayout(new BorderLayout());
+        optionFrame.setLocationRelativeTo(null);
         optionFrame.add(topOptionPanel, BorderLayout.NORTH);
         optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
 
@@ -390,20 +418,42 @@ public class TakGame2D {
         moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
+        moveFrame.setLocationRelativeTo(null);
         moveFrame.add(topMovePanel);
 
         moveFrame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        // SwingUtilities.invokeLater(new Runnable() {
-        //     @Override
-        //     public void run() {
-        //         new TakGame2D();
-        //     }
-        // });
+    public void endScreen() {
 
-        TakGame2D t2 = new TakGame2D();
-        t2.startingWindow();
+        JLabel winLabel = new JLabel("Congratulations!");
+        Font font = new Font("Georgia", Font.BOLD, 40);
+        winLabel.setFont(font);
+
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        topPanel.setBackground(Color.LIGHT_GRAY);
+        topPanel.add(winLabel);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout());
+        bottomPanel.setBackground(Color.LIGHT_GRAY);
+
+        JFrame endFrame = new JFrame();
+        endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        endFrame.setSize(400,400);
+        endFrame.setLocationRelativeTo(null);
+        endFrame.setLayout(new GridLayout(2, 1));
+        endFrame.add(topPanel);
+        endFrame.add(bottomPanel);
+        endFrame.setVisible(true);
+
+
+    }
+
+    public static void main(String[] args) {
+
+        TakGame2D game = new TakGame2D();
+        game.startingWindow();
     }
 }

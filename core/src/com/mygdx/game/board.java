@@ -582,7 +582,8 @@ public class board {
 
 
     public void continueDropPiece(int x, int y, ArrayList<Integer> temp, int dir) {
-        
+        System.out.println("Created");
+
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
         final JTextField textField = new JTextField();
         JButton button = new JButton("Confirm");
@@ -604,8 +605,11 @@ public class board {
                     dropFrame.dispose();
                 }
                 else{
-                    continueMove(getChordsAndDir()[0], getChordsAndDir()[1], getTemp(), getChordsAndDir()[2], drop);
+                    
                     dropFrame.dispose();
+                    System.out.println("disposed");
+
+                    continueMove(getChordsAndDir()[0], getChordsAndDir()[1], getTemp(), getChordsAndDir()[2], drop);
                 }                
             }
 

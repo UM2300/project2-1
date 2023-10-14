@@ -232,42 +232,48 @@ public class TakGame2D {
                             }
                         }
 
-
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
                         int[] buttonChords = {xChord,yChord};
 
-                        
-                        if(getMidTurn()){
-                            
-                            setMoveToChords(buttonChords);
-                            //int dir = targetDir(getCurrentChords(), getMoveToChords());
-                            
-                            dropPiece();
+                        boolean checker = boardButtons[xChord-1][yChord-1].getIsEmpty();
 
-                            //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
-                            setMidTurn(false);
-                            source.setIsEmpty(false);
-                        }
-                        else{
-                            if(source.getIsEmpty()){                             
-                                setCurrentChords(buttonChords);
-                                addPiece();
+                        if(checker||(logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)<=2 && logicBoard.getCurrentPlayer().equals("WHITE"))||
+                        (logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)>2 && logicBoard.getCurrentPlayer().equals("BROWN"))){
+                            
+                            if(getMidTurn()){
+                            
+                                setMoveToChords(buttonChords);
+                                //int dir = targetDir(getCurrentChords(), getMoveToChords());
+                                
+                                dropPiece();
+
+                                //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
+                                setMidTurn(false);
                                 source.setIsEmpty(false);
                             }
                             else{
-                                movePiece();
-                                setCurrentChords(buttonChords);
-                                setMidTurn(true);
+                                if(source.getIsEmpty()){                             
+                                    setCurrentChords(buttonChords);
+                                    addPiece();
+                                    source.setIsEmpty(false);
+                                }
+                                else{
+                                    movePiece();
+                                    setCurrentChords(buttonChords);
+                                    setMidTurn(true);
+                                }
                             }
-                        }
 
+                            
+                            //logicBoard.checkWinCondition();
+                            //logicBoard.winBoardFull();
+                            //logicBoard.checkState();
+                            System.out.println(xChord+" "+yChord);
+
+                        }
                         
-                        //logicBoard.checkWinCondition();
-                        //logicBoard.winBoardFull();
-                        //logicBoard.checkState();
-                        System.out.println(xChord+" "+yChord);
                     }
 
                 });

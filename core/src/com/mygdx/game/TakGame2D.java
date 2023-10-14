@@ -292,17 +292,9 @@ public class TakGame2D {
                                     stones2--;
                                     rightStonesLabel.setText("Brown Stones: " + stones2);
                                 }
-
-                                
-
                             }
-
                         }
-
-                        
-                        
                     }
-
                 });
 
                 boardPanel.add(boardButtons[i][j]);

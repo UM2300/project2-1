@@ -10,7 +10,7 @@ Setup:
 
 A 5x5 board will be displayed (a standard sized board) with a counter on either side of how many pieces each player gets. 
 
-Each player will have their own set of pieces. A set typically consists of flat "stones" (used to build roads) and "capstones" (which can be used as both road pieces and to exert control over other pieces). The number of pieces in a set varies depending on the board size, but a typical set for a 5x5 board includes 21 stones and 1 capstone per player.
+Each player will have their own set of pieces. A set consists of flat "stones" (used to build roads) and "capstones" (which can be used as both road pieces and to exert control over other pieces). Each player gets 21 stones and 1 capstone.
 Flat stones are denoted by a horizontal brown or white rectangle. 
 Standing stones are denoted by vertical brown or white square.
 
@@ -20,9 +20,9 @@ After pressing "Start", players take turns, with the first player usually being 
 
 On your turn, you can do one of the following:
 
-- Place one of your flat stones on an empty square: You can either add the stone as a "flat stone", or as a "standing stone".
+- Place one of your stones on an empty square: You can either add a flat stone, a standing stone, or a capstone. To do this, click on an empty tile and choose the piece you want to add.
 
-- Move one or more of your own flat stones: A stone can move in a straight line (horizontally, vertically, but not diagonally) as far as you like, but it must stop when it encounters a standing stone, a capstone or the edge of the board. You can only move your own pieces. Moving ends your turn.
+- Move one or more of your own stones: A stone can move in a straight line (horizontally, vertically, but not diagonally) as far as you like, but is blocked when it encounters a standing stone, a capstone or the edge of the board. You can only move your own pieces. To move a piece / stack already on the board, click the tile with the piece you want moved, specify how many pieces you want to move, click the destination, specify the number of pieces you want dropped off.  Moving ends your turn.
 
 - Moving a stack: Flat pieces can be stacked on top of each other. When moving a stack, you can only move as many places as there are stones in the stack. The colour of the top stone denotes which player "controlls" the stack and only they can move it. As you move a stack, you have to drop off at least one stone every tile you cross. 
 

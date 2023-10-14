@@ -115,9 +115,17 @@ public class TakGame2D {
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        topPanel.setBackground(Color.LIGHT_GRAY);
+        topPanel.setBackground(new Color(192, 130, 97));
         topPanel.add(startLabel);
 
+        JLabel teamLabel = new JLabel("Group 02 - Team 2 Good");
+        Font newFont2 = new Font("Georgia", Font.PLAIN, 15);
+        teamLabel.setFont(newFont2);
+
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        middlePanel.setBackground(new Color(210, 150, 100));
+        middlePanel.add(teamLabel);
 
         JButton startButton = new JButton("Start");
         startButton.setSize(100, 50);
@@ -134,8 +142,9 @@ public class TakGame2D {
             
         });
         
-        JButton instructionsButton = new JButton("Instructions");
+        JButton instructionsButton = new JButton("How to play");
         startButton.setSize(100, 50);
+        
 
         instructionsButton.addActionListener(new ActionListener() {
             
@@ -157,17 +166,19 @@ public class TakGame2D {
             }
         });
     
-        JPanel bottomPanel1 = new JPanel();
-        bottomPanel1.setLayout(new FlowLayout());
-        bottomPanel1.add(startButton);
-        bottomPanel1.add(instructionsButton);
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        bottomPanel.setBackground(new Color(226, 199, 153));
+        bottomPanel.add(startButton);
+        bottomPanel.add(instructionsButton);
         
         startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         startFrame.setSize(400, 300);
         startFrame.setLocationRelativeTo(null);
-        startFrame.setLayout(new GridLayout(2, 1));
+        startFrame.setLayout(new GridLayout(3, 1));
         startFrame.add(topPanel);
-        startFrame.add(bottomPanel1);
+        startFrame.add(middlePanel);
+        startFrame.add(bottomPanel);
         startFrame.setVisible(true);
 
     }

@@ -351,14 +351,14 @@ public class TakGame2D {
                 logicBoard.checkState();
                 System.out.println(logicBoard.isGameEnded());;
 
-            //     if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
-            //         endScreen("BROWN");
-            //       //  System.out.println("reached");
-            //     }
-            //     else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
-            //         endScreen("WHITE");
-            //         System.out.println("reached");
-            //     }
+                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                    endScreen("WHITE");
+                  //  System.out.println("reached");
+                }
+                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                    endScreen("BROWN");
+                    //System.out.println("reached");
+                }
              }
             
         });
@@ -392,14 +392,12 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                // if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
-                //     endScreen("WHITE");
-                //     System.out.println("reached");
-                // }
-                // else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
-                //     endScreen("BROWN");
-                //     System.out.println("reached");
-                // }
+                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                    endScreen("WHITE");
+                }
+                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                    endScreen("BROWN");
+                }
 
             }
         });
@@ -432,14 +430,12 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                // if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
-                //     endScreen("WHITE");
-                //     System.out.println("reached");
-                // }
-                // else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
-                //     endScreen("BROWN");
-                //     System.out.println("reached");
-                // }
+                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                    endScreen("WHITE");
+                }
+                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                    endScreen("BROWN");
+                }
                 
             }
         });
@@ -567,11 +563,11 @@ public class TakGame2D {
             JPanel bottomPanel = new JPanel();
 
             if (currentPlayer == "WHITE") {
-                bottomPanel.add(whiteWinLabel);
+                bottomPanel.add(brownWinLabel);
     
             }
             else if (currentPlayer == "BROWN") {
-                bottomPanel.add(brownWinLabel);
+                bottomPanel.add(whiteWinLabel);
             }
 
             topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -580,7 +576,6 @@ public class TakGame2D {
 
             bottomPanel.setLayout(new FlowLayout());
             bottomPanel.setBackground(Color.LIGHT_GRAY);
-            bottomPanel.add(brownWinLabel);
 
             JFrame endFrame = new JFrame();
             endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -592,7 +587,6 @@ public class TakGame2D {
 
             endFrame.setVisible(true);
 
-            
         
     }
 

@@ -365,8 +365,9 @@ public class board {
                 System.out.println("Brown Wins.");
             else 
                 System.out.println("It's a Draw.");
+            
+            isGameEnded = true;
         }
-        isGameEnded = true;
     }
 
 

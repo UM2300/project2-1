@@ -322,11 +322,6 @@ public class TakGame2D {
         buttonGroup.add(standingButton);
         buttonGroup.add(capstoneButton);
 
-
-
-
-
-
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
 
@@ -353,7 +348,17 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-            }
+                System.out.println(logicBoard.isGameEnded());;
+
+            //     if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+            //         endScreen("BROWN");
+            //       //  System.out.println("reached");
+            //     }
+            //     else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+            //         endScreen("WHITE");
+            //         System.out.println("reached");
+            //     }
+             }
             
         });
 
@@ -385,6 +390,15 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
+                // if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                //     endScreen("WHITE");
+                //     System.out.println("reached");
+                // }
+                // else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                //     endScreen("BROWN");
+                //     System.out.println("reached");
+                // }
+
             }
         });
 
@@ -415,6 +429,15 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
+                // if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                //     endScreen("WHITE");
+                //     System.out.println("reached");
+                // }
+                // else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                //     endScreen("BROWN");
+                //     System.out.println("reached");
+                // }
+                
             }
         });
 
@@ -525,82 +548,49 @@ public class TakGame2D {
         moveFrame.setVisible(true);
     }
 
-    public void endScreen() {
+    public void endScreen(String currentPlayer) {
 
-        Timer timer = new Timer(100, new ActionListener() {
+            JLabel winLabel = new JLabel("Congratulations!");
+            Font font = new Font("Georgia", Font.BOLD, 40);
+            winLabel.setFont(font);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            JLabel brownWinLabel = new JLabel("Brown wins!");
+            brownWinLabel.setFont(font);
 
-                if (logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+            JLabel whiteWinLabel = new JLabel("White wins!");
+            whiteWinLabel.setFont(font);
 
-                    JLabel winLabel = new JLabel("Congratulations!");
-                    Font font = new Font("Georgia", Font.BOLD, 40);
-                    winLabel.setFont(font);
+            JPanel topPanel = new JPanel();
+            JPanel bottomPanel = new JPanel();
 
-                    JLabel whiteWinLabel = new JLabel("White wins!");
-                    whiteWinLabel.setFont(font);
-
-                    JPanel topPanel = new JPanel();
-                    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                    topPanel.setBackground(Color.LIGHT_GRAY);
-                    topPanel.add(winLabel);
-
-                    JPanel bottomPanel = new JPanel();
-                    bottomPanel.setLayout(new FlowLayout());
-                    bottomPanel.setBackground(Color.LIGHT_GRAY);
-                    bottomPanel.add(whiteWinLabel);
-            
-                    JFrame endFrame = new JFrame();
-                    endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    endFrame.setSize(400,400);
-                    endFrame.setLocationRelativeTo(null);
-                    endFrame.setLayout(new GridLayout(2, 1));
-                    endFrame.add(topPanel);
-                    endFrame.add(bottomPanel);
-
-                    endFrame.setVisible(true);
-                }
-
-                else if (logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
-
-                    JLabel winLabel = new JLabel("Congratulations!");
-                    Font font = new Font("Georgia", Font.BOLD, 40);
-                    winLabel.setFont(font);
-
-                    JLabel brownWinLabel = new JLabel("Brown wins!");
-                    brownWinLabel.setFont(font);
-
-                    JPanel topPanel = new JPanel();
-                    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                    topPanel.setBackground(Color.LIGHT_GRAY);
-                    topPanel.add(winLabel);
-
-                    JPanel bottomPanel = new JPanel();
-                    bottomPanel.setLayout(new FlowLayout());
-                    bottomPanel.setBackground(Color.LIGHT_GRAY);
-                    bottomPanel.add(brownWinLabel);
-
-                    JFrame endFrame = new JFrame();
-                    endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    endFrame.setSize(400,400);
-                    endFrame.setLocationRelativeTo(null);
-                    endFrame.setLayout(new GridLayout(2, 1));
-                    endFrame.add(topPanel);
-                    endFrame.add(bottomPanel);
-
-                    endFrame.setVisible(true);
-                }
-            
+            if (currentPlayer == "WHITE") {
+                bottomPanel.add(whiteWinLabel);
+    
+            }
+            else if (currentPlayer == "BROWN") {
+                bottomPanel.add(brownWinLabel);
             }
 
+            topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            topPanel.setBackground(Color.LIGHT_GRAY);
+            topPanel.add(winLabel);
+
+            bottomPanel.setLayout(new FlowLayout());
+            bottomPanel.setBackground(Color.LIGHT_GRAY);
+            bottomPanel.add(brownWinLabel);
+
+            JFrame endFrame = new JFrame();
+            endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            endFrame.setSize(400,400);
+            endFrame.setLocationRelativeTo(null);
+            endFrame.setLayout(new GridLayout(2, 1));
+            endFrame.add(topPanel);
+            endFrame.add(bottomPanel);
+
+            endFrame.setVisible(true);
+
             
-        });
-
         
-
-        timer.start();
-
     }
 
 

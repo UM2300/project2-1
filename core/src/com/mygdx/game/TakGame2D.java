@@ -393,7 +393,7 @@ public class TakGame2D {
                         colorButton.setText("WHITE TURN");
                         stones2--;
                         rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
                         optionFrame.dispose();
                     }

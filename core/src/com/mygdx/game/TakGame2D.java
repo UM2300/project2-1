@@ -111,11 +111,17 @@ public class TakGame2D {
     public boolean bCapstone = true;
 
     public void startingWindow() {
+
+        if (frame != null) {
+            frame.dispose(); // Dispose of the existing frame if it exists
+        }
         final JFrame startFrame = new JFrame("Tak Menu");
+
+
     
         // Set up the title label
         JLabel startLabel = new JLabel("Tak");
-        Font titleFont = new Font("Georgia", Font.BOLD, 60);
+        Font titleFont = new Font("Algerian", Font.BOLD, 60);
         startLabel.setFont(titleFont);
         startLabel.setForeground(new Color(226, 199, 153));
     
@@ -149,7 +155,7 @@ public class TakGame2D {
     
         // Create and style the "Start" button
         JButton startButton = new JButton("Start");
-        startButton.setFont(new Font("Arial", Font.BOLD, 24));
+        startButton.setFont(new Font("Algerian", Font.BOLD, 24));
         startButton.setUI(highlightUI);
         startButton.setBackground(new Color(226, 199, 153)); // Button color
         startButton.setForeground(new Color(192, 130, 97)); // Text color
@@ -168,7 +174,7 @@ public class TakGame2D {
     
         // Create and style the "Instructions" button
         JButton instructionsButton = new JButton("Instructions");
-        instructionsButton.setFont(new Font("Arial", Font.BOLD, 24));
+        instructionsButton.setFont(new Font("Algerian", Font.BOLD, 24));
         instructionsButton.setUI(highlightUI);
         instructionsButton.setBackground(new Color(226, 199, 153)); // Button color
         instructionsButton.setForeground(new Color(192, 130, 97)); // Text color
@@ -605,46 +611,129 @@ public class TakGame2D {
         moveFrame.setVisible(true);
     }
 
-    public void endScreen(String currentPlayer) {
+    public void resetGame() {
+        // Clear game state and update the board
+        logicBoard = new board();
+        pieceQuantity = 1;
+        dropNum = 0;
+        setMidTurn(false);
 
-            JLabel winLabel = new JLabel("Congratulations!");
-            Font font = new Font("Georgia", Font.BOLD, 40);
-            winLabel.setFont(font);
+        stones = 21;
+        capstone = 1;
+        wCapstone = true;
+        stones2 = 21;
+        capstone2 = 1;
+        bCapstone = true;
 
-            JLabel brownWinLabel = new JLabel("Brown wins!");
-            brownWinLabel.setFont(font);
-
-            JLabel whiteWinLabel = new JLabel("White wins!");
-            whiteWinLabel.setFont(font);
-
-            JPanel topPanel = new JPanel();
-            JPanel bottomPanel = new JPanel();
-
-            if (currentPlayer == "WHITE") {
-                bottomPanel.add(brownWinLabel);
-    
+        // Clear the icons on the board buttons
+        for (int i = 0; i < boardButtons.length; i++) {
+            for (int j = 0; j < boardButtons[i].length; j++) {
+                boardButtons[i][j].setIcon(null);
             }
-            else if (currentPlayer == "BROWN") {
-                bottomPanel.add(whiteWinLabel);
-            }
+        }
+        frame.dispose();
 
-            topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            topPanel.setBackground(Color.LIGHT_GRAY);
-            topPanel.add(winLabel);
+        // Update the logicBoard with its initial state if necessary
+        logicBoard = new board();
 
-            bottomPanel.setLayout(new FlowLayout());
-            bottomPanel.setBackground(Color.LIGHT_GRAY);
+        // Update the JLabels
+        leftStonesLabel.setText("White Stones: " + stones);
+        leftCapstoneLabel.setText("White Capstone: " + capstone);
+        rightStonesLabel.setText("Brown Stones: " + stones2);
+        rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
 
-            JFrame endFrame = new JFrame();
-            endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            endFrame.setSize(400,400);
-            endFrame.setLocationRelativeTo(null);
-            endFrame.setLayout(new GridLayout(2, 1));
-            endFrame.add(topPanel);
-            endFrame.add(bottomPanel);
 
-            endFrame.setVisible(true);   
     }
+
+    public void endScreen(String currentPlayer) {
+        final JFrame endFrame = new JFrame("Game Over");
+    
+        JLabel winLabel = new JLabel("Congratulations!");
+        Font titleFont = new Font("Algerian", Font.BOLD, 35);
+        winLabel.setFont(titleFont);
+    
+        JLabel winMessageLabel;
+    
+        if (currentPlayer.equals("WHITE")) {
+            winMessageLabel = new JLabel("Brown wins!");
+        } else if (currentPlayer.equals("BROWN")) {
+            winMessageLabel = new JLabel("White wins!");
+        } else {
+            winMessageLabel = new JLabel("It's a draw!");
+        }
+    
+        Font messageFont = new Font("Algerian", Font.BOLD, 24);
+        winMessageLabel.setFont(messageFont);
+    
+        // Create a panel for the messages
+        JPanel messagePanel = new JPanel();
+        messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        messagePanel.setBackground(new Color(192, 130, 97));
+        messagePanel.add(winLabel);
+        messagePanel.add(winMessageLabel);
+        winLabel.setForeground(new Color(226, 199, 153));
+        winMessageLabel.setForeground(new Color(226, 199, 153));
+    
+        // Create a panel for the buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(226, 199, 153));
+
+        ButtonUI highlightUI = new BasicButtonUI() {
+            private Color hoverColor = new Color(242, 236, 190); // Color when hovering
+
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                AbstractButton button = (AbstractButton) c;
+                ButtonModel model = button.getModel();
+
+                if (model.isRollover()) {
+                    button.setBackground(hoverColor); // Change the background color on hover
+                } else {
+                    button.setBackground(new Color(226, 199, 153)); // Restore the default color
+                }
+                super.paint(g, c);
+            }
+        };
+
+        JButton startOverButton = new JButton("Start Over");
+        startOverButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        startOverButton.setUI(highlightUI);
+        startOverButton.setBackground(new Color(226, 199, 153)); // Button color
+        startOverButton.setForeground(new Color(192, 130, 97)); // Text color
+        startOverButton.setFocusPainted(false); // Remove the border around the text
+        startOverButton.setPreferredSize(new Dimension(200, 50)); // Button size
+    
+        // Add action listener for the "Start" button
+        startOverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetGame(); // Call resetGame method to clear the board and game state
+                optionFrame.dispose();
+                //frame.dispose();
+                startingWindow();
+                endFrame.dispose();
+
+            }
+        });
+
+        buttonPanel.add(startOverButton);
+    
+        // Add components to the endFrame
+        endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        endFrame.setSize(400, 300);
+        endFrame.setLocationRelativeTo(null);
+        endFrame.setLayout(new GridLayout(2, 1));
+    
+        // Add the message panel to the top
+        endFrame.add(messagePanel);
+    
+        // Add the button panel to the bottom
+        endFrame.add(buttonPanel);
+    
+        endFrame.setVisible(true);
+    }
+    
 
     public void updateVisualBoard() {
         // Assuming logicBoard has a method like getTileState(x, y) that returns the numerical state of the tile

@@ -191,7 +191,7 @@ public class TakGame2D {
 
         frame = new JFrame("TakGame2D");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(600, 450);
         frame.setLayout(new BorderLayout());
         frame.add(topRightPanel, BorderLayout.NORTH);
 
@@ -277,9 +277,9 @@ public class TakGame2D {
 
                 boardPanel.add(boardButtons[i][j]);
                 if ((i + j) % 2 == 0) {
-                    boardButtons[i][j].setBackground(Color.LIGHT_GRAY);
+                    boardButtons[i][j].setBackground(new Color(226, 199, 153));
                 } else {
-                    boardButtons[i][j].setBackground(Color.BLACK);
+                    boardButtons[i][j].setBackground(new Color(192, 130, 97));
                 }
             }
         }
@@ -292,8 +292,8 @@ public class TakGame2D {
         // Optional: Setting some preferred sizes and colors for visualization purposes
         leftPanel.setPreferredSize(new Dimension(100, 400));
         rightPanel.setPreferredSize(new Dimension(100, 400));
-        leftPanel.setBackground(Color.GRAY);
-        rightPanel.setBackground(Color.GRAY);
+        leftPanel.setBackground(new Color(242, 236, 190));
+        rightPanel.setBackground(new Color(242, 236, 190));
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(false);

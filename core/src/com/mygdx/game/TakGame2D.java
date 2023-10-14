@@ -326,15 +326,11 @@ public class TakGame2D {
                                     colorButton.setForeground(Color.WHITE);
                                     colorButton.setBackground(new Color(192, 130, 97));
                                     colorButton.setText("BROWN TURN");
-                                    stones--;
-                                    leftStonesLabel.setText(" White Stones: " + stones);
                                 }
                                 else{
                                     colorButton.setForeground(new Color(192, 130, 97));
                                     colorButton.setBackground(Color.WHITE);
                                     colorButton.setText("WHITE TURN");
-                                    stones2--;
-                                    rightStonesLabel.setText(" Brown Stones: " + stones2);
                                 }
                             }
                         }
@@ -394,11 +390,15 @@ public class TakGame2D {
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
+                    stones--;
+                    leftStonesLabel.setText("White Stones: " + stones);
                     optionFrame.dispose();
                     
                 } else {
                     logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
+                    stones2--;
+                    rightStonesLabel.setText("Brown Stones: " + stones2);
                     optionFrame.dispose();
                 }
                 logicBoard.checkWinCondition();
@@ -423,12 +423,16 @@ public class TakGame2D {
 
                     logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
+                    stones--;
+                    leftStonesLabel.setText("White Stones: " + stones);
                     optionFrame.dispose();
                     
                 } else {
 
                     logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
+                    stones2--;
+                    rightStonesLabel.setText("Brown Stones: " + stones2);
                     optionFrame.dispose();
 
                 }

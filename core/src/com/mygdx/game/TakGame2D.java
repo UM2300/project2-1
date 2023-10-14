@@ -179,7 +179,7 @@ public class TakGame2D {
 
     public TakGame2D() {
 
-        colorButton = new JButton("PLAYER TURN");
+        colorButton = new JButton("WHITE TURN");
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topRightPanel.add(colorButton);
 
@@ -205,7 +205,7 @@ public class TakGame2D {
         leftPanel.add(Box.createVerticalStrut(5));
         leftPanel.add(leftCapstoneLabel);
         leftPanel.add(Box.createVerticalGlue());
-        colorButton.setBackground(Color.BLUE);
+       //colorButton.setBackground(Color.BLUE);
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(Box.createVerticalGlue());
@@ -332,7 +332,8 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (stones > 0) {
-                        colorButton.setBackground(Color.RED);
+                        //colorButton.setBackground(Color.RED);
+                        colorButton.setText("BLACK TURN");
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
@@ -341,7 +342,8 @@ public class TakGame2D {
                     }
                 } else {
                     if (stones2 > 0) {
-                        colorButton.setBackground(Color.BLUE);
+                       // colorButton.setBackground(Color.BLUE);
+                        colorButton.setText("WHITE TURN");
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
@@ -362,7 +364,8 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (stones > 0) {
-                        colorButton.setBackground(Color.RED);
+                       // colorButton.setBackground(Color.RED);
+                        colorButton.setText("BLACK TURN");
                         stones--;  // Decrease stone count
                         leftStonesLabel.setText(stones + " Stones");  // Update label
                         logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
@@ -371,7 +374,8 @@ public class TakGame2D {
                     }
                 } else {
                     if (stones2 > 0) {
-                        colorButton.setBackground(Color.BLUE);
+                        //colorButton.setBackground(Color.BLUE);
+                        colorButton.setText("WHITE TURN");
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
@@ -391,7 +395,8 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (capstone > 0) {
-                        colorButton.setBackground(Color.RED);
+                       // colorButton.setBackground(Color.RED);
+                        colorButton.setText("BLACK TURN");
                         capstone--;
                         leftCapstoneLabel.setText(capstone + " Capstone");
                         logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
@@ -400,7 +405,8 @@ public class TakGame2D {
                     }
                 } else {
                     if (capstone2 > 0) {
-                        colorButton.setBackground(Color.BLUE);
+                      //  colorButton.setBackground(Color.BLUE);
+                        colorButton.setText("WHITE TURN");
                         capstone2--;
                         rightCapstoneLabel.setText(capstone2 + " Capstone");
                         logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);

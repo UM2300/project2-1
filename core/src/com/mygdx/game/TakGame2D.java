@@ -426,30 +426,82 @@ public class TakGame2D {
 
     public void endScreen() {
 
-        JLabel winLabel = new JLabel("Congratulations!");
-        Font font = new Font("Georgia", Font.BOLD, 40);
-        winLabel.setFont(font);
+        Timer timer = new Timer(100, new ActionListener() {
 
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        topPanel.setBackground(Color.LIGHT_GRAY);
-        topPanel.add(winLabel);
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new FlowLayout());
-        bottomPanel.setBackground(Color.LIGHT_GRAY);
+                if (logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
 
-        JFrame endFrame = new JFrame();
-        endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        endFrame.setSize(400,400);
-        endFrame.setLocationRelativeTo(null);
-        endFrame.setLayout(new GridLayout(2, 1));
-        endFrame.add(topPanel);
-        endFrame.add(bottomPanel);
-        endFrame.setVisible(true);
+                    JLabel winLabel = new JLabel("Congratulations!");
+                    Font font = new Font("Georgia", Font.BOLD, 40);
+                    winLabel.setFont(font);
 
+                    JLabel whiteWinLabel = new JLabel("White wins!");
+                    whiteWinLabel.setFont(font);
+
+                    JPanel topPanel = new JPanel();
+                    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                    topPanel.setBackground(Color.LIGHT_GRAY);
+                    topPanel.add(winLabel);
+
+                    JPanel bottomPanel = new JPanel();
+                    bottomPanel.setLayout(new FlowLayout());
+                    bottomPanel.setBackground(Color.LIGHT_GRAY);
+                    bottomPanel.add(whiteWinLabel);
+            
+                    JFrame endFrame = new JFrame();
+                    endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    endFrame.setSize(400,400);
+                    endFrame.setLocationRelativeTo(null);
+                    endFrame.setLayout(new GridLayout(2, 1));
+                    endFrame.add(topPanel);
+                    endFrame.add(bottomPanel);
+
+                    endFrame.setVisible(true);
+                }
+
+                else if (logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+
+                    JLabel winLabel = new JLabel("Congratulations!");
+                    Font font = new Font("Georgia", Font.BOLD, 40);
+                    winLabel.setFont(font);
+
+                    JLabel brownWinLabel = new JLabel("Brown wins!");
+                    brownWinLabel.setFont(font);
+
+                    JPanel topPanel = new JPanel();
+                    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                    topPanel.setBackground(Color.LIGHT_GRAY);
+                    topPanel.add(winLabel);
+
+                    JPanel bottomPanel = new JPanel();
+                    bottomPanel.setLayout(new FlowLayout());
+                    bottomPanel.setBackground(Color.LIGHT_GRAY);
+                    bottomPanel.add(brownWinLabel);
+
+                    JFrame endFrame = new JFrame();
+                    endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    endFrame.setSize(400,400);
+                    endFrame.setLocationRelativeTo(null);
+                    endFrame.setLayout(new GridLayout(2, 1));
+                    endFrame.add(topPanel);
+                    endFrame.add(bottomPanel);
+
+                    endFrame.setVisible(true);
+                }
+            
+            }
+
+            
+        });
+
+        
+
+        timer.start();
 
     }
+
 
     public static void main(String[] args) {
 

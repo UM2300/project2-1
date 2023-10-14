@@ -15,6 +15,15 @@ public class TakGame2D {
     private JButton colorButton;
 
 
+    private final ImageIcon whiteFlatStone = loadAndResizeImage("assets/WhitePiece.png", 0.1);
+    private final ImageIcon whiteStandingStone = loadAndResizeImage("assets/WhiteStanding.png", 0.1);
+    private final ImageIcon whiteCapstone = loadAndResizeImage("assets/WhiteCapstone.png", 0.1);
+    private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
+    private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
+    private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
+
+
+
     private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
 
     private JFrame frame;
@@ -281,6 +290,16 @@ public class TakGame2D {
         frame.setVisible(false);
     }
 
+
+
+    private ImageIcon loadAndResizeImage(String path, double scale) {
+        ImageIcon originalIcon = new ImageIcon(path);
+        int newWidth = (int) (originalIcon.getIconWidth() * scale);
+        int newHeight = (int) (originalIcon.getIconHeight() * scale);
+        Image resizedImage = originalIcon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
+    }
+
     public void addPiece() {
 
         optionLabel = new JLabel("Choose a piece to add:");
@@ -295,6 +314,10 @@ public class TakGame2D {
         buttonGroup.add(capstoneButton);
 
 
+
+
+
+
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
 
@@ -304,6 +327,7 @@ public class TakGame2D {
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
                         optionFrame.dispose();
                     }
                 } else {
@@ -312,6 +336,7 @@ public class TakGame2D {
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
                         optionFrame.dispose();
                     }
                 }
@@ -332,6 +357,7 @@ public class TakGame2D {
                         stones--;  // Decrease stone count
                         leftStonesLabel.setText(stones + " Stones");  // Update label
                         logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
                         optionFrame.dispose();
                     }
                 } else {
@@ -340,6 +366,7 @@ public class TakGame2D {
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
                         optionFrame.dispose();
                     }
                 }
@@ -359,6 +386,7 @@ public class TakGame2D {
                         capstone--;
                         leftCapstoneLabel.setText(capstone + " Capstone");
                         logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
                         optionFrame.dispose();
                     }
                 } else {
@@ -367,6 +395,7 @@ public class TakGame2D {
                         capstone2--;
                         rightCapstoneLabel.setText(capstone2 + " Capstone");
                         logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
                         optionFrame.dispose();
                     }
                 }

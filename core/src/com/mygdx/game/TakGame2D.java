@@ -105,8 +105,10 @@ public class TakGame2D {
 
     public int stones = 21;
     public int capstone = 1;
+    public boolean wCapstone = true;
     public int stones2 = 21;
     public int capstone2 = 1;
+    public boolean bCapstone = true;
 
     public void startingWindow() {
         final JFrame startFrame = new JFrame("Tak Menu");
@@ -213,6 +215,8 @@ public class TakGame2D {
     }
     
     public TakGame2D() {
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+
 
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
@@ -276,44 +280,65 @@ public class TakGame2D {
                             }
                         }
 
-
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
                         int[] buttonChords = {xChord,yChord};
 
-                        
-                        if(getMidTurn()){
-                            
-                            setMoveToChords(buttonChords);
-                            //int dir = targetDir(getCurrentChords(), getMoveToChords());
-                            
-                            dropPiece();
+                        boolean checker = boardButtons[xChord-1][yChord-1].getIsEmpty();
 
-                            //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
-                            setMidTurn(false);
-                            source.setIsEmpty(false);
-                        }
-                        else{
-                            if(source.getIsEmpty()){                             
-                                setCurrentChords(buttonChords);
-                                addPiece();
+                        if(checker||midTurn||(logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)<=2 && logicBoard.getCurrentPlayer().equals("WHITE"))||
+                        (logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)>2 && logicBoard.getCurrentPlayer().equals("BROWN"))){
+                            
+                            if(getMidTurn()){
+                            
+                                setMoveToChords(buttonChords);
+                                //int dir = targetDir(getCurrentChords(), getMoveToChords());
+                                
+                                dropPiece();
+
+                                //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
+                                setMidTurn(false);
                                 source.setIsEmpty(false);
                             }
                             else{
-                                movePiece();
-                                setCurrentChords(buttonChords);
-                                setMidTurn(true);
+                                if(source.getIsEmpty()){                             
+                                    setCurrentChords(buttonChords);
+                                    addPiece();
+                                    source.setIsEmpty(false);
+                                }
+                                else{
+                                    movePiece();
+                                    setCurrentChords(buttonChords);
+                                    setMidTurn(true);
+                                }
+                            }
+
+                            
+                            //logicBoard.checkWinCondition();
+                            //logicBoard.winBoardFull();
+                            //logicBoard.checkState();
+                            System.out.println(xChord+" "+yChord);
+
+                            if(!getMidTurn()){
+
+                                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                                    colorButton.setForeground(Color.WHITE);
+                                    colorButton.setBackground(new Color(192, 130, 97));
+                                    colorButton.setText("BROWN TURN");
+                                    stones--;
+                                    leftStonesLabel.setText("White Stones: " + stones);
+                                }
+                                else{
+                                    colorButton.setForeground(new Color(192, 130, 97));
+                                    colorButton.setBackground(Color.WHITE);
+                                    colorButton.setText("WHITE TURN");
+                                    stones2--;
+                                    rightStonesLabel.setText("Brown Stones: " + stones2);
+                                }
                             }
                         }
-
-                        
-                        //logicBoard.checkWinCondition();
-                        //logicBoard.winBoardFull();
-                        //logicBoard.checkState();
-                        System.out.println(xChord+" "+yChord);
                     }
-
                 });
 
                 boardPanel.add(boardButtons[i][j]);
@@ -356,7 +381,7 @@ public class TakGame2D {
 
         JRadioButton flatButton = new JRadioButton("add Flat Stone");
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
-        JRadioButton capstoneButton = new JRadioButton("add Capstone");
+        final JRadioButton capstoneButton = new JRadioButton("add Capstone");
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(flatButton);
@@ -367,40 +392,25 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e){
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText("White Stones: " + stones);
-                        logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
-                        optionFrame.dispose();
-                    }
+                    logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
+                    optionFrame.dispose();
+                    
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
-                        optionFrame.dispose();
-                    }
+                    logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
+                    optionFrame.dispose();
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
                 System.out.println(logicBoard.isGameEnded());;
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
-                  //  System.out.println("reached");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
-                    //System.out.println("reached");
                 }
              }
             
@@ -409,37 +419,27 @@ public class TakGame2D {
 
         standingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText("White Stones: " + stones);                        
-                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
-                        optionFrame.dispose();
-                    }
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){     
+
+                    logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
+                    optionFrame.dispose();
+                    
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
+                    optionFrame.dispose();
+
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
                 }
 
@@ -450,36 +450,43 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e){
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
+
+                    if (!wCapstone) capstoneButton.setVisible(false);
+
+                    else {
+
+                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(whiteCapstone);
+                        wCapstone = false;
                         capstone--;
                         leftCapstoneLabel.setText("White Capstone: " + capstone);
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
                         optionFrame.dispose();
+
                     }
+
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
+
+                    if (!bCapstone) capstoneButton.setVisible(false);
+
+                    else {
+
+                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(brownCapstone);
+                        bCapstone = false;
                         capstone2--;
                         rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
-                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
                         optionFrame.dispose();
+
                     }
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
                 }
                 
@@ -642,6 +649,10 @@ public class TakGame2D {
         for (int i = 0; i < boardButtons.length; i++) {
             for (int j = 0; j < boardButtons[i].length; j++) {
                 int state = logicBoard.getPieceAt(i, j);
+
+                String stackDetails = logicBoard.getStackDetails(i, j);
+                boardButtons[i][j].setToolTipText(stackDetails);
+
                 switch(state) {
                     case 0: boardButtons[i][j].setIcon(whiteFlatStone);
                         break;

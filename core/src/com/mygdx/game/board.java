@@ -47,6 +47,11 @@ public class board {
         return board;
     }
 
+    public int wCounter = 0;
+    public int bCounter = 0;
+
+    public int maxPiecesPerPlayer = 21;
+
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
             currentPlayer = "BROWN";
@@ -65,24 +70,38 @@ public class board {
 
 
     public void addPiece(int num,int x, int y){
+
         System.out.println("this method ran: "+x+" "+y);
+
+        if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
+            System.out.println("Not browns turn");
+            return;
+        } else if (currentPlayer.equals("BROWN")&&(num < 3 || num > 5)) {
+            System.out.println("Not whites turn");
+            return;
+            }
+
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
 
-                    if(currentPlayer.equals("WHITE")&&(num==3||num==4||num==5))
-                        System.out.println("Not browns turn");
-                    else if(currentPlayer.equals("BROWN")&&(num==0||num==1||num==2))
-                        System.out.println("Not whites turn");
-                    else if(!board[i][j].isEmpty()){
-                        System.out.println("Not empty space");
+                    if(!board[i][j].isEmpty()){
+                        System.out.println("Not an empty space");
                     }
                     else{
                         board[i][j].add(num);
+
+                        if (currentPlayer.equals("WHITE")) {
+                            wCounter++;
+                        } else if (currentPlayer.equals("BROWN")) {
+                            bCounter++;
+                        }
+
                         togglePlayer();
                         int inum= i+1;
                         int jnum=j+1;
                         System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
+
                     }
                 }
             }
@@ -309,6 +328,9 @@ public class board {
     }
 
     public boolean checkIfFull(ArrayList<Integer>[][] board) {
+
+        if ((wCounter == maxPiecesPerPlayer) || (bCounter == maxPiecesPerPlayer)) return true;
+
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].isEmpty()) {

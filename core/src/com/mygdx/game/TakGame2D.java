@@ -21,6 +21,7 @@ public class TakGame2D {
     private boardButton[][] boardButtons;
     private JPanel leftPanel, rightPanel, boardPanel;
     private int pieceQuantity = 1;
+    private int dropNum;
     private final int BOARD_SIZE = 5;
 
     Draw draw = new Draw();
@@ -66,7 +67,13 @@ public class TakGame2D {
         this.pieceQuantity = pieceQuantity;
     }
 
-    
+    public int getDropNum(){
+        return dropNum;
+    }
+
+    public void setDropNum(int dropNum){
+        this.dropNum = dropNum;
+    }    
 
 
     public int targetDir(int[] currentChords, int[] moveToChords){
@@ -223,6 +230,8 @@ public class TakGame2D {
                             setMoveToChords(buttonChords);
                             int dir = targetDir(getCurrentChords(), getMoveToChords());
                             
+                            //dropPiece();
+
                             logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
                             setMidTurn(false);
                             source.setIsEmpty(false);
@@ -402,6 +411,42 @@ public class TakGame2D {
                 String txt = textField.getText();
                 int quantity = Integer.parseInt(txt);
                 setPieceQuantity(quantity);
+                moveFrame.dispose();
+            }
+
+        });
+
+        JPanel topMovePanel = new JPanel();
+        topMovePanel.setLayout(new GridLayout(3, 1));
+        topMovePanel.add(moveLabel);
+        topMovePanel.add(textField);
+        topMovePanel.add(button);
+        
+        
+        moveFrame = new JFrame("Move Piece");
+        moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        moveFrame.setSize(300, 200);
+        moveFrame.setLayout(new BorderLayout());
+        moveFrame.setLocationRelativeTo(null);
+        moveFrame.add(topMovePanel);
+
+        moveFrame.setVisible(true);
+    }
+
+    public void dropPiece() {
+        
+        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
+        final JTextField textField = new JTextField();
+        JButton button = new JButton("Confirm");
+
+
+        button.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e){
+
+                String txt = textField.getText();
+                int drop = Integer.parseInt(txt);
+                setDropNum(drop);
                 moveFrame.dispose();
             }
 

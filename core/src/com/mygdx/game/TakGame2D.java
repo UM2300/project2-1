@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
 import javax.swing.*;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -106,44 +109,77 @@ public class TakGame2D {
     public int capstone2 = 1;
 
     public void startingWindow() {
-        
-        final JFrame startFrame = new JFrame();
-
+        final JFrame startFrame = new JFrame("Tak Menu");
+    
+        // Set up the title label
         JLabel startLabel = new JLabel("Tak");
-        Font newFont = new Font("Georgia", Font.BOLD, 60);
-        startLabel.setFont(newFont);
-
+        Font titleFont = new Font("Georgia", Font.BOLD, 60);
+        startLabel.setFont(titleFont);
+        startLabel.setForeground(new Color(226, 199, 153));
+    
         JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        topPanel.setBackground(Color.LIGHT_GRAY);
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20)); // Add vertical padding
+        topPanel.setBackground(new Color(192, 130, 97));
         topPanel.add(startLabel);
+    
+        // Create a button panel for the menu buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2, 1, 0, 0)); // Added vertical spacing
+        buttonPanel.setBackground(new Color(226, 199, 153)); // Set background color
 
+        // Define a custom ButtonUI for highlighting
+        ButtonUI highlightUI = new BasicButtonUI() {
+            private Color hoverColor = new Color(242, 236, 190); // Color when hovering
 
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                AbstractButton button = (AbstractButton) c;
+                ButtonModel model = button.getModel();
+
+                if (model.isRollover()) {
+                    button.setBackground(hoverColor); // Change the background color on hover
+                } else {
+                    button.setBackground(new Color(226, 199, 153)); // Restore the default color
+                }
+                super.paint(g, c);
+            }
+        };
+    
+        // Create and style the "Start" button
         JButton startButton = new JButton("Start");
-        startButton.setSize(100, 50);
-
+        startButton.setFont(new Font("Arial", Font.BOLD, 24));
+        startButton.setUI(highlightUI);
+        startButton.setBackground(new Color(226, 199, 153)); // Button color
+        startButton.setForeground(new Color(192, 130, 97)); // Text color
+        startButton.setFocusPainted(false); // Remove the border around the text
+        startButton.setPreferredSize(new Dimension(200, 50)); // Button size
+    
+        // Add action listener for the "Start" button
         startButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 new TakGame2D();
                 frame.setVisible(true);
                 startFrame.dispose();
             }
-
-            
         });
-        
+    
+        // Create and style the "Instructions" button
         JButton instructionsButton = new JButton("Instructions");
-        startButton.setSize(100, 50);
-
+        instructionsButton.setFont(new Font("Arial", Font.BOLD, 24));
+        instructionsButton.setUI(highlightUI);
+        instructionsButton.setBackground(new Color(226, 199, 153)); // Button color
+        instructionsButton.setForeground(new Color(192, 130, 97)); // Text color
+        instructionsButton.setFocusPainted(false); // Remove the border around the text
+        instructionsButton.setPreferredSize(new Dimension(200, 50)); // Button size
+    
+        // Add action listener for the "Instructions" button
         instructionsButton.addActionListener(new ActionListener() {
-            
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     File instructionsFile = new File("Instructions.txt");
-
+    
                     if (Desktop.isDesktopSupported() && instructionsFile.exists()) {
                         Desktop desktop = Desktop.getDesktop();
                         desktop.open(instructionsFile);
@@ -157,21 +193,25 @@ public class TakGame2D {
             }
         });
     
-        JPanel bottomPanel1 = new JPanel();
-        bottomPanel1.setLayout(new FlowLayout());
-        bottomPanel1.add(startButton);
-        bottomPanel1.add(instructionsButton);
-        
+        // Add buttons to the button panel
+        buttonPanel.add(startButton);
+        buttonPanel.add(instructionsButton);
+    
+        // Add components to the startFrame
         startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         startFrame.setSize(400, 300);
         startFrame.setLocationRelativeTo(null);
-        startFrame.setLayout(new GridLayout(2, 1));
-        startFrame.add(topPanel);
-        startFrame.add(bottomPanel1);
+        startFrame.setLayout(new BorderLayout()); // Use BorderLayout for more control
+    
+        // Add the title label to the top
+        startFrame.add(topPanel, BorderLayout.NORTH);
+    
+        // Add the button panel to the center with padding
+        startFrame.add(buttonPanel, BorderLayout.CENTER);
+    
         startFrame.setVisible(true);
-
     }
-
+    
     public TakGame2D() {
 
         colorButton = new JButton("WHITE TURN");

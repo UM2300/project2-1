@@ -378,7 +378,7 @@ public class TakGame2D {
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
                         optionFrame.dispose();
                     }
                 } else {
@@ -389,7 +389,7 @@ public class TakGame2D {
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
                         optionFrame.dispose();
                     }
                 }
@@ -418,7 +418,7 @@ public class TakGame2D {
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
                         optionFrame.dispose();
                     }
                 } else {
@@ -429,7 +429,7 @@ public class TakGame2D {
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
+                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
                         optionFrame.dispose();
                     }
                 }

@@ -117,6 +117,14 @@ public class board {
             }
         }
     }
+    public int getPieceAt(int i, int j) {
+        ArrayList<Integer> stack = board[i][j];
+        if (stack.isEmpty()) {
+            return -1;
+        }
+        return stack.get(stack.size() - 1);
+    }
+
 
 
     /**

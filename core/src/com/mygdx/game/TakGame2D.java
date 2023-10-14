@@ -102,8 +102,10 @@ public class TakGame2D {
 
     public int stones = 21;
     public int capstone = 1;
+    public boolean wCapstone = true;
     public int stones2 = 21;
     public int capstone2 = 1;
+    public boolean bCapstone = true;
 
     public void startingWindow() {
         
@@ -339,7 +341,7 @@ public class TakGame2D {
 
         JRadioButton flatButton = new JRadioButton("add Flat Stone");
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
-        JRadioButton capstoneButton = new JRadioButton("add Capstone");
+        final JRadioButton capstoneButton = new JRadioButton("add Capstone");
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(flatButton);
@@ -364,13 +366,11 @@ public class TakGame2D {
                 logicBoard.checkState();
                 System.out.println(logicBoard.isGameEnded());;
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
-                  //  System.out.println("reached");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
-                    //System.out.println("reached");
                 }
              }
             
@@ -396,10 +396,10 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
                 }
 
@@ -411,25 +411,42 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
 
-                    logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
-                    optionFrame.dispose();
+                    if (!wCapstone) capstoneButton.setVisible(false);
+
+                    else {
+
+                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(whiteCapstone);
+                        wCapstone = false;
+                        capstone--;
+                        leftCapstoneLabel.setText("White Capstone: " + capstone);
+                        optionFrame.dispose();
+
+                    }
 
                 } else {
 
-                    logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
-                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
-                    optionFrame.dispose();
-                    
+                    if (!bCapstone) capstoneButton.setVisible(false);
+
+                    else {
+
+                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                        boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(brownCapstone);
+                        bCapstone = false;
+                        capstone2--;
+                        rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
+                        optionFrame.dispose();
+
+                    }
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "WHITE") {
+                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
                     endScreen("WHITE");
                 }
-                else if(logicBoard.isGameEnded() == true && logicBoard.getCurrentPlayer() == "BROWN") {
+                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
                     endScreen("BROWN");
                 }
                 

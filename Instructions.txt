@@ -1,6 +1,6 @@
 TAK:
 
-Welcome to Group 02's game of Tak!
+Welcome to Team 2 Good's game of Tak!
 
 Tak is a two-player abstract strategy board game. It's a simple yet deep game that can be played with a standard chess or checkerboard. Here are the basic rules to get you started:
 
@@ -12,7 +12,7 @@ A 5x5 board will be displayed (a standard sized board) with a counter on either 
 
 Each player will have their own set of pieces. A set typically consists of flat "stones" (used to build roads) and "capstones" (which can be used as both road pieces and to exert control over other pieces). The number of pieces in a set varies depending on the board size, but a typical set for a 5x5 board includes 21 stones and 1 capstone per player.
 Flat stones are denoted by a horizontal brown or white rectangle. 
-Standing stones are denoted by vertical brown or white rectangle.
+Standing stones are denoted by vertical brown or white square.
 
 Gameplay:
 

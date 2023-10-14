@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
+ * This class represents the logic behind the rules of Tak
+ */
+
+/*
  * Piece keys are as follows:
  * 
  * 0 = white road
@@ -31,6 +35,11 @@ public class board {
     private boolean isGameEnded = false;
     private static String currentPlayer = "WHITE";
 
+    public int wCounter = 0;
+    public int bCounter = 0;
+
+    public int maxPiecesPerPlayer = 21;
+
     public boolean isGameEnded() {
         return isGameEnded;
     }
@@ -46,11 +55,6 @@ public class board {
     public ArrayList<Integer>[][] getBoard(){
         return board;
     }
-
-    public int wCounter = 0;
-    public int bCounter = 0;
-
-    public int maxPiecesPerPlayer = 21;
 
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
@@ -69,6 +73,13 @@ public class board {
     }
 
 
+    /**
+     * Adds a piece to the board with the colour of the current player, and switches the turn to the opponent after the piece has been added
+     * 
+     * @param num the number representing the piece (see key above)
+     * @param x x coordinate on the board
+     * @param y y coordinate on the board
+     */
     public void addPiece(int num,int x, int y){
 
         System.out.println("this method ran: "+x+" "+y);
@@ -110,7 +121,15 @@ public class board {
     }
 
     
-
+    /**
+     * Moves a piece / stack to a specified cell / block 
+     * 
+     * @param x current x coordinate on the board
+     * @param y current y coordinate on the board
+     * @param quant quantity of pieces to move (if a stack, quant > 1, else quant = 1)
+     * @param dir direction (up, down, left, right) in which the player wants to move the piece/stack
+     * @param dropNum the number of pieces to drop off in the current tile (if a stack dropNum >= 1, else dropNum = 1)
+     */
     public void move(int x, int y, int quant, int dir, int dropNum){
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -188,6 +207,15 @@ public class board {
             System.out.println("Invalid quantity");
     }
 
+    /**
+     * Continues a move if a STACK is being moved
+     * 
+     * @param x x coordinate on board
+     * @param y y coordinate on board
+     * @param temp current stack of pieces 
+     * @param dir direction (up, down, left, right) to continue move
+     * @param dropNum number of pieces to drop of in the current tile (if a stack dropNum >= 1, else dropNum = 1)
+     */
     public void continueMove(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
         System.out.println("continue move");
                  
@@ -248,6 +276,13 @@ public class board {
     }
 
 
+    /**
+     * Drops off a number of pieces as a stack is being moved
+     * 
+     * @param temp current state of the stack
+     * @param quant number of pieces to be dropped off at the current tile
+     * @return pieces being dropped off
+     */
     public ArrayList<Integer> dropOff(ArrayList<Integer> temp, int quant){
 
         if(quant>temp.size()){
@@ -264,6 +299,13 @@ public class board {
         }
     }
 
+    /**
+     * Checks if the coordinates of a tile is valid
+     * 
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return true if coordinates are on the board, false if not
+     */
     public boolean checkSpace(int x, int y){
 
         if(x<0||y<0||x>4||y>4)
@@ -273,6 +315,13 @@ public class board {
     }
     
 
+    /**
+     * Checks if a move of a piece or stack is valid
+     * 
+     * @param pile the current stack / piece
+     * @param target the current tile's contents 
+     * @return true if there is no capstone / standing stone / the tile is empty, false if otherwise
+     */
     public boolean checkMove(ArrayList<Integer> pile, ArrayList<Integer> target){
 
         if(target.isEmpty()){
@@ -296,6 +345,13 @@ public class board {
     }
 
 
+    /**
+     * Returns the top piece of a stack
+     * 
+     * @param x x coordinate on the board
+     * @param y y coordinate on the board
+     * @return top piece of a stack
+     */
     public int popFromTop(int x, int y){
 
         if(!board[x][y].isEmpty()){
@@ -309,6 +365,9 @@ public class board {
             return -1;
     }
 
+    /**
+     * Used to check the current state of the board
+     */
     public void checkState(){
 
         for (int i = 0; i < board.length; i++) {
@@ -327,6 +386,12 @@ public class board {
         }
     }
 
+    /**
+     * Checks if the board is full, ie if a player has used up all their pieces or if there are no more empty tiles.
+     * 
+     * @param board 2D array representing coordinates on the board 
+     * @return true if the board is full / player has used up all pieces, false if otherwise
+     */
     public boolean checkIfFull(ArrayList<Integer>[][] board) {
 
         if ((wCounter == maxPiecesPerPlayer) || (bCounter == maxPiecesPerPlayer)) return true;
@@ -341,6 +406,9 @@ public class board {
         return true;
     }
 
+    /**
+     * Checks if the board has no empty tiles or if a player has used all pieces, and returns the winner for this condition
+     */
     public void winBoardFull() {
 
         int wCounter = 0;

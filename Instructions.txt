@@ -11,9 +11,8 @@ Setup:
 A 5x5 board will be displayed (a standard sized board) with a counter on either side of how many pieces each player gets. 
 
 Each player will have their own set of pieces. A set typically consists of flat "stones" (used to build roads) and "capstones" (which can be used as both road pieces and to exert control over other pieces). The number of pieces in a set varies depending on the board size, but a typical set for a 5x5 board includes 21 stones and 1 capstone per player.
-Flat stones are denoted by a black or white rectangle. 
-Standing stones have an "X" marked on the rectangle. 
-Capstones have a "C" marked on the rectangle.
+Flat stones are denoted by a horizontal brown or white rectangle. 
+Standing stones are denoted by vertical brown or white rectangle.
 
 Gameplay:
 

@@ -383,28 +383,18 @@ public class TakGame2D {
 
         standingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText("White Stones: " + stones);                        
-                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
-                        optionFrame.dispose();
-                    }
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){     
+
+                    logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
+                    optionFrame.dispose();
+                    
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
+                    optionFrame.dispose();
+
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
@@ -424,27 +414,17 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e){
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        capstone--;
-                        leftCapstoneLabel.setText("White Capstone: " + capstone);
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
+                    optionFrame.dispose();
+
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        capstone2--;
-                        rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
-                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
+                    optionFrame.dispose();
+                    
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();

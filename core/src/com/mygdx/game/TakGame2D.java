@@ -11,8 +11,11 @@ import java.io.IOException;
 
 public class TakGame2D {
 
-    private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
 
+    private JButton colorButton;
+
+
+    private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
 
     private JFrame frame;
     private JFrame optionFrame;
@@ -160,6 +163,10 @@ public class TakGame2D {
 
     public TakGame2D() {
 
+        colorButton = new JButton("PLAYER TURN");
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.add(colorButton);
+
         leftStonesLabel = new JLabel(stones + " Stones");
         leftCapstoneLabel = new JLabel(capstone + " Capstone");
         rightStonesLabel = new JLabel(stones2 + " Stones");
@@ -170,6 +177,7 @@ public class TakGame2D {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
+        frame.add(topRightPanel, BorderLayout.NORTH);
 
         leftPanel = new JPanel();
         rightPanel = new JPanel();
@@ -181,7 +189,7 @@ public class TakGame2D {
         leftPanel.add(Box.createVerticalStrut(5));
         leftPanel.add(leftCapstoneLabel);
         leftPanel.add(Box.createVerticalGlue());
-
+        colorButton.setBackground(Color.BLUE);
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(Box.createVerticalGlue());
@@ -200,8 +208,8 @@ public class TakGame2D {
                 boardButtons[i][j] = new boardButton(chords,true);
                 boardButtons[i][j].setOpaque(true); // This is to make sure the background color is visible
                 boardButtons[i][j].addActionListener(new ActionListener() {
-                    
-                    
+
+
                     public void actionPerformed(ActionEvent e){
 
                         for(int i=0; i< boardButtons.length; i++){
@@ -211,7 +219,7 @@ public class TakGame2D {
                             }
                         }
 
-                        
+
                         boardButton source = (boardButton) e.getSource();
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
@@ -274,13 +282,13 @@ public class TakGame2D {
     }
 
     public void addPiece() {
-        
+
         optionLabel = new JLabel("Choose a piece to add:");
 
         JRadioButton flatButton = new JRadioButton("add Flat Stone");
         JRadioButton standingButton = new JRadioButton("add Standing Stone");
         JRadioButton capstoneButton = new JRadioButton("add Capstone");
-       
+
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(flatButton);
         buttonGroup.add(standingButton);
@@ -292,6 +300,7 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (stones > 0) {
+                        colorButton.setBackground(Color.RED);
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
@@ -299,6 +308,7 @@ public class TakGame2D {
                     }
                 } else {
                     if (stones2 > 0) {
+                        colorButton.setBackground(Color.BLUE);
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
@@ -318,6 +328,7 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (stones > 0) {
+                        colorButton.setBackground(Color.RED);
                         stones--;  // Decrease stone count
                         leftStonesLabel.setText(stones + " Stones");  // Update label
                         logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
@@ -325,6 +336,7 @@ public class TakGame2D {
                     }
                 } else {
                     if (stones2 > 0) {
+                        colorButton.setBackground(Color.BLUE);
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
                         logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
@@ -343,6 +355,7 @@ public class TakGame2D {
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
                     if (capstone > 0) {
+                        colorButton.setBackground(Color.RED);
                         capstone--;
                         leftCapstoneLabel.setText(capstone + " Capstone");
                         logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
@@ -350,6 +363,7 @@ public class TakGame2D {
                     }
                 } else {
                     if (capstone2 > 0) {
+                        colorButton.setBackground(Color.BLUE);
                         capstone2--;
                         rightCapstoneLabel.setText(capstone2 + " Capstone");
                         logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
@@ -367,8 +381,8 @@ public class TakGame2D {
         topOptionPanel.setBounds(0, 0, 300, 100);
         JPanel bottomOptionPanel = new JPanel();
         bottomOptionPanel.setBounds(0, 0, 300, 100);
-        bottomOptionPanel.setLayout(new GridLayout(3, 1)); 
-        
+        bottomOptionPanel.setLayout(new GridLayout(3, 1));
+
         topOptionPanel.add(optionLabel);
         bottomOptionPanel.add(flatButton);
         bottomOptionPanel.add(standingButton);
@@ -382,14 +396,14 @@ public class TakGame2D {
         optionFrame.add(topOptionPanel, BorderLayout.NORTH);
         optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
 
-        
+
         optionFrame.setVisible(true);
 
         
     }
 
     public void movePiece() {
-        
+
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
         final JTextField textField = new JTextField();
         JButton button = new JButton("Confirm");
@@ -412,8 +426,8 @@ public class TakGame2D {
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
         topMovePanel.add(button);
-        
-        
+
+
         moveFrame = new JFrame("Move Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         moveFrame.setSize(300, 200);

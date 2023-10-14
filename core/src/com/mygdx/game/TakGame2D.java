@@ -188,7 +188,7 @@ public class TakGame2D {
 
         frame = new JFrame("TakGame2D");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 450);
+        frame.setSize(700, 450);
         frame.setLayout(new BorderLayout());
         frame.add(topRightPanel, BorderLayout.NORTH);
 
@@ -287,8 +287,8 @@ public class TakGame2D {
         frame.add(boardPanel, BorderLayout.CENTER);
 
         // Optional: Setting some preferred sizes and colors for visualization purposes
-        leftPanel.setPreferredSize(new Dimension(100, 400));
-        rightPanel.setPreferredSize(new Dimension(100, 400));
+        leftPanel.setPreferredSize(new Dimension(150, 400));
+        rightPanel.setPreferredSize(new Dimension(150, 400));
         leftPanel.setBackground(new Color(242, 236, 190));
         rightPanel.setBackground(new Color(242, 236, 190));
 
@@ -410,8 +410,8 @@ public class TakGame2D {
                         colorButton.setForeground(Color.WHITE);
                         colorButton.setBackground(new Color(192, 130, 97));
                         colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText(stones + " Stones");
+                        capstone--;
+                        leftCapstoneLabel.setText(capstone + " Capstone");
                         logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
                         optionFrame.dispose();
@@ -421,8 +421,8 @@ public class TakGame2D {
                         colorButton.setForeground(new Color(192, 130, 97));
                         colorButton.setBackground(Color.WHITE);
                         colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText(stones2 + " Stones");
+                        capstone2--;
+                        rightCapstoneLabel.setText(capstone2 + " Capstone");
                         logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
                         optionFrame.dispose();

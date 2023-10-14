@@ -188,7 +188,7 @@ public class TakGame2D {
 
         frame = new JFrame("TakGame2D");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 450);
+        frame.setSize(700, 450);
         frame.setLayout(new BorderLayout());
         frame.add(topRightPanel, BorderLayout.NORTH);
 
@@ -287,8 +287,8 @@ public class TakGame2D {
         frame.add(boardPanel, BorderLayout.CENTER);
 
         // Optional: Setting some preferred sizes and colors for visualization purposes
-        leftPanel.setPreferredSize(new Dimension(100, 400));
-        rightPanel.setPreferredSize(new Dimension(100, 400));
+        leftPanel.setPreferredSize(new Dimension(150, 400));
+        rightPanel.setPreferredSize(new Dimension(150, 400));
         leftPanel.setBackground(new Color(242, 236, 190));
         rightPanel.setBackground(new Color(242, 236, 190));
 
@@ -372,7 +372,7 @@ public class TakGame2D {
                         colorButton.setText("BROWN TURN");
                         stones--;
                         leftStonesLabel.setText(stones + " Stones");
-                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                        logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
                         optionFrame.dispose();
                     }
@@ -383,7 +383,7 @@ public class TakGame2D {
                         colorButton.setText("WHITE TURN");
                         stones2--;
                         rightStonesLabel.setText(stones2 + " Stones");
-                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                        logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
                         optionFrame.dispose();
                     }
@@ -410,9 +410,9 @@ public class TakGame2D {
                         colorButton.setForeground(Color.WHITE);
                         colorButton.setBackground(new Color(192, 130, 97));
                         colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText(stones + " Stones");
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                        capstone--;
+                        leftCapstoneLabel.setText(capstone + " Capstone");
+                        logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
                         optionFrame.dispose();
                     }
@@ -421,9 +421,9 @@ public class TakGame2D {
                         colorButton.setForeground(new Color(192, 130, 97));
                         colorButton.setBackground(Color.WHITE);
                         colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText(stones2 + " Stones");
-                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                        capstone2--;
+                        rightCapstoneLabel.setText(capstone2 + " Capstone");
+                        logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
                         optionFrame.dispose();
                     }
@@ -526,7 +526,7 @@ public class TakGame2D {
                 }
 
                 logicBoard.move(currentChords[0], currentChords[1], getPieceQuantity(), dir, getDropNum());
-                updateVisualBoard();
+
                 moveFrame.dispose();
             }
 
@@ -588,32 +588,6 @@ public class TakGame2D {
             endFrame.add(bottomPanel);
 
             endFrame.setVisible(true);   
-    }
-
-    public void updateVisualBoard() {
-        // Assuming logicBoard has a method like getTileState(x, y) that returns the numerical state of the tile
-        // Assuming boardButtons is a 2D array of JButtons representing the GUI board
-
-        for (int i = 0; i < boardButtons.length; i++) {
-            for (int j = 0; j < boardButtons[i].length; j++) {
-                int state = logicBoard.getPieceAt(i, j);
-                switch(state) {
-                    case 0: boardButtons[i][j].setIcon(whiteFlatStone);
-                        break;
-                    case 1: boardButtons[i][j].setIcon(whiteStandingStone);
-                        break;
-                    case 2: boardButtons[i][j].setIcon(whiteCapstone);
-                        break;
-                    case 3: boardButtons[i][j].setIcon(brownFlatStone);
-                        break;
-                    case 4: boardButtons[i][j].setIcon(brownStandingStone);
-                        break;
-                    case 5: boardButtons[i][j].setIcon(brownCapstone);
-                        break;
-                    default: boardButtons[i][j].setIcon(null); // Default to no icon or some default image
-                }
-            }
-        }
     }
 
 

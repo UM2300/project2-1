@@ -47,6 +47,11 @@ public class board {
         return board;
     }
 
+    public int wCounter = 0;
+    public int bCounter = 0;
+
+    public int maxPiecesPerPlayer = 21;
+
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
             currentPlayer = "BROWN";
@@ -65,24 +70,38 @@ public class board {
 
 
     public void addPiece(int num,int x, int y){
+
         System.out.println("this method ran: "+x+" "+y);
+
+        if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
+            System.out.println("Not browns turn");
+            return;
+        } else if (currentPlayer.equals("BROWN")&&(num < 3 || num > 5)) {
+            System.out.println("Not whites turn");
+            return;
+            }
+
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
                 if(x-1==i && y-1==j){
 
-                    if(currentPlayer.equals("WHITE")&&(num==3||num==4||num==5))
-                        System.out.println("Not browns turn");
-                    else if(currentPlayer.equals("BROWN")&&(num==0||num==1||num==2))
-                        System.out.println("Not whites turn");
-                    else if(!board[i][j].isEmpty()){
-                        System.out.println("Not empty space");
+                    if(!board[i][j].isEmpty()){
+                        System.out.println("Not an empty space");
                     }
                     else{
                         board[i][j].add(num);
+
+                        if (currentPlayer.equals("WHITE")) {
+                            wCounter++;
+                        } else if (currentPlayer.equals("BROWN")) {
+                            bCounter++;
+                        }
+
                         togglePlayer();
                         int inum= i+1;
                         int jnum=j+1;
                         System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
+
                     }
                 }
             }
@@ -309,6 +328,9 @@ public class board {
     }
 
     public boolean checkIfFull(ArrayList<Integer>[][] board) {
+
+        if ((wCounter == maxPiecesPerPlayer) || (bCounter == maxPiecesPerPlayer)) return true;
+
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].isEmpty()) {
@@ -347,50 +369,94 @@ public class board {
         isGameEnded = true;
     }
 
-    // Add these to the board class
-    private boolean dfs(int x, int y, int player, boolean[][] visited) {
-        if (x < 0 || y < 0 || x >= board.length || y >= board[0].length || visited[x][y]) return false;
+
+    /**
+     * Checks if the top piece at the specified coordinates belongs to the given player and forms
+     * part of a potential road.
+     *
+     * @param x the x-coordinate on the board.
+     * @param y the y-coordinate on the board.
+     * @param player the player ("WHITE" or other) to check the piece for.
+     * @return true if the top piece at (x, y) belongs to the given player and is part of a potential road, false otherwise.
+     */
+    public boolean isPartOfRoad(int x, int y, String player) {
         ArrayList<Integer> stack = board[x][y];
-        if (stack.isEmpty()) return false;
+        if (stack.isEmpty()) {
+            return false;
+        }
 
         int topPiece = stack.get(stack.size() - 1);
-        if (player == 0 && (topPiece != 0 && topPiece != 2 && topPiece != 1)) return false;
-        if (player == 1 && (topPiece != 3 && topPiece != 5 && topPiece != 4)) return false;
+        if (player.equals("WHITE")) {
+            return topPiece == 0 || topPiece == 2;  // Checking for white flat stone or capstone.
+        } else {
+            return topPiece == 3 || topPiece == 5;  // Checking for brown flat stone or capstone.
+        }
+    }
 
-        if ((player == 0 && y == board[0].length - 1) || (player == 1 && x == board.length - 1)) return true;
 
-        visited[x][y] = true;
-
-        if (dfs(x + 1, y, player, visited) || dfs(x - 1, y, player, visited) || dfs(x, y + 1, player, visited) || dfs(x, y - 1, player, visited))
-            return true;
-
+    /**
+     * Checks if the given player has successfully formed a road on the board.
+     *
+     * @param player the player ("WHITE" or "Brown") to check for a winning road.
+     * @return true if the player has made a road either horizontally or vertically, false otherwise.
+     */
+    public boolean checkRoadForPlayer(String player) {
+        for (int i = 0; i < board.length; i++) {
+            if (checkRoadRecursive(0, i, player, new boolean[5][5], "vertical") ||
+                    checkRoadRecursive(i, 0, player, new boolean[5][5], "horizontal")) {
+                return true;
+            }
+        }
         return false;
     }
 
-    public void checkWinCondition() {
-        // For white player
-        for (int i = 0; i < board.length; i++) {
-            if (dfs(i, 0, 0, new boolean[5][5])) {
-                System.out.println("White Wins!");
-                isGameEnded = true;
-                return;
-            }
-        }
 
-        // For brown player
-        for (int j = 0; j < board[0].length; j++) {
-            if (dfs(0, j, 1, new boolean[5][5])) {
-                System.out.println("Brown Wins!");
-                isGameEnded = true;
-                return;
-            }
+    /**
+     * Recursively checks for a road in the given direction starting from the specified coordinates.
+     *
+     * @param x the x-coordinate to start checking from.
+     * @param y the y-coordinate to start checking from.
+     * @param player the player ("WHITE" or other) to check the road for.
+     * @param visited a 2D boolean array marking the cells that have been visited during the search.
+     * @param direction the direction ("vertical" or "horizontal") to check for the road.
+     * @return true if a road is found in the given direction starting from (x, y), false otherwise.
+     */
+    public boolean checkRoadRecursive(int x, int y, String player, boolean[][] visited, String direction) {
+        if (x < 0 || x >= 5 || y < 0 || y >= 5 || visited[x][y] || !isPartOfRoad(x, y, player)) {
+            return false;
         }
+        if (direction.equals("vertical") && x == 4) {
+            return true;
+        }
+        if (direction.equals("horizontal") && y == 4) {
+            return true;
+        }
+        visited[x][y] = true;
+        return checkRoadRecursive(x - 1, y, player, visited, direction) ||
+                checkRoadRecursive(x + 1, y, player, visited, direction) ||
+                checkRoadRecursive(x, y - 1, player, visited, direction) ||
+                checkRoadRecursive(x, y + 1, player, visited, direction);
     }
 
-    public static void main(String[] args) {
-        board board = new board();
-        board.addPiece(0, 1, 1);
-        System.out.println(board.toString());
+    /**
+     * Checks if either player ("WHITE" or "BROWN") has won the game by forming a road.
+     * If a player has won, an appropriate message is printed to the console, and the game ends.
+     */
+
+    public void checkWinCondition() {
+        boolean whiteWins = checkRoadForPlayer("WHITE");
+        boolean brownWins = checkRoadForPlayer("BROWN");
+
+        if (whiteWins && brownWins) {
+            System.out.println("WHITE Wins, as the player who made the move wins."); //based on the rules
+            isGameEnded = true;
+        } else if (whiteWins) {
+            System.out.println("WHITE Wins by making a road.");
+            isGameEnded = true;
+        } else if (brownWins) {
+            System.out.println("BROWN Wins by making a road.");
+            isGameEnded = true;
+        }
     }
 
 }

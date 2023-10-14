@@ -276,28 +276,30 @@ public class TakGame2D {
                             //logicBoard.checkState();
                             System.out.println(xChord+" "+yChord);
 
+                            if(!getMidTurn()){
+
+                                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                                    colorButton.setForeground(Color.WHITE);
+                                    colorButton.setBackground(new Color(192, 130, 97));
+                                    colorButton.setText("BROWN TURN");
+                                    stones--;
+                                    leftStonesLabel.setText("White Stones: " + stones);
+                                }
+                                else{
+                                    colorButton.setForeground(new Color(192, 130, 97));
+                                    colorButton.setBackground(Color.WHITE);
+                                    colorButton.setText("WHITE TURN");
+                                    stones2--;
+                                    rightStonesLabel.setText("Brown Stones: " + stones2);
+                                }
+
+                                
+
+                            }
+
                         }
 
-                        if(!getMidTurn()){
-
-                            if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                                colorButton.setForeground(Color.WHITE);
-                                colorButton.setBackground(new Color(192, 130, 97));
-                                colorButton.setText("BROWN TURN");
-                                stones--;
-                                leftStonesLabel.setText("White Stones: " + stones);
-                            }
-                            else{
-                                colorButton.setForeground(new Color(192, 130, 97));
-                                colorButton.setBackground(Color.WHITE);
-                                colorButton.setText("WHITE TURN");
-                                stones2--;
-                                rightStonesLabel.setText("Brown Stones: " + stones2);
-                            }
-
-                            
-
-                        }
+                        
                         
                     }
 

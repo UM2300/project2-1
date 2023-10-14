@@ -182,7 +182,6 @@ public class board {
         x--;
         y--;
 
-
         if(board[x][y].size()>=quant && quant<=5){
             while(quant>0){
                 temp.add(0, popFromTop(x, y));
@@ -607,11 +606,7 @@ public class board {
                 else{
                     continueMove(getChordsAndDir()[0], getChordsAndDir()[1], getTemp(), getChordsAndDir()[2], drop);
                     dropFrame.dispose();
-                }
-
-                
-
-                
+                }                
             }
 
         });

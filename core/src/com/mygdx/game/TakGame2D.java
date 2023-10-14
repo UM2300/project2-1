@@ -11,18 +11,13 @@ import java.io.IOException;
 
 public class TakGame2D {
 
-
     private JButton colorButton;
-
-
     private final ImageIcon whiteFlatStone = loadAndResizeImage("assets/WhitePiece.png", 0.1);
     private final ImageIcon whiteStandingStone = loadAndResizeImage("assets/WhiteStanding.png", 0.1);
     private final ImageIcon whiteCapstone = loadAndResizeImage("assets/WhiteCapstone.png", 0.1);
     private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
     private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
     private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
-
-
 
     private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
 
@@ -592,9 +587,7 @@ public class TakGame2D {
             endFrame.add(topPanel);
             endFrame.add(bottomPanel);
 
-            endFrame.setVisible(true);
-
-        
+            endFrame.setVisible(true);   
     }
 
 

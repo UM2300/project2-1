@@ -252,7 +252,7 @@ public class TakGame2D {
                             dropPiece();
 
                             //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
-                            //setMidTurn(false);
+                            setMidTurn(false);
                             source.setIsEmpty(false);
                         }
                         else{
@@ -499,7 +499,7 @@ public class TakGame2D {
 
 
         moveFrame = new JFrame("Move Piece");
-        moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);
@@ -545,7 +545,7 @@ public class TakGame2D {
         
         
         moveFrame = new JFrame("Move Piece");
-        moveFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);

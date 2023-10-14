@@ -3,6 +3,21 @@ package com.mygdx.game;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 /*
  * This class represents the logic behind the rules of Tak
  */
@@ -34,6 +49,12 @@ public class board {
     private int turn = 0;
     private boolean isGameEnded = false;
     private static String currentPlayer = "WHITE";
+    private JFrame dropFrame;
+    private int drop=1;
+
+    private ArrayList<Integer> temp;
+    private int[] chordsAndDir;
+
 
     public int wCounter = 0;
     public int bCounter = 0;
@@ -55,6 +76,31 @@ public class board {
     public ArrayList<Integer>[][] getBoard(){
         return board;
     }
+
+    public int getDrop(){
+        return drop;
+    }
+
+    public void setDrop(int drop){
+        this.drop=drop;
+    }
+
+    public int[] getChordsAndDir(){
+        return chordsAndDir;
+    }
+
+    public void setChordsAndDir(int[] chordsAndDir){
+        this.chordsAndDir=chordsAndDir;
+    }
+
+    public ArrayList<Integer> getTemp(){
+        return temp;
+    }
+
+    public void setTemp(ArrayList<Integer> temp){
+        this.temp=temp;
+    }
+
 
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
@@ -188,7 +234,8 @@ public class board {
                         System.out.println("moved");
 
                         if(temp.size()>0){
-                            continueMove(xChord, yChord, temp, dir, 0);
+                            //continueMove(xChord, yChord, temp, dir, 0);
+                            continueDropPiece(xChord, yChord, temp, dir);
                         }
                         togglePlayer();
                     }
@@ -216,13 +263,16 @@ public class board {
      * @param dir direction (up, down, left, right) to continue move
      * @param dropNum number of pieces to drop of in the current tile (if a stack dropNum >= 1, else dropNum = 1)
      */
+
     public void continueMove(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
         System.out.println("continue move");
                  
-        Scanner in = new Scanner(System.in);
-        System.out.println("please give drop number");
-        System.out.print(">");
-        dropNum = Integer.parseInt(in.nextLine());
+        //Scanner in = new Scanner(System.in);
+        //System.out.println("please give drop number");
+        //System.out.print(">");
+        //dropNum = Integer.parseInt(in.nextLine());
+        //continueDropPiece();
+        //dropNum = getDrop();
 
         ArrayList<Integer> target = new ArrayList<Integer>();
         int xChord=x;
@@ -261,7 +311,15 @@ public class board {
                     System.out.println("moved");
 
                     if(temp.size()>0){
-                        continueMove(xChord, yChord, temp, dir, 0);   
+                        //continueMove(xChord, yChord, temp, dir, 0); 
+                        try{
+                            Thread.sleep(2000);
+                            continueDropPiece(xChord, yChord, temp, dir);
+                        }
+                        catch(Exception e){
+                            System.out.println("Time error");
+                        };
+                          
                     }
                 }
                 else{
@@ -356,9 +414,7 @@ public class board {
 
         if(!board[x][y].isEmpty()){
             int result = board[x][y].get(board[x][y].size()-1);
-
             board[x][y].remove(board[x][y].size()-1);
-
             return result;
         }
         else
@@ -369,7 +425,6 @@ public class board {
      * Used to check the current state of the board
      */
     public void checkState(){
-
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 ArrayList<Integer> list = board[i][j];
@@ -393,9 +448,7 @@ public class board {
      * @return true if the board is full / player has used up all pieces, false if otherwise
      */
     public boolean checkIfFull(ArrayList<Integer>[][] board) {
-
         if ((wCounter == maxPiecesPerPlayer) || (bCounter == maxPiecesPerPlayer)) return true;
-
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].isEmpty()) {
@@ -526,6 +579,58 @@ public class board {
             System.out.println("BROWN Wins by making a road.");
             isGameEnded = true;
         }
+    }
+
+
+    public void continueDropPiece(int x, int y, ArrayList<Integer> temp, int dir) {
+        
+        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
+        final JTextField textField = new JTextField();
+        JButton button = new JButton("Confirm");
+
+        int[] chordsAndDir = {x,y,dir};
+
+        setChordsAndDir(chordsAndDir);
+
+        setTemp(temp);
+
+        button.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e){
+
+                String txt = textField.getText();
+                int drop = Integer.parseInt(txt);
+                
+                if(getTemp().isEmpty()){
+                    dropFrame.dispose();
+                }
+                else{
+                    continueMove(getChordsAndDir()[0], getChordsAndDir()[1], getTemp(), getChordsAndDir()[2], drop);
+                    dropFrame.dispose();
+                }
+
+                
+
+                
+            }
+
+        });
+
+        JPanel topMovePanel = new JPanel();
+        topMovePanel.setLayout(new GridLayout(3, 1));
+        topMovePanel.add(moveLabel);
+        topMovePanel.add(textField);
+        topMovePanel.add(button);
+        
+        
+        dropFrame = new JFrame("Move Piece (continued)");
+        dropFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dropFrame.setSize(300, 200);
+        dropFrame.setLayout(new BorderLayout());
+        dropFrame.setLocationRelativeTo(null);
+        dropFrame.add(topMovePanel);
+
+        dropFrame.setVisible(true);
     }
 
 }

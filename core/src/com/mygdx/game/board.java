@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
+import java.util.List;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Collections;
+
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -124,6 +126,67 @@ public class board {
         }
         return stack.get(stack.size() - 1);
     }
+
+//    public String getStackDetails(int i, int j) {
+//        StringBuilder details = new StringBuilder();
+//
+//        ArrayList<Integer> stack = board[i][j];
+//
+//        if (stack == null || stack.isEmpty()) {
+//            return "No pieces at this position.";
+//        }
+//
+//        details.append(stack.size()).append(" pieces: ");
+//
+//        for (Integer piece : stack) {
+//            details.append("[").append(piece.toString()).append("], ");
+//        }
+//
+//        // Remove the trailing comma and space
+//        details.setLength(details.length() - 2);
+//
+//        return details.toString();
+//    }
+
+    public String getStackDetails(int i, int j) {
+        StringBuilder tooltip = new StringBuilder("<html>");
+
+        // Get a reversed view of the board tile stack.
+        List<Integer> reversedStack = new ArrayList<>(board[i][j]);
+        Collections.reverse(reversedStack);
+
+        // Iterate through the reversed stack.
+        for (Integer piece : reversedStack) {
+            switch (piece) {
+                case 0:
+                    tooltip.append("<img src='file:assets/WhitePiece.png' width='50' height='30'>");
+                    break;
+                case 1:
+                    tooltip.append("<img src='file:assets/WhiteStanding.png' width='30' height='30'>");
+                    break;
+                case 2:
+                    tooltip.append("<img src='file:assets/WhiteCapstone.png' width='30' height='30'>");
+                    break;
+                case 3:
+                    tooltip.append("<img src='file:assets/BlackPiece.png' width='50' height='30'>");
+                    break;
+                case 4:
+                    tooltip.append("<img src='file:assets/BlackStanding.png' width='30' height='30'>");
+                    break;
+                case 5:
+                    tooltip.append("<img src='file:assets/BlackCapstone.png' width='30' height='30'>");
+                    break;
+            }
+            tooltip.append("<br>"); // To arrange them vertically.
+        }
+
+        tooltip.append("</html>");
+        return tooltip.toString();
+    }
+
+
+
+
 
 
 
@@ -639,6 +702,9 @@ public class board {
 
         dropFrame.setVisible(true);
     }
+
+
+
 
 }
 

@@ -173,6 +173,8 @@ public class TakGame2D {
     }
 
     public TakGame2D() {
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+
 
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
@@ -598,6 +600,10 @@ public class TakGame2D {
         for (int i = 0; i < boardButtons.length; i++) {
             for (int j = 0; j < boardButtons[i].length; j++) {
                 int state = logicBoard.getPieceAt(i, j);
+
+                String stackDetails = logicBoard.getStackDetails(i, j);
+                boardButtons[i][j].setToolTipText(stackDetails);
+
                 switch(state) {
                     case 0: boardButtons[i][j].setIcon(whiteFlatStone);
                         break;

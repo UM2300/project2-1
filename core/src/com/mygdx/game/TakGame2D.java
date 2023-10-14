@@ -184,6 +184,8 @@ public class TakGame2D {
     }
 
     public TakGame2D() {
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+
 
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
@@ -254,7 +256,7 @@ public class TakGame2D {
 
                         boolean checker = boardButtons[xChord-1][yChord-1].getIsEmpty();
 
-                        if(checker||(logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)<=2 && logicBoard.getCurrentPlayer().equals("WHITE"))||
+                        if(checker||midTurn||(logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)<=2 && logicBoard.getCurrentPlayer().equals("WHITE"))||
                         (logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)>2 && logicBoard.getCurrentPlayer().equals("BROWN"))){
                             
                             if(getMidTurn()){
@@ -287,10 +289,25 @@ public class TakGame2D {
                             //logicBoard.checkState();
                             System.out.println(xChord+" "+yChord);
 
-                        }
-                        
-                    }
+                            if(!getMidTurn()){
 
+                                if(logicBoard.getCurrentPlayer().equals("WHITE")){
+                                    colorButton.setForeground(Color.WHITE);
+                                    colorButton.setBackground(new Color(192, 130, 97));
+                                    colorButton.setText("BROWN TURN");
+                                    stones--;
+                                    leftStonesLabel.setText("White Stones: " + stones);
+                                }
+                                else{
+                                    colorButton.setForeground(new Color(192, 130, 97));
+                                    colorButton.setBackground(Color.WHITE);
+                                    colorButton.setText("WHITE TURN");
+                                    stones2--;
+                                    rightStonesLabel.setText("Brown Stones: " + stones2);
+                                }
+                            }
+                        }
+                    }
                 });
 
                 boardPanel.add(boardButtons[i][j]);
@@ -344,27 +361,14 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e){
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText("White Stones: " + stones);
-                        logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
-                        optionFrame.dispose();
-                    }
+                    logicBoard.addPiece(0, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
+                    optionFrame.dispose();
+                    
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
-                        optionFrame.dispose();
-                    }
+                    logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
+                    optionFrame.dispose();
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
@@ -386,28 +390,18 @@ public class TakGame2D {
 
         standingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        stones--;
-                        leftStonesLabel.setText("White Stones: " + stones);                        
-                        logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
-                        optionFrame.dispose();
-                    }
+                if(logicBoard.getCurrentPlayer().equals("WHITE")){     
+
+                    logicBoard.addPiece(1, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
+                    optionFrame.dispose();
+                    
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        stones2--;
-                        rightStonesLabel.setText("Brown Stones: " + stones2);
-                        logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(4, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
+                    optionFrame.dispose();
+
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
@@ -427,27 +421,17 @@ public class TakGame2D {
             public void actionPerformed(ActionEvent e){
 
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                    if (stones > 0) {
-                        colorButton.setForeground(Color.WHITE);
-                        colorButton.setBackground(new Color(192, 130, 97));
-                        colorButton.setText("BROWN TURN");
-                        capstone--;
-                        leftCapstoneLabel.setText("White Capstone: " + capstone);
-                        logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteCapstone);
+                    optionFrame.dispose();
+
                 } else {
-                    if (stones2 > 0) {
-                        colorButton.setForeground(new Color(192, 130, 97));
-                        colorButton.setBackground(Color.WHITE);
-                        colorButton.setText("WHITE TURN");
-                        capstone2--;
-                        rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
-                        logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
-                        boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
-                        optionFrame.dispose();
-                    }
+
+                    logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
+                    boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownCapstone);
+                    optionFrame.dispose();
+                    
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
@@ -619,6 +603,10 @@ public class TakGame2D {
         for (int i = 0; i < boardButtons.length; i++) {
             for (int j = 0; j < boardButtons[i].length; j++) {
                 int state = logicBoard.getPieceAt(i, j);
+
+                String stackDetails = logicBoard.getStackDetails(i, j);
+                boardButtons[i][j].setToolTipText(stackDetails);
+
                 switch(state) {
                     case 0: boardButtons[i][j].setIcon(whiteFlatStone);
                         break;

@@ -1,7 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.GUI;
 
 import javax.swing.JButton;
 
+/**
+ * This class represents the tiles on the board which are buttons
+ */
 
 public class boardButton extends JButton{
     

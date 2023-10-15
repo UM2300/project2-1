@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.GUI;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,9 +18,17 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.GUI.TakPiece.Owner;
+import com.mygdx.game.GUI.TakPiece.Type;
+import com.mygdx.game.GameLogic.board;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * This class represents the 3D version of the game, and will be used in Phases 2 and 3
+ */
+
 
 // left pieces are white
 // right pieces are brown

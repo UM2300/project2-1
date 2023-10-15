@@ -1,8 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.GUI;
 
 import javax.swing.*;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import com.mygdx.game.GameLogic.board;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +13,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+/**
+ * This class represents the 2D GUI version of the game
+ */
 
 public class TakGame2D {
 
@@ -44,6 +50,16 @@ public class TakGame2D {
     board logicBoard = new board();
 
     boardButton boardButton;
+
+    public int stones = 21;
+    public int capstone = 1;
+    public boolean wCapstone = true;
+    public int stones2 = 21;
+    public int capstone2 = 1;
+    public boolean bCapstone = true;
+
+    private JButton instructionsButton = new JButton("Instructions");
+    private JButton instructionsNewButton = new JButton("Instructions");
 
     public boolean getMidTurn(){
         return midTurn;
@@ -86,16 +102,22 @@ public class TakGame2D {
     }    
 
 
-    public int targetDir(int[] currentChords, int[] moveToChords){
+    /**
+     * Calculates the direction of a move using the current coordinates and the destination coordinates of a piece
+     * @param currentCoords current coordinates of a piece
+     * @param moveToCoords destination coordinates of a piece
+     * @return
+     */
+    public int targetDir(int[] currentCoords, int[] moveToCoords){
 
-        if(currentChords[0]!=moveToChords[0]){
-            if(moveToChords[0]>currentChords[0])
+        if(currentCoords[0]!=moveToCoords[0]){
+            if(moveToCoords[0]>currentCoords[0])
                 return 2;
             else
                 return 0;
         }
         else{
-            if(moveToChords[1]>currentChords[1])
+            if(moveToCoords[1]>currentCoords[1])
                 return 1;
             else
                 return 3;
@@ -103,16 +125,9 @@ public class TakGame2D {
 
     }
 
-    public int stones = 21;
-    public int capstone = 1;
-    public boolean wCapstone = true;
-    public int stones2 = 21;
-    public int capstone2 = 1;
-    public boolean bCapstone = true;
-
-    private JButton instructionsButton = new JButton("Instructions");
-    private JButton instructionsNewButton = new JButton("Instructions");
-
+    /**
+     * Displays the starting window of the GUI with start and instructions button
+     */
     public void startingWindow() {
 
         if (frame != null) {
@@ -120,8 +135,6 @@ public class TakGame2D {
         }
         final JFrame startFrame = new JFrame("Tak Menu");
 
-
-    
         // Set up the title label
         JLabel startLabel = new JLabel("Tak");
         Font titleFont = new Font("Algerian", Font.BOLD, 60);
@@ -175,8 +188,6 @@ public class TakGame2D {
             }
         });
         // Create and style the "Instructions" button
-        //JButton instructionsButton = new JButton("Instructions");
-        this.instructionsButton = instructionsButton;
         instructionsButton.setFont(new Font("Algerian", Font.BOLD, 24));
         instructionsButton.setUI(highlightUI);
         instructionsButton.setBackground(new Color(226, 199, 153)); // Button color
@@ -204,8 +215,6 @@ public class TakGame2D {
             }
         });
     
-
-    
         // Add buttons to the button panel
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
@@ -225,6 +234,9 @@ public class TakGame2D {
         startFrame.setVisible(true);
     }
     
+    /**
+     * Constructor for the class which is the frame displaying the game board, pieces and whose turn it is
+     */
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
@@ -233,11 +245,10 @@ public class TakGame2D {
         colorButton.setForeground(new Color(192, 130, 97));
         colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
         colorButton.setBackground(Color.WHITE);
-        this.instructionsNewButton = instructionsNewButton;
         instructionsNewButton.setFont(new Font("Algerian", Font.PLAIN, 14));
-        instructionsNewButton.setBackground(new Color(226, 199, 153)); // Button color
-        instructionsNewButton.setForeground(new Color(192, 130, 97)); // Text color
-        instructionsNewButton.setFocusPainted(false); // Remove the border around the text
+        instructionsNewButton.setBackground(new Color(226, 199, 153)); 
+        instructionsNewButton.setForeground(new Color(192, 130, 97)); 
+        instructionsNewButton.setFocusPainted(false); 
 
         // Add action listener for the "Instructions" button
         instructionsNewButton.addActionListener(new ActionListener() {
@@ -358,10 +369,6 @@ public class TakGame2D {
                                 }
                             }
 
-                            
-                            //logicBoard.checkWinCondition();
-                            //logicBoard.winBoardFull();
-                            //logicBoard.checkState();
                             System.out.println(xChord+" "+yChord);
 
                             if(!getMidTurn()){
@@ -409,6 +416,12 @@ public class TakGame2D {
 
 
 
+    /**
+     * Responsible for loading and resizing the images of the pieces dislayed on the board
+     * @param path file name of the respective image
+     * @param scale scale factor
+     * @return image of piece
+     */
     private ImageIcon loadAndResizeImage(String path, double scale) {
         ImageIcon originalIcon = new ImageIcon(path);
         int newWidth = (int) (originalIcon.getIconWidth() * scale);
@@ -417,6 +430,9 @@ public class TakGame2D {
         return new ImageIcon(resizedImage);
     }
 
+    /**
+     * Displays popup when adding a piece to the board
+     */
     public void addPiece() {
 
         optionLabel = new JLabel("Choose a piece to add:");
@@ -568,6 +584,9 @@ public class TakGame2D {
         
     }
 
+    /**
+     * Displays popup window when moving a piece on the board
+     */
     public void movePiece() {
 
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
@@ -604,6 +623,9 @@ public class TakGame2D {
         moveFrame.setVisible(true);
     }
 
+    /**
+     * Displays popup window to specify how many pieces of a stack (or a single piece) to drop off at the current tile
+     */
     public void dropPiece() {
         
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
@@ -651,6 +673,9 @@ public class TakGame2D {
         moveFrame.setVisible(true);
     }
 
+    /**
+     * Resets the game board 
+     */
     public void resetGame() {
         // Clear game state and update the board
         logicBoard = new board();
@@ -682,9 +707,12 @@ public class TakGame2D {
         rightStonesLabel.setText("Brown Stones: " + stones2);
         rightCapstoneLabel.setText("Brown Capstone: " + capstone2);
 
-
     }
 
+    /**
+     * Displays the endscreen when a winning condition is met
+     * @param currentPlayer the player who just performed a move (ie. the current player whose turn it is)
+     */
     public void endScreen(String currentPlayer) {
         final JFrame endFrame = new JFrame("Game Over");
     
@@ -739,18 +767,17 @@ public class TakGame2D {
         JButton startOverButton = new JButton("Start Over");
         startOverButton.setFont(new Font("Algerian", Font.BOLD, 24));
         startOverButton.setUI(highlightUI);
-        startOverButton.setBackground(new Color(226, 199, 153)); // Button color
-        startOverButton.setForeground(new Color(192, 130, 97)); // Text color
-        startOverButton.setFocusPainted(false); // Remove the border around the text
-        startOverButton.setPreferredSize(new Dimension(200, 50)); // Button size
+        startOverButton.setBackground(new Color(226, 199, 153)); 
+        startOverButton.setForeground(new Color(192, 130, 97)); 
+        startOverButton.setFocusPainted(false); 
+        startOverButton.setPreferredSize(new Dimension(200, 50)); 
     
         // Add action listener for the "Start" button
         startOverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetGame(); // Call resetGame method to clear the board and game state
+                resetGame(); 
                 optionFrame.dispose();
-                //frame.dispose();
                 startingWindow();
                 endFrame.dispose();
 
@@ -775,10 +802,13 @@ public class TakGame2D {
     }
     
 
+    /**
+     * Updates the game board on the GUI
+     * Assuming logicBoard has a method like getTileState(x, y) that returns the numerical state of the tile
+     * Assuming boardButtons is a 2D array of JButtons representing the GUI board
+     */
     public void updateVisualBoard() {
-        // Assuming logicBoard has a method like getTileState(x, y) that returns the numerical state of the tile
-        // Assuming boardButtons is a 2D array of JButtons representing the GUI board
-
+    
         for (int i = 0; i < boardButtons.length; i++) {
             for (int j = 0; j < boardButtons[i].length; j++) {
                 int state = logicBoard.getPieceAt(i, j);

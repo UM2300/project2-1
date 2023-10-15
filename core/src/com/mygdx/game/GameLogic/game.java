@@ -1,6 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.GameLogic;
 
 import java.util.Scanner;
+
+/**
+ * This class is used to test and check the logic methods and rules of the game by being displayed in the terminal
+ */
 
 public class game {
     board board = new board();
@@ -33,11 +37,20 @@ public class game {
         scanner.close();
     }
 
+    /**
+     * Checks if a winning condition is met / game is over
+     * @return true is the game is over, false if otherwise
+     */
     private boolean isGameOver() {
         return board.isGameEnded();
     }
 
 
+    /**
+     * Checks if the "check" command passed into the terminal is valid
+     * @param command command typed in by user
+     * @return true if command is valid, false if otherwise
+     */
     public boolean comCheck(String command){
         String[] split = command.split("\\s+");
         String[] comType = {"add","move","check","full"};
@@ -52,6 +65,10 @@ public class game {
         return stat;
     }
 
+    /**
+     * Determines which action to take based on input command passed in by user, performs that command, checks the game state and then switches to the next player's turn
+     * @param command command passed into terminal by user
+     */
     public void comStart(String command){
         String[] split = command.split("\\s+");
         String[] comType = {"add","move","check","full"};
@@ -80,13 +97,13 @@ public class game {
         board.checkState();
         togglePlayer();
 
-
-
-
-
     }
 
 
+    /**
+     * Adds a piece to the board by using the terminal 
+     * @param command command passed into terminal by user
+     */
     public void add(String command){
         String[] split = command.split("\\s+");
         String[] comType = {"0","1","2","3","4","5"};
@@ -106,6 +123,10 @@ public class game {
     }
 
 
+    /**
+     * Moves a piece on the board using the terminal
+     * @param command command passed into terminal by user
+     */
     public void move(String command){
         String[] split = command.split("\\s+");
         String[] comType = {"up","right","down","left"};
@@ -132,6 +153,9 @@ public class game {
     }
 
 
+    /**
+     * Alternates between the 2 player's turns
+     */
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
             currentPlayer = "BROWN";
@@ -141,10 +165,16 @@ public class game {
     }
 
 
+    /**
+     * Checks the current state of the game (displayed in the terminal)
+     */
     public void check(){
         board.checkState();
     }
     
+    /**
+     * Checks if the current state of the board is full
+     */
     public void full(){
         board.winBoardFull();
     }

@@ -1,15 +1,15 @@
-package com.mygdx.game;
+package com.mygdx.game.GUI;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class Draw extends JPanel implements MouseListener{
+/**
+ * This class is responsible for placing the images of the pieces onto the board
+ */
+
+public class Draw extends JPanel{
 
     Image whiteFlat;
     Image whiteStanding;
@@ -64,55 +64,13 @@ public class Draw extends JPanel implements MouseListener{
 
     }
 
+    /**
+     * Repaints the panel to update the displayed image
+     * @param image image of piece to be displayed
+     */
     public void setCurrentImage(Image image) {
-        ;
-        repaint(); // Repaint the panel to update the displayed image
+        repaint(); 
     }
 
 
-
-    public void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
-
-
-
-
-    }
-
-   
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
-    }
-
-
-    
 }

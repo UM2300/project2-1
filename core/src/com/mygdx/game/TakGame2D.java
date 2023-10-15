@@ -110,6 +110,9 @@ public class TakGame2D {
     public int capstone2 = 1;
     public boolean bCapstone = true;
 
+    private JButton instructionsButton = new JButton("Instructions");
+    private JButton instructionsNewButton = new JButton("Instructions");
+
     public void startingWindow() {
 
         if (frame != null) {
@@ -171,9 +174,9 @@ public class TakGame2D {
                 startFrame.dispose();
             }
         });
-    
         // Create and style the "Instructions" button
-        JButton instructionsButton = new JButton("Instructions");
+        //JButton instructionsButton = new JButton("Instructions");
+        this.instructionsButton = instructionsButton;
         instructionsButton.setFont(new Font("Algerian", Font.BOLD, 24));
         instructionsButton.setUI(highlightUI);
         instructionsButton.setBackground(new Color(226, 199, 153)); // Button color
@@ -201,6 +204,8 @@ public class TakGame2D {
             }
         });
     
+
+    
         // Add buttons to the button panel
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
@@ -223,24 +228,57 @@ public class TakGame2D {
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
+        colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
         colorButton.setBackground(Color.WHITE);
+        this.instructionsNewButton = instructionsNewButton;
+        instructionsNewButton.setFont(new Font("Algerian", Font.PLAIN, 14));
+        instructionsNewButton.setBackground(new Color(226, 199, 153)); // Button color
+        instructionsNewButton.setForeground(new Color(192, 130, 97)); // Text color
+        instructionsNewButton.setFocusPainted(false); // Remove the border around the text
+
+        // Add action listener for the "Instructions" button
+        instructionsNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File instructionsFile = new File("Instructions.txt");
+    
+                    if (Desktop.isDesktopSupported() && instructionsFile.exists()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.open(instructionsFile);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Unable to open instructions.");
+                    }
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error opening instructions.");
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.add(instructionsNewButton);
         topRightPanel.add(colorButton);
 
         leftStonesLabel = new JLabel(" White Stones: " + stones);
         leftStonesLabel.setForeground(new Color(192, 130, 97));
+        leftStonesLabel.setFont(new Font("Algerian", Font.PLAIN, 14));
         leftCapstoneLabel = new JLabel(" White Capstone: " + capstone);
         leftCapstoneLabel.setForeground(new Color(192, 130, 97));
+        leftCapstoneLabel.setFont(new Font("Algerian", Font.PLAIN, 14));
         rightStonesLabel = new JLabel(" Brown Stones: " + stones2);
         rightStonesLabel.setForeground(new Color(192, 130, 97));
+        rightStonesLabel.setFont(new Font("Algerian", Font.PLAIN, 14));
         rightCapstoneLabel = new JLabel(" Brown Capstone: " + capstone2);
         rightCapstoneLabel.setForeground(new Color(192, 130, 97));
+        rightCapstoneLabel.setFont(new Font("Algerian", Font.PLAIN, 14));
 
 
-        frame = new JFrame("TakGame2D");
+        frame = new JFrame("Tak");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 450);
         frame.setLayout(new BorderLayout());
@@ -332,11 +370,13 @@ public class TakGame2D {
                                     colorButton.setForeground(Color.WHITE);
                                     colorButton.setBackground(new Color(192, 130, 97));
                                     colorButton.setText("BROWN TURN");
+                                    colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
                                 }
                                 else{
                                     colorButton.setForeground(new Color(192, 130, 97));
                                     colorButton.setBackground(Color.WHITE);
                                     colorButton.setText("WHITE TURN");
+                                    colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
                                 }
                             }
                         }

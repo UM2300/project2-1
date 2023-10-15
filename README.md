@@ -1,6 +1,9 @@
 # project2-1
 
 README
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+FOR PEER REVIEW: RUN TakGame2D to test the game 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 A 2D version of a human vs human playable board game of Tak - Group 02
 Requirements: Installation of Java on laptop

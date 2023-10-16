@@ -199,19 +199,48 @@ public class TakGame2D {
         instructionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Create a panel to display the instructions
+                JPanel instructionsPanel = new JPanel();
+                instructionsPanel.setLayout(new BorderLayout());
+
+                // Create a JTextArea to display the instructions text
+                JTextArea instructionsText = new JTextArea(20, 50);
+                instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
+                instructionsText.setLineWrap(true);
+                instructionsText.setWrapStyleWord(true);
+                instructionsText.setEditable(false); // Make it read-only
+
+                // Add a JScrollPane to the JTextArea for scrolling if needed
+                JScrollPane scrollPane = new JScrollPane(instructionsText);
+
+                // Load instructions from a file or set the text directly
                 try {
                     File instructionsFile = new File("Instructions.txt");
-    
-                    if (Desktop.isDesktopSupported() && instructionsFile.exists()) {
-                        Desktop desktop = Desktop.getDesktop();
-                        desktop.open(instructionsFile);
+                    if (instructionsFile.exists()) {
+                        // Load instructions from the file
+                        BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
+                        String line;
+                        StringBuilder instructions = new StringBuilder();
+                        while ((line = reader.readLine()) != null) {
+                            instructions.append(line).append("\n");
+                        }
+                        reader.close();
+                        instructionsText.setText(instructions.toString());
+                        instructionsText.setCaretPosition(0);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Unable to open instructions.");
+                        // If the file doesn't exist, set some default instructions
+                        instructionsText.setText("No instructions found.");
                     }
                 } catch (IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Error opening instructions.");
+                    instructionsText.setText("Error opening instructions.");
                     exception.printStackTrace();
                 }
+
+                // Add the scrollPane to the instructions panel
+                instructionsPanel.add(scrollPane, BorderLayout.CENTER);
+
+                // Show the instructions in a dialog
+                JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
             }
         });
     
@@ -254,19 +283,48 @@ public class TakGame2D {
         instructionsNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Create a panel to display the instructions
+                JPanel instructionsPanel = new JPanel();
+                instructionsPanel.setLayout(new BorderLayout());
+
+                // Create a JTextArea to display the instructions text
+                JTextArea instructionsText = new JTextArea(20, 50);
+                instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
+                instructionsText.setLineWrap(true);
+                instructionsText.setWrapStyleWord(true);
+                instructionsText.setEditable(false); // Make it read-only
+
+                // Add a JScrollPane to the JTextArea for scrolling if needed
+                JScrollPane scrollPane = new JScrollPane(instructionsText);
+
+                // Load instructions from a file or set the text directly
                 try {
                     File instructionsFile = new File("Instructions.txt");
-    
-                    if (Desktop.isDesktopSupported() && instructionsFile.exists()) {
-                        Desktop desktop = Desktop.getDesktop();
-                        desktop.open(instructionsFile);
+                    if (instructionsFile.exists()) {
+                        // Load instructions from the file
+                        BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
+                        String line;
+                        StringBuilder instructions = new StringBuilder();
+                        while ((line = reader.readLine()) != null) {
+                            instructions.append(line).append("\n");
+                        }
+                        reader.close();
+                        instructionsText.setText(instructions.toString());
+                        instructionsText.setCaretPosition(0);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Unable to open instructions.");
+                        // If the file doesn't exist, set some default instructions
+                        instructionsText.setText("No instructions found.");
                     }
                 } catch (IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Error opening instructions.");
+                    instructionsText.setText("Error opening instructions.");
                     exception.printStackTrace();
                 }
+
+                // Add the scrollPane to the instructions panel
+                instructionsPanel.add(scrollPane, BorderLayout.CENTER);
+
+                // Show the instructions in a dialog
+                JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -435,16 +493,55 @@ public class TakGame2D {
      */
     public void addPiece() {
 
-        optionLabel = new JLabel("Choose a piece to add:");
+        // Create and configure optionFrame
+        optionFrame = new JFrame("Choose Piece");
+        optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        optionFrame.setSize(300, 200);
+        optionFrame.setLayout(new BorderLayout());
+        optionFrame.setLocationRelativeTo(null);
 
-        JRadioButton flatButton = new JRadioButton("add Flat Stone");
-        JRadioButton standingButton = new JRadioButton("add Standing Stone");
-        final JRadioButton capstoneButton = new JRadioButton("add Capstone");
+        // Create a top panel for the title label
+        JPanel topOptionPanel = new JPanel();
+        topOptionPanel.setBackground(new Color(242, 236, 190)); // Set background color
+        topOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        optionFrame.add(topOptionPanel, BorderLayout.NORTH);
 
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(flatButton);
-        buttonGroup.add(standingButton);
-        buttonGroup.add(capstoneButton);
+        // Create a label with a custom font and add it to the top panel
+        optionLabel = new JLabel("Choose a piece to add");
+        optionLabel.setFont(new Font("Algerian", Font.PLAIN, 18)); // Custom font
+        optionLabel.setForeground(new Color(192, 130, 97));
+        optionLabel.setBackground(new Color(192, 130, 97));
+        topOptionPanel.add(optionLabel);
+
+        // Create a bottom panel for the radio buttons
+        JPanel bottomOptionPanel = new JPanel();
+        bottomOptionPanel.setBackground(new Color(242, 236, 190)); // Set background color
+        bottomOptionPanel.setLayout(new GridLayout(3, 1));
+        bottomOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
+
+        // Create and style the radio buttons
+        JRadioButton flatButton = new JRadioButton("Add Flat Stone");
+        JRadioButton standingButton = new JRadioButton("Add Standing Stone");
+        final JRadioButton capstoneButton = new JRadioButton("Add Capstone");
+
+        Font radioButtonFont = new Font("Algerian", Font.PLAIN, 16); // Custom font for radio buttons
+        flatButton.setBackground(new Color(242, 236, 190));
+        flatButton.setFont(radioButtonFont);
+        flatButton.setForeground(new Color(192, 130, 97));
+        standingButton.setBackground(new Color(242, 236, 190));
+        standingButton.setFont(radioButtonFont);
+        standingButton.setForeground(new Color(192, 130, 97));
+        capstoneButton.setBackground(new Color(242, 236, 190));
+        capstoneButton.setFont(radioButtonFont);
+        capstoneButton.setForeground(new Color(192, 130, 97));
+
+        // Add radio buttons to the bottom panel
+        bottomOptionPanel.add(flatButton);
+        bottomOptionPanel.add(standingButton);
+        bottomOptionPanel.add(capstoneButton);
+
+        optionFrame.setVisible(true);
 
         flatButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
@@ -559,7 +656,7 @@ public class TakGame2D {
             }
         });
 
-        JPanel topOptionPanel = new JPanel();
+        /*JPanel topOptionPanel = new JPanel();
         topOptionPanel.setBounds(0, 0, 300, 100);
         JPanel bottomOptionPanel = new JPanel();
         bottomOptionPanel.setBounds(0, 0, 300, 100);
@@ -579,7 +676,7 @@ public class TakGame2D {
         optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
 
 
-        optionFrame.setVisible(true);
+        optionFrame.setVisible(true);*/
 
         
     }

@@ -1,6 +1,6 @@
 TAK:
 
-Welcome to Team 2 Good's game of Tak!
+Welcome to the game of Tak!
 
 Tak is a two-player abstract strategy board game. It's a simple yet deep game that can be played with a standard chess or checkerboard. Here are the basic rules to get you started:
 

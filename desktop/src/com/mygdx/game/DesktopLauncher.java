@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.mygdx.game.GUI.TakGameGUI;
+import com.mygdx.game.GUI.GUI3D.TakGameGUI;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {

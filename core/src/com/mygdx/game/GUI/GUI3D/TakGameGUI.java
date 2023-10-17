@@ -1,4 +1,4 @@
-package com.mygdx.game.GUI;
+package com.mygdx.game.GUI.GUI3D;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +18,8 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.GUI.TakPiece.Owner;
-import com.mygdx.game.GUI.TakPiece.Type;
+import com.mygdx.game.GUI.GUI3D.TakPiece.Owner;
+import com.mygdx.game.GUI.GUI3D.TakPiece.Type;
 import com.mygdx.game.GameLogic.board;
 
 import java.util.ArrayList;

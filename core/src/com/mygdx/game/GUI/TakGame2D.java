@@ -215,7 +215,7 @@ public class TakGame2D {
 
                 // Load instructions from a file or set the text directly
                 try {
-                    File instructionsFile = new File("Instructions.txt");
+                    File instructionsFile = new File("core\\src\\com\\mygdx\\game\\Instructions.txt");
                     if (instructionsFile.exists()) {
                         // Load instructions from the file
                         BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
@@ -299,8 +299,8 @@ public class TakGame2D {
 
                 // Load instructions from a file or set the text directly
                 try {
-                    File instructionsFile = new File("Instructions.txt");
-                    if (instructionsFile.exists()) {
+                    File instructionsFile = new File("core\\src\\com\\mygdx\\game\\Instructions.txt");                    
+                        if (instructionsFile.exists()) {
                         // Load instructions from the file
                         BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
                         String line;

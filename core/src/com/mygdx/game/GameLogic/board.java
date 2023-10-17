@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.mygdx.game.GUI.TakPiece;
+import com.mygdx.game.GUI.GUI3D.TakPiece;
 
 import javax.swing.*;
 import java.awt.*;

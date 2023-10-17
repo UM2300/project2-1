@@ -1,4 +1,4 @@
-package com.mygdx.game.GUI;
+package com.mygdx.game.GUI.GUI3D;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;

@@ -50,13 +50,12 @@ public class board {
 
     public TakPiece piece;
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
-    private int turn = 0;
     private boolean isGameEnded = false;
     private static String currentPlayer = "WHITE";
     private JFrame dropFrame;
     private int drop=1;
 
-    private ArrayList<Integer> temp;
+    private ArrayList<Integer> heldPieces;
     private int[] chordsAndDir;
 
 
@@ -67,10 +66,6 @@ public class board {
 
     public boolean isGameEnded() {
         return isGameEnded;
-    }
-
-    public void setTurn(int turn){
-        this.turn = turn;
     }
 
     public String getCurrentPlayer(){
@@ -97,12 +92,12 @@ public class board {
         this.chordsAndDir=chordsAndDir;
     }
 
-    public ArrayList<Integer> getTemp(){
-        return temp;
+    public ArrayList<Integer> getHeldPieces(){
+        return heldPieces;
     }
 
-    public void setTemp(ArrayList<Integer> temp){
-        this.temp=temp;
+    public void setHeldPieces(ArrayList<Integer> heldPieces){
+        this.heldPieces=heldPieces;
     }
 
 
@@ -120,6 +115,7 @@ public class board {
                 board[i][j] = new ArrayList<Integer>();
             }
         }
+        setHeldPieces(new ArrayList<Integer>());
     }
     public int getPieceAt(int i, int j) {
         ArrayList<Integer> stack = board[i][j];
@@ -307,7 +303,11 @@ public class board {
 
                         if(temp.size()>0){
                             //continueMove(xChord, yChord, temp, dir, 0);
-                            continueDropPiece(xChord, yChord, temp, dir);
+                            //continueDropPiece(xChord, yChord, temp, dir);
+                            setHeldPieces(temp);
+                        }
+                        else{
+                            setHeldPieces(new ArrayList<Integer>());
                         }
                         togglePlayer();
                     }
@@ -336,15 +336,10 @@ public class board {
      * @param dropNum number of pieces to drop of in the current tile (if a stack dropNum >= 1, else dropNum = 1)
      */
 
-    public void continueMove(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
-        System.out.println("continue move");
-                 
-        //Scanner in = new Scanner(System.in);
-        //System.out.println("please give drop number");
-        //System.out.print(">");
-        //dropNum = Integer.parseInt(in.nextLine());
-        //continueDropPiece();
-        //dropNum = getDrop();
+    public void move(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
+        System.out.println("\ncontinue move\n");
+
+        System.out.println("input machine coords are "+x+" "+y+" going "+dir);
 
         ArrayList<Integer> target = new ArrayList<Integer>();
         int xChord=x;
@@ -379,19 +374,17 @@ public class board {
                     }
 
                     ArrayList<Integer> drop = dropOff(temp, dropNum);
+                    System.out.println("Hovering piece was added at machine chords "+xChord+" "+yChord);                    
                     board[xChord][yChord].addAll(drop);
-                    System.out.println("moved");
+                    //System.out.println("moved");
 
                     if(temp.size()>0){
                         //continueMove(xChord, yChord, temp, dir, 0); 
-                        try{
-                            Thread.sleep(2000);
-                            continueDropPiece(xChord, yChord, temp, dir);
-                        }
-                        catch(Exception e){
-                            System.out.println("Time error");
-                        };
-                          
+                        setHeldPieces(temp);
+                        //continueDropPiece(xChord, yChord, temp, dir);  
+                    }
+                    else{
+                        setHeldPieces(new ArrayList<Integer>());
                     }
                 }
                 else{
@@ -665,7 +658,7 @@ public class board {
 
         setChordsAndDir(chordsAndDir);
 
-        setTemp(temp);
+        setHeldPieces(temp);
 
         button.addActionListener(new ActionListener() {
             
@@ -674,7 +667,7 @@ public class board {
                 String txt = textField.getText();
                 int drop = Integer.parseInt(txt);
                 
-                if(getTemp().isEmpty()){
+                if(getHeldPieces().isEmpty()){
                     dropFrame.dispose();
                 }
                 else{
@@ -682,7 +675,7 @@ public class board {
                     dropFrame.dispose();
                     System.out.println("disposed");
 
-                    continueMove(getChordsAndDir()[0], getChordsAndDir()[1], getTemp(), getChordsAndDir()[2], drop);
+                    move(getChordsAndDir()[0], getChordsAndDir()[1], getHeldPieces(), getChordsAndDir()[2], drop);
                 }                
             }
 

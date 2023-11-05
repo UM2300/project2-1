@@ -39,6 +39,9 @@ public class TakGame2D {
     private int pieceQuantity = 1;
     private int dropNum;
     private final int BOARD_SIZE = 5;
+    private int dir;
+
+    private int dropIteration;
 
     Draw draw = new Draw();
 
@@ -101,6 +104,21 @@ public class TakGame2D {
         this.dropNum = dropNum;
     }    
 
+    public int getDir(){
+        return dir;
+    }
+
+    public void setDir(int dir){
+        this.dir=dir;
+    }
+
+    public int getDropIteration(){
+        return dropIteration;
+    }
+
+    public void setDropIteration(int dropIteration){
+        this.dropIteration=dropIteration;
+    }
 
     /**
      * Calculates the direction of a move using the current coordinates and the destination coordinates of a piece
@@ -408,7 +426,7 @@ public class TakGame2D {
                                 setMoveToChords(buttonChords);
                                 //int dir = targetDir(getCurrentChords(), getMoveToChords());
                                 
-                                dropPiece();
+                                dropPiece(1);
 
                                 //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
                                 setMidTurn(false);
@@ -723,12 +741,13 @@ public class TakGame2D {
     /**
      * Displays popup window to specify how many pieces of a stack (or a single piece) to drop off at the current tile
      */
-    public void dropPiece() {
+    public void dropPiece(int iteration) {
         
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
         final JTextField textField = new JTextField();
         JButton button = new JButton("Confirm");
 
+        setDropIteration(iteration);
 
         button.addActionListener(new ActionListener() {
             
@@ -745,13 +764,40 @@ public class TakGame2D {
                     setMidTurn(false);
                 }
 
-                logicBoard.move(currentChords[0], currentChords[1], getPieceQuantity(), dir, getDropNum());
-                updateVisualBoard();
-                logicBoard.checkState();
-                moveFrame.dispose();
+                //System.out.println("Coodinates of the button are "+currentChords[0]+" "+currentChords[1]);
+
+                if(logicBoard.getHeldPieces().isEmpty()){
+                    logicBoard.move(currentChords[0], currentChords[1], getPieceQuantity(), dir, getDropNum());
+                    updateVisualBoard();
+                    logicBoard.checkState();
+                    moveFrame.dispose();
+                }
+                else{
+                    System.out.println("Last piece is above "+currentChords[0]+" "+currentChords[1]+" going "+getDir());
+                    logicBoard.move(currentChords[0], currentChords[1], logicBoard.getHeldPieces(), getDir(), getDropNum());
+                    updateVisualBoard();
+                    logicBoard.checkState();
+                    moveFrame.dispose();
+                }
+
+                if(!logicBoard.getHeldPieces().isEmpty()){
+                    System.out.println("Coming from "+currentChords[0]+" "+currentChords[1]+" "+dir);
+                    
+                    
+                    if(getDropIteration()==1){
+                        setDir(dir);
+                        alterChords(currentChords[0]-1, currentChords[1]-1, getDir());
+                    }
+                    else{
+                        alterChords(currentChords[0], currentChords[1], getDir());
+                    }
+                    moveFrame.dispose();
+                    dropPiece(getDropIteration()+1);
+                }
             }
 
         });
+        
 
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
@@ -769,6 +815,27 @@ public class TakGame2D {
 
         moveFrame.setVisible(true);
     }
+
+
+    public void alterChords(int x, int y, int dir){
+        
+        switch(dir){
+            case 0:
+                x--;
+                break;
+            case 1:
+                y++;
+                break;
+            case 2:
+                x++;
+                break;
+            case 3:
+                y--;
+                break;
+        }
+        setCurrentChords(new int[]{x,y});
+    }
+
 
     /**
      * Resets the game board 

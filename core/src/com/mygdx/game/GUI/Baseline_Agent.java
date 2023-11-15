@@ -1,5 +1,6 @@
 package com.mygdx.game.GUI;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.mygdx.game.GameLogic.board;
 import com.mygdx.game.GameLogic.game;
@@ -18,9 +19,9 @@ public class Baseline_Agent {
         return false;
     }
 
-    public ArrayList<ArrayList<Integer>> getAvailableTiles (ArrayList<Integer> [][] board, String currentPlayer) {
+    public ArrayList<int []> getAvailableTiles (ArrayList<Integer> [][] board, String currentPlayer) {
 
-        ArrayList<ArrayList<Integer>> availableTiles = new ArrayList<>();   //ArrayList of ArrayLists (for easy access later)
+        ArrayList<int []> availableTiles = new ArrayList<>();   //ArrayList of arrays 
         
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -32,8 +33,8 @@ public class Baseline_Agent {
                 if (currentPlayer.equals("WHITE")){
 
                     if((tileValue >= 0 && tileValue <= 2) || board[i][j].isEmpty()) {
-                        ArrayList<Integer> newArrayList = board[i][j];
-                        availableTiles.add(newArrayList);
+                        int [] coordinates = {i, j};   
+                        availableTiles.add(coordinates);
                     }
                 }
 
@@ -42,8 +43,8 @@ public class Baseline_Agent {
                 if (currentPlayer.equals("BROWN")) {
 
                     if((tileValue >= 3 && tileValue <= 5) || board[i][j].isEmpty()) {
-                        ArrayList<Integer> newArrayList = board[i][j];
-                        availableTiles.add(newArrayList);
+                        int[] coordinates = {i, j};    
+                        availableTiles.add(coordinates);
                     }
                 }
                 

@@ -64,6 +64,18 @@ public class TakGame2D {
     private JButton instructionsButton = new JButton("Instructions");
     private JButton instructionsNewButton = new JButton("Instructions");
 
+    private boolean baseline=true;
+
+    Baseline_Agent baseline_Agent;
+
+    public boolean getBaseLine(){
+        return baseline;
+    }
+
+    public void setBaseline(boolean baseline){
+        this.baseline=baseline;
+    }
+
     public boolean getMidTurn(){
         return midTurn;
     }
@@ -287,6 +299,10 @@ public class TakGame2D {
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
+        if(baseline){
+            baseline_Agent = new Baseline_Agent(logicBoard);
+        }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
@@ -449,18 +465,9 @@ public class TakGame2D {
 
                             if(!getMidTurn()){
 
-                                if(logicBoard.getCurrentPlayer().equals("WHITE")){
-                                    colorButton.setForeground(Color.WHITE);
-                                    colorButton.setBackground(new Color(192, 130, 97));
-                                    colorButton.setText("BROWN TURN");
-                                    colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
-                                }
-                                else{
-                                    colorButton.setForeground(new Color(192, 130, 97));
-                                    colorButton.setBackground(Color.WHITE);
-                                    colorButton.setText("WHITE TURN");
-                                    colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
-                                }
+
+                                //////////////////////////////////////////////////////////////////
+                                
                             }
                         }
                     }
@@ -490,7 +497,20 @@ public class TakGame2D {
         frame.setVisible(false);
     }
 
-
+    public void switchTurnLabel(){
+        if(!logicBoard.getCurrentPlayer().equals("WHITE")){
+            colorButton.setForeground(Color.WHITE);
+            colorButton.setBackground(new Color(192, 130, 97));
+            colorButton.setText("BROWN TURN");
+            colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
+        }
+        else{
+            colorButton.setForeground(new Color(192, 130, 97));
+            colorButton.setBackground(Color.WHITE);
+            colorButton.setText("WHITE TURN");
+            colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
+        }
+    }
 
     /**
      * Responsible for loading and resizing the images of the pieces dislayed on the board
@@ -569,13 +589,26 @@ public class TakGame2D {
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteFlatStone);
                     stones--;
                     leftStonesLabel.setText("White Stones: " + stones);
+                    switchTurnLabel();
                     optionFrame.dispose();
-                    
+
+                    if(baseline){
+                        try {    
+                            Thread.sleep(2000);
+                            baseline_Agent.chooseMove(logicBoard, "BROWN");
+                        } catch (InterruptedException f) {
+                            f.printStackTrace();
+                        }
+                        
+                    }
+
+
                 } else {
                     logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
                     stones2--;
                     rightStonesLabel.setText("Brown Stones: " + stones2);
+                    switchTurnLabel();
                     optionFrame.dispose();
                 }
                 logicBoard.checkWinCondition();
@@ -602,6 +635,7 @@ public class TakGame2D {
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(whiteStandingStone);
                     stones--;
                     leftStonesLabel.setText("White Stones: " + stones);
+                    switchTurnLabel();
                     optionFrame.dispose();
                     
                 } else {
@@ -610,6 +644,7 @@ public class TakGame2D {
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownStandingStone);
                     stones2--;
                     rightStonesLabel.setText("Brown Stones: " + stones2);
+                    switchTurnLabel();
                     optionFrame.dispose();
 
                 }
@@ -641,6 +676,7 @@ public class TakGame2D {
                         wCapstone = false;
                         capstone--;
                         leftCapstoneLabel.setText(" White Capstone: " + capstone);
+                        switchTurnLabel();
                         optionFrame.dispose();
 
                     }
@@ -656,6 +692,7 @@ public class TakGame2D {
                         bCapstone = false;
                         capstone2--;
                         rightCapstoneLabel.setText(" Brown Capstone: " + capstone2);
+                        switchTurnLabel();
                         optionFrame.dispose();
 
                     }
@@ -773,7 +810,7 @@ public class TakGame2D {
                     moveFrame.dispose();
                 }
                 else{
-                    System.out.println("Last piece is above "+currentChords[0]+" "+currentChords[1]+" going "+getDir());
+                    //System.out.println("Last piece is above "+currentChords[0]+" "+currentChords[1]+" going "+getDir());
                     logicBoard.move(currentChords[0], currentChords[1], logicBoard.getHeldPieces(), getDir(), getDropNum());
                     updateVisualBoard();
                     logicBoard.checkState();
@@ -781,9 +818,7 @@ public class TakGame2D {
                 }
 
                 if(!logicBoard.getHeldPieces().isEmpty()){
-                    System.out.println("Coming from "+currentChords[0]+" "+currentChords[1]+" "+dir);
-                    
-                    
+                    //System.out.println("Coming from "+currentChords[0]+" "+currentChords[1]+" "+dir);
                     if(getDropIteration()==1){
                         setDir(dir);
                         alterChords(currentChords[0]-1, currentChords[1]-1, getDir());
@@ -793,6 +828,9 @@ public class TakGame2D {
                     }
                     moveFrame.dispose();
                     dropPiece(getDropIteration()+1);
+                }
+                else{
+                    switchTurnLabel();
                 }
             }
 

@@ -29,7 +29,10 @@ public class Baseline_Agent {
         for (int i = 0; i < logicBoard.getBoard().length; i++) {
             for (int j = 0; j <  logicBoard.getBoard().length; j++) {
 
-                int tileValue = logicBoard.getBoard()[i][j].get(logicBoard.getBoard()[i][j].size()-1);  //top piece of the stack
+                int tileValue=-1;
+                if(!logicBoard.getBoard()[i][j].isEmpty()){
+                    tileValue = logicBoard.getBoard()[i][j].get(logicBoard.getBoard()[i][j].size()-1);  //top piece of the stack
+                }
 
                 // if the current player is white and the piece at the tile is 0, 1, 2 or it is empty,
                 // create a copy of the arraylist and add it to availableTiles

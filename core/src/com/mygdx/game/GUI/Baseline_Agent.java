@@ -19,20 +19,20 @@ public class Baseline_Agent {
         return false;
     }
 
-    public ArrayList<int []> getAvailableTiles (ArrayList<Integer> [][] board, String currentPlayer) {
+    public ArrayList<int []> getAvailableTiles (board board, String currentPlayer) {
 
         ArrayList<int []> availableTiles = new ArrayList<>();   //ArrayList of arrays 
         
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
+        for (int i = 0; i < board.getBoard().length; i++) {
+            for (int j = 0; j <  board.getBoard().length; j++) {
 
-                int tileValue = board[i][j].get(board[i][j].size()-1);  //top piece of the stack
+                int tileValue = board.getBoard()[i][j].get(board.getBoard()[i][j].size()-1);  //top piece of the stack
 
                 // if the current player is white and the piece at the tile is 0, 1, 2 or it is empty,
                 // create a copy of the arraylist and add it to availableTiles
                 if (currentPlayer.equals("WHITE")){
 
-                    if((tileValue >= 0 && tileValue <= 2) || board[i][j].isEmpty()) {
+                    if((tileValue >= 0 && tileValue <= 2) || board.getBoard()[i][j].isEmpty()) {
                         int [] coordinates = {i, j};   
                         availableTiles.add(coordinates);
                     }
@@ -42,7 +42,7 @@ public class Baseline_Agent {
                 // create a copy of the arraylist and add it to availableTiles
                 if (currentPlayer.equals("BROWN")) {
 
-                    if((tileValue >= 3 && tileValue <= 5) || board[i][j].isEmpty()) {
+                    if((tileValue >= 3 && tileValue <= 5) || board.getBoard()[i][j].isEmpty()) {
                         int[] coordinates = {i, j};    
                         availableTiles.add(coordinates);
                     }

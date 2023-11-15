@@ -191,7 +191,7 @@ public class board {
     /**
      * Adds a piece to the board with the colour of the current player, and switches the turn to the opponent after the piece has been added
      * 
-     * Uses machine index
+     * Uses human index
      * 
      * @param num the number representing the piece (see key above)
      * @param x x coordinate on the board

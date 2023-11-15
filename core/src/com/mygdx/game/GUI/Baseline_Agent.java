@@ -65,22 +65,22 @@ public class Baseline_Agent {
         ArrayList<int[]> chords = new ArrayList<int[]>();
         chords = getAvailableTiles(logicBoard, currentPlayer);
 
-        int[] moveChords = chords.get((int)Math.random()*chords.size());
+        int[] moveChords = chords.get((int)(Math.random()*chords.size()));
 
         if(logicBoard.getBoard()[moveChords[0]][moveChords[1]].isEmpty()){
 
-            int pieceAdded = (int)Math.random()*2;
+            int pieceAdded = (int)(Math.random()*2);
 
             if(currentPlayer.equals("BROWN")){
                 pieceAdded=pieceAdded+3;
             }
-            logicBoard.addPiece(moveChords[0], moveChords[1], pieceAdded);
+            logicBoard.addPiece(moveChords[0]+1, moveChords[1]+1, pieceAdded);
         }
         else{
-            int moveDir = (int)Math.random()*3;
-            int quant = (int)Math.random()*logicBoard.getBoard()[moveChords[0]][moveChords[1]].size();
+            int moveDir = (int)(Math.random()*3);
+            int quant = (int)(Math.random()*logicBoard.getBoard()[moveChords[0]][moveChords[1]].size());
 
-            int dropNum = (int)Math.random()*(quant-1)+1;
+            int dropNum = (int)(Math.random()*(quant-1)+1);
 
             logicBoard.move(moveChords[0]-1, moveChords[1]-1, quant, moveDir, dropNum);
 

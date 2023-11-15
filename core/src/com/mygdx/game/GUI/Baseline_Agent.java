@@ -79,7 +79,7 @@ public class Baseline_Agent {
 
             int dropNum = (int)Math.random()*(quant-1)+1;
 
-            logicBoard.move(moveChords[0], moveChords[1], quant, moveDir, dropNum);
+            logicBoard.move(moveChords[0]-1, moveChords[1]-1, quant, moveDir, dropNum);
 
             if(!logicBoard.getHeldPieces().isEmpty()){
                 dropRecursion(moveChords[0],moveChords[1],moveDir);

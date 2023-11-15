@@ -241,6 +241,8 @@ public class board {
     /**
      * Moves a piece / stack to a specified cell / block 
      * 
+     * Input is human interpretation index
+     * 
      * @param x current x coordinate on the board
      * @param y current y coordinate on the board
      * @param quant quantity of pieces to move (if a stack, quant > 1, else quant = 1)
@@ -330,6 +332,8 @@ public class board {
 
     /**
      * Continues a move if a STACK is being moved
+     * 
+     * Uses machine input index
      * 
      * @param x x coordinate on board
      * @param y y coordinate on board

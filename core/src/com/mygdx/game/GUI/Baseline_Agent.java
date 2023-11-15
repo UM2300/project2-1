@@ -74,15 +74,17 @@ public class Baseline_Agent {
             if(currentPlayer.equals("BROWN")){
                 pieceAdded=pieceAdded+3;
             }
-            logicBoard.addPiece(moveChords[0]+1, moveChords[1]+1, pieceAdded);
+            System.out.println("Adding at machine choords "+(moveChords[0])+" "+(moveChords[1]));
+            logicBoard.addPiece(moveChords[0], moveChords[1], pieceAdded);
         }
         else{
             int moveDir = (int)(Math.random()*3);
-            int quant = (int)(Math.random()*logicBoard.getBoard()[moveChords[0]][moveChords[1]].size());
+            int quant = (int)(Math.random()*logicBoard.getBoard()[moveChords[0]][moveChords[1]].size()-1)+1;
 
             int dropNum = (int)(Math.random()*(quant-1)+1);
 
-            logicBoard.move(moveChords[0]-1, moveChords[1]-1, quant, moveDir, dropNum);
+            System.out.println("Moving at machine choords "+(moveChords[0])+" "+(moveChords[1]));
+            logicBoard.move(moveChords[0]+1, moveChords[1]+1, quant, moveDir, dropNum);
 
             if(!logicBoard.getHeldPieces().isEmpty()){
                 dropRecursion(moveChords[0],moveChords[1],moveDir);

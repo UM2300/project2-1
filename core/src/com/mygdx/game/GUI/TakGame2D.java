@@ -591,18 +591,10 @@ public class TakGame2D {
                     leftStonesLabel.setText("White Stones: " + stones);
                     switchTurnLabel();
                     optionFrame.dispose();
-
-                    if(baseline){
-                        try {    
-                            Thread.sleep(2000);
-                            baseline_Agent.chooseMove(logicBoard, "BROWN");
-                        } catch (InterruptedException f) {
-                            f.printStackTrace();
-                        }
-                        
-                    }
-
-
+                    
+                    baselineCall(1);
+                    updateVisualBoard();
+                
                 } else {
                     logicBoard.addPiece(3, getCurrentChords()[0], getCurrentChords()[1]);
                     boardButtons[getCurrentChords()[0]-1][getCurrentChords()[1]-1].setIcon(brownFlatStone);
@@ -1037,7 +1029,25 @@ public class TakGame2D {
         }
     }
 
+    public void baselineCall(int num){
 
+        if(baseline){
+
+            //try {   
+                if(num==1){
+                    //Thread.sleep(2000);
+                } 
+                baseline_Agent.chooseMove(logicBoard, "BROWN");
+            //} catch //(InterruptedException f) {
+                //f.printStackTrace();
+            //}           
+            
+            if(logicBoard.getCurrentPlayer().equals("BROWN")){
+                baselineCall(num++);
+            }
+        }
+
+    }
 
     public static void main(String[] args) {
 

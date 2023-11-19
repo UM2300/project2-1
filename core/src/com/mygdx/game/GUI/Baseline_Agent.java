@@ -1,9 +1,7 @@
 package com.mygdx.game.GUI;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.mygdx.game.GameLogic.board;
-import com.mygdx.game.GameLogic.game;
 
 
 public class Baseline_Agent {

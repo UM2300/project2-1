@@ -109,6 +109,50 @@ public class board {
         }
     }
 
+    //////////////////////////////////////////
+    public board clone() {
+        board newBoard = new board();
+
+        // Deep copy of the 2D ArrayList
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[i].length; j++) {
+                newBoard.board[i][j] = new ArrayList<>(this.board[i][j]);
+            }
+        }
+
+        // Deep copy of heldPieces
+        if (this.heldPieces != null) {
+            newBoard.heldPieces = new ArrayList<>(this.heldPieces);
+        } else {
+            newBoard.heldPieces = null;
+        }
+
+        // Copying primitive types and immutable objects
+        newBoard.isGameEnded = this.isGameEnded;
+        newBoard.drop = this.drop;
+        newBoard.wCounter = this.wCounter;
+        newBoard.bCounter = this.bCounter;
+        newBoard.maxPiecesPerPlayer = this.maxPiecesPerPlayer;
+
+        // currentPlayer is a String, which is immutable in Java, so we can just copy the reference
+        newBoard.currentPlayer = this.currentPlayer;
+
+        // Assuming chordsAndDir is an array of primitives (like int[]), it can be cloned directly
+        if (this.chordsAndDir != null) {
+            newBoard.chordsAndDir = this.chordsAndDir.clone();
+        } else {
+            newBoard.chordsAndDir = null;
+        }
+
+        // GUI components (like JFrame) are typically not cloned in such situations
+        // as they are often specific to the instance of the game being played
+
+        return newBoard;
+    }
+
+//////////////////////////////////
+
+
     public board(){
         for(int i=0; i<board.length; i++){
             for(int j=0; j<board.length; j++){
@@ -124,27 +168,6 @@ public class board {
         }
         return stack.get(stack.size() - 1);
     }
-
-//    public String getStackDetails(int i, int j) {
-//        StringBuilder details = new StringBuilder();
-//
-//        ArrayList<Integer> stack = board[i][j];
-//
-//        if (stack == null || stack.isEmpty()) {
-//            return "No pieces at this position.";
-//        }
-//
-//        details.append(stack.size()).append(" pieces: ");
-//
-//        for (Integer piece : stack) {
-//            details.append("[").append(piece.toString()).append("], ");
-//        }
-//
-//        // Remove the trailing comma and space
-//        details.setLength(details.length() - 2);
-//
-//        return details.toString();
-//    }
 
     public String getStackDetails(int i, int j) {
         StringBuilder tooltip = new StringBuilder("<html>");
@@ -703,10 +726,6 @@ public class board {
 
         dropFrame.setVisible(true);
     }
-
-
-
-
 }
 
 

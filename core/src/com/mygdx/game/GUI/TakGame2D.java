@@ -592,6 +592,9 @@ public class TakGame2D {
                     switchTurnLabel();
                     optionFrame.dispose();
                     
+                    logicBoard.checkWinCondition();
+                    logicBoard.winBoardFull();
+                    logicBoard.checkState();
                     baselineCall(1);
                     updateVisualBoard();
                 
@@ -602,6 +605,12 @@ public class TakGame2D {
                     rightStonesLabel.setText("Brown Stones: " + stones2);
                     switchTurnLabel();
                     optionFrame.dispose();
+
+                    logicBoard.checkWinCondition();
+                    logicBoard.winBoardFull();
+                    logicBoard.checkState();
+                    baselineCall(1);
+                    updateVisualBoard();
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
@@ -823,6 +832,12 @@ public class TakGame2D {
                 }
                 else{
                     switchTurnLabel();
+                    
+                    logicBoard.checkWinCondition();
+                    logicBoard.winBoardFull();
+                    logicBoard.checkState();
+                    baselineCall(1);
+                    updateVisualBoard();
                 }
             }
 

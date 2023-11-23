@@ -6,8 +6,27 @@ import com.mygdx.game.GameLogic.board;
 public class EvalFunc {
  
     private board logicBoard;
+    private boolean[][] visited;
+
+    public void setVisited(boolean[][] visited){
+        this.visited=visited;
+    }
+
+    public boolean[][] getVisited(){
+        return this.visited;
+    }
 
     public int evaluation(board logicBoard){
+
+        boolean[][] newVisited = new boolean[5][5];
+
+        for (int i = 0; i < newVisited.length; i++) {
+            for (int j = 0; j < newVisited[i].length; j++) {
+                newVisited[i][j] = false;
+            }
+        }
+
+        setVisited(newVisited);
         
         int finalScore = 0;
         int piecesValues = pieceCount(logicBoard);
@@ -72,18 +91,32 @@ public class EvalFunc {
 
         int score=0;
 
+        boolean[][] newVisited = new boolean[5][5];
+
+        for (int i = 0; i < newVisited.length; i++) {
+            for (int j = 0; j < newVisited[i].length; j++) {
+                newVisited[i][j] = false;
+            }
+        }
+
+        setVisited(newVisited);
+
         boolean[][] verticalBool = new boolean[5][5];
         boolean[][] horizontalBool = new boolean[5][5];
 
         for (int i = 0; i < logicBoard.getBoard().length; i++) {
 
-            ArrayList<Integer>[] vertUp = checkRoadIncremental(0, i, player, verticalBool, "vu");
-            ArrayList<Integer>[] horiRight = checkRoadIncremental(i, 0, player, horizontalBool, "hr");
+            ArrayList<Integer>[] vertUp = checkRoadIncremental(0, i, player, "vu", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            setVisited(newVisited);
+            ArrayList<Integer>[] horiRight = checkRoadIncremental(i, 0, player, "hr", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            setVisited(newVisited);
 
             int j = logicBoard.getBoard().length-1-i;
 
-            ArrayList<Integer>[] vertDown = checkRoadIncremental(0, j, player, verticalBool, "vu");
-            ArrayList<Integer>[] horiLeft = checkRoadIncremental(j, 0, player, horizontalBool, "hr");
+            ArrayList<Integer>[] vertDown = checkRoadIncremental(0, j, player, "vu", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            setVisited(newVisited);
+            ArrayList<Integer>[] horiLeft = checkRoadIncremental(j, 0, player, "hr", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            setVisited(newVisited);
 
             int vertUpScore = vertUp[0].size()*vertUp[0].size()+1;
             int vertDownScore = vertDown[0].size()*vertDown[0].size()+1;
@@ -102,10 +135,14 @@ public class EvalFunc {
     }
 
 
-    public ArrayList<Integer>[] checkRoadIncremental(int x, int y, String player, boolean[][] visited, String direction){
+    public ArrayList<Integer>[] checkRoadIncremental(int x, int y, String player, String direction, ArrayList<Integer> best, ArrayList<Integer> good, ArrayList<int[]> roadChords){
 
-        ArrayList<Integer> best = new ArrayList<Integer>();
-        ArrayList<Integer> good = new ArrayList<Integer>();
+        //ArrayList<Integer> best = new ArrayList<Integer>();
+        //ArrayList<Integer> good = new ArrayList<Integer>();
+
+        //ArrayList<int[]> roadChords=new ArrayList<int[]>();
+
+        boolean[][] visited=getVisited();
 
         best.add(logicBoard.getBoard()[x][y].get(logicBoard.getBoard()[x][y].size()-1));
 
@@ -114,14 +151,20 @@ public class EvalFunc {
             while(checkAdj(x, y, visited, player)) {   
                 if(!visited[x-1][y]&&isPartOfRoad(x-1, y, player)){
                     best.add(logicBoard.getBoard()[x-1][y].get(logicBoard.getBoard()[x-1][y].size()-1));
+                    roadChords.add(new int[]{x-1,y});
+                    visited[x-1][y]=true;
                     x=x-1;
                 }
                 else if(!visited[x][y-1]&&isPartOfRoad(x, y-1, player)){
                     good.add(logicBoard.getBoard()[x][y-1].get(logicBoard.getBoard()[x][y-1].size()-1));
+                    roadChords.add(new int[]{x,y-1});
+                    visited[x][y-1]=true;
                     y=y-1;
                 }
                 else if(!visited[x][y+1]&&isPartOfRoad(x, y+1, player)){
                     good.add(logicBoard.getBoard()[x][y+1].get(logicBoard.getBoard()[x][y+1].size()-1));
+                    roadChords.add(new int[]{x,y+1});
+                    visited[x][y+1]=true;
                     y=y+1;
                 }
             }
@@ -131,14 +174,20 @@ public class EvalFunc {
             while(checkAdj(x, y, visited, player)) {
                 if(!visited[x+1][y]&&isPartOfRoad(x+1, y, player)){
                     best.add(logicBoard.getBoard()[x+1][y].get(logicBoard.getBoard()[x+1][y].size()-1));
+                    roadChords.add(new int[]{x+1,y});
+                    visited[x+1][y]=true;
                     x=x+1;
                 }
                 else if(!visited[x][y-1]&&isPartOfRoad(x, y-1, player)){
                     good.add(logicBoard.getBoard()[x][y-1].get(logicBoard.getBoard()[x][y-1].size()-1));
+                    roadChords.add(new int[]{x,y-1});
+                    visited[x][y-1]=true;
                     y=y-1;
                 }
                 else if(!visited[x][y+1]&&isPartOfRoad(x, y+1, player)){
                     good.add(logicBoard.getBoard()[x][y+1].get(logicBoard.getBoard()[x][y+1].size()-1));
+                    roadChords.add(new int[]{x,y+1});
+                    visited[x][y+1]=true;
                     y=y+1;
                 }
             }
@@ -148,14 +197,20 @@ public class EvalFunc {
             while(checkAdj(x, y, visited, player)) {   
                 if(!visited[x][y+1]&&isPartOfRoad(x, y+1, player)){
                     best.add(logicBoard.getBoard()[x][y+1].get(logicBoard.getBoard()[x][y+1].size()-1));
+                    roadChords.add(new int[]{x,y+1});
+                    visited[x][y+1]=true;
                     y=y+1;
                 }
                 else if(!visited[x-1][y]&&isPartOfRoad(x-1, y, player)){
                     good.add(logicBoard.getBoard()[x-1][y].get(logicBoard.getBoard()[x-1][y].size()-1));
+                    roadChords.add(new int[]{x-1,y});
+                    visited[x-1][y]=true;
                     x=x-1;
                 }
                 else if(!visited[x+1][y]&&isPartOfRoad(x+1, y, player)){
                     good.add(logicBoard.getBoard()[x+1][y].get(logicBoard.getBoard()[x+1][y].size()-1));
+                    roadChords.add(new int[]{x+1,y});
+                    visited[x+1][y]=true;
                     x=x+1;
                 }
             }
@@ -165,20 +220,63 @@ public class EvalFunc {
             while(checkAdj(x, y, visited, player)) {   
                 if(!visited[x][y-1]&&isPartOfRoad(x, y-1, player)){
                     best.add(logicBoard.getBoard()[x][y-1].get(logicBoard.getBoard()[x][y-1].size()-1));
+                    roadChords.add(new int[]{x,y-1});
+                    visited[x][y-1]=true;
                     y=y-1;
                 }
                 else if(!visited[x-1][y]&&isPartOfRoad(x-1, y, player)){
                     good.add(logicBoard.getBoard()[x-1][y].get(logicBoard.getBoard()[x-1][y].size()-1));
+                    roadChords.add(new int[]{x-1,y});
+                    visited[x-1][y]=true;
                     x=x-1;
                 }
                 else if(!visited[x+1][y]&&isPartOfRoad(x+1, y, player)){
                     good.add(logicBoard.getBoard()[x+1][y].get(logicBoard.getBoard()[x+1][y].size()-1));
+                    roadChords.add(new int[]{x+1,y});
+                    visited[x+1][y]=true;
                     x=x+1;
                 }       
             }
         }
 
-        ArrayList[] lists = {best, good};
+        
+
+
+        setVisited(visited);
+
+        for (int i=0; i<best.size(); i++){
+            int oldX=roadChords.get(i)[0];
+            int oldY=roadChords.get(i)[1];
+
+            if(!visited[oldX-1][oldY]&&isPartOfRoad(oldX-1, oldY, player)){
+                ArrayList[] list = checkRoadIncremental(oldX-1, oldY, player, direction, best, good, roadChords);
+                best = list[0];
+                good = list[1];
+                roadChords = list[2];
+            }
+            if(!visited[oldX+1][oldY]&&isPartOfRoad(oldX-1, oldY, player)){
+                ArrayList[] list = checkRoadIncremental(oldX+1, oldY, player, direction, best, good, roadChords);
+                best = list[0];
+                good = list[1];
+                roadChords = list[2];
+            }
+            if(!visited[oldX][oldY-1]&&isPartOfRoad(oldX-1, oldY, player)){
+                ArrayList[] list = checkRoadIncremental(oldX, oldY-1, player, direction, best, good, roadChords);
+                best = list[0];
+                good = list[1];
+                roadChords = list[2];
+            }
+            if(!visited[oldX][oldY+1]&&isPartOfRoad(oldX-1, oldY, player)){
+                ArrayList[] list = checkRoadIncremental(oldX, oldY+1, player, direction, best, good, roadChords);
+                best = list[0];
+                good = list[1];
+                roadChords = list[2];
+            }
+
+        }
+        
+        ArrayList[] lists = {best, good, roadChords};
+
 
         return lists;
     }

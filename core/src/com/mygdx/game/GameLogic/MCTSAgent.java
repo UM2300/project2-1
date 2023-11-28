@@ -1,8 +1,8 @@
 package com.mygdx.game.GameLogic;
 
+import com.mygdx.game.GUI.Baseline_Agent;
 import com.mygdx.game.GUI.EvalFunc;
 import java.util.ArrayList;
-
 
 /**
  * MCTSAgent class implements the Monte Carlo Tree Search (MCTS) algorithm for decision-making in games.
@@ -25,7 +25,7 @@ public class MCTSAgent {
         for (int i = 0; i < MAX_ITERATIONS; i++) {
             MCTSNode promisingNode = selectPromisingNode(rootNode); // Select the most promising node
             if (!promisingNode.getGameState().isGameEnded()) {
-                expandNode(promisingNode);  // Expand the selected node
+                expandNode(promisingNode, currentBoard);  // Expand the selected node, (artur added currentBoard)
             }
 
             MCTSNode nodeToExplore = promisingNode;
@@ -81,9 +81,42 @@ public class MCTSAgent {
         return bestNode;
     }
 
-    private void expandNode(MCTSNode node) {
+    private void expandNode(MCTSNode node, board currentBoard) {
 
+        ArrayList<board> legalMoves = new ArrayList<>();
+
+        Baseline_Agent baselineAgent = new Baseline_Agent(currentBoard);
+
+        board currentState = node.getGameState();
+        String currentPlayer = currentState.getCurrentPlayer();
+
+        while (legalMoves.size() < MAX_ITERATIONS) {
+
+            baselineAgent.chooseMove(currentState, currentPlayer);
+
+            // Check if the move is not a repetition
+            if (!containsBoard(legalMoves, currentState)) {
+                legalMoves.add(currentState);
+            }
+        }
+
+        for (board nextState : legalMoves) {
+            MCTSNode newNode = new MCTSNode(nextState);
+            newNode.setParent(node);
+            node.addChild(newNode);
+        }
     }
+
+    private boolean containsBoard(ArrayList<board> boards, board nextState) {
+        for (board existingBoard : boards) {
+            if (existingBoard.equals(nextState)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
 
     private int simulateRandomPlayout(MCTSNode node) {

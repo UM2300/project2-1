@@ -143,10 +143,6 @@ public class board {
         } else {
             newBoard.chordsAndDir = null;
         }
-
-        // GUI components (like JFrame) are typically not cloned in such situations
-        // as they are often specific to the instance of the game being played
-
         return newBoard;
     }
 

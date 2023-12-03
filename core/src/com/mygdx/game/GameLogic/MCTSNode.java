@@ -13,6 +13,11 @@ public class MCTSNode {
     private int visitCount; // Number of times the node has been visited
     private int evalScore;
 
+    private int expandedNodeScore;
+    private int simulatedMoveScore;
+    private int terminalStateScore;
+    private double totalScore;
+
     public MCTSNode(board gameState) {
         this.gameState = gameState;
         this.children = new ArrayList<>();
@@ -59,7 +64,7 @@ public class MCTSNode {
         return bestChild;
     }
 
-    public double getWinScore() {
+    public int getWinScore() {
         return this.evalScore;
     }
 
@@ -69,6 +74,25 @@ public class MCTSNode {
 
     public void incrementVisitCount() {
         this.visitCount++;
+    }
+    public void setExpandedNodeScore(int score) {
+        this.expandedNodeScore = (score);
+    }
+    public int getExpandedNodeScore() {
+        return expandedNodeScore;
+    }
+    public void setSimulatedMoveScore(int score) {
+        this.simulatedMoveScore = score;
+    }
+    public int getSimulatedMoveScore() {
+        return simulatedMoveScore;
+    }
+    public void setTerminalStateScore(int score) {
+        this.terminalStateScore = score;
+    }
+    public void updateScore(int gameResult) {
+        // Update the total score based on the game result (you can customize the update logic)
+        totalScore += gameResult;
     }
 
 

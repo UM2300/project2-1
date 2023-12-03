@@ -3,6 +3,7 @@ package com.mygdx.game.GameLogic;
 import com.mygdx.game.GUI.Baseline_Agent;
 import com.mygdx.game.GUI.EvalFunc;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * MCTSAgent class implements the Monte Carlo Tree Search (MCTS) algorithm for decision-making in games.
@@ -82,30 +83,41 @@ public class MCTSAgent {
     }
 
     private void expandNode(MCTSNode node, board currentBoard) {
-
         ArrayList<board> legalMoves = new ArrayList<>();
-
         Baseline_Agent baselineAgent = new Baseline_Agent(currentBoard);
 
         board currentState = node.getGameState();
-        String currentPlayer = currentState.getCurrentPlayer();
 
         while (legalMoves.size() < MAX_ITERATIONS) {
+            // Clone the current state before applying the move
+            board clonedState = currentState.clone();
 
-            baselineAgent.chooseMove(currentState, currentPlayer);
+            String currentPlayer = clonedState.getCurrentPlayer();
+            baselineAgent.chooseMove(clonedState, currentPlayer);
 
             // Check if the move is not a repetition
-            if (!containsBoard(legalMoves, currentState)) {
-                legalMoves.add(currentState);
+            if (!containsBoard(legalMoves, clonedState)) {
+                legalMoves.add(clonedState);
+            }
+
+
+            for (int i = 0; i < legalMoves.size(); i++) {
+                board nextState = legalMoves.get(i);
+                MCTSNode newNode = new MCTSNode(nextState);
+                newNode.setParent(node);
+                newNode.setExpandedNodeScore(new EvalFunc().evaluation(nextState));
+                node.addChild(newNode);
             }
         }
 
-        for (board nextState : legalMoves) {
+        for (int i = 0; i < legalMoves.size(); i++) {
+            board nextState = legalMoves.get(i);
             MCTSNode newNode = new MCTSNode(nextState);
             newNode.setParent(node);
             node.addChild(newNode);
         }
     }
+
 
     private boolean containsBoard(ArrayList<board> boards, board nextState) {
         for (board existingBoard : boards) {
@@ -116,14 +128,38 @@ public class MCTSAgent {
         return false;
     }
 
-
-
-
     private int simulateRandomPlayout(MCTSNode node) {
-return 0;
+        board clonedBoard = node.getGameState().clone();
+        Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard);
+        String currentPlayer = clonedBoard.getCurrentPlayer();
+
+        // Simulate the next player move and evaluate it
+        baselineAgent.chooseMove(clonedBoard, currentPlayer);
+        node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
+
+        // Continue simulation to terminal state
+        if (!clonedBoard.isGameEnded()) {
+            do {
+                clonedBoard.togglePlayer();
+                baselineAgent.chooseMove(clonedBoard, currentPlayer);
+            } while (!clonedBoard.isGameEnded());
+        }
+
+        int terminalScore = new EvalFunc().evaluation(clonedBoard);
+        node.setTerminalStateScore(terminalScore);
+        return terminalScore; // Or return a combined score
     }
 
     private void backPropagate(MCTSNode node, int gameResult) {
-
+        while (node != null) {
+            node.incrementVisitCount();
+            node.updateScore(gameResult);
+            node = node.getParent();
+        }
     }
+
+
+
+
+
 }

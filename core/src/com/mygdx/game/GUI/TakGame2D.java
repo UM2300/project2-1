@@ -5,6 +5,7 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import com.mygdx.game.GameLogic.board;
+import com.mygdx.game.GameLogic.game;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -207,16 +208,53 @@ public class TakGame2D {
         startButton.setForeground(new Color(192, 130, 97)); // Text color
         startButton.setFocusPainted(false); // Remove the border around the text
         startButton.setPreferredSize(new Dimension(200, 50)); // Button size
-    
-        // Add action listener for the "Start" button
+
+        final JFrame gameModeFrame = new JFrame("Game Mode");
+  
         startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameModeFrame.setVisible(true);
+                startFrame.dispose();
+            }
+        });
+
+        JPanel modeButtonPanel = new JPanel();
+        modeButtonPanel.setLayout(new GridLayout(1, 2, 0, 0)); 
+        modeButtonPanel.setBackground(new Color(226, 199, 153)); 
+
+        JButton hhButton = new JButton("Multiplayer");
+        hhButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        hhButton.setUI(highlightUI);
+        hhButton.setBackground(new Color(226, 199, 153)); 
+        hhButton.setForeground(new Color(192, 130, 97)); 
+        hhButton.setFocusPainted(false); 
+        hhButton.setPreferredSize(new Dimension(200, 50)); 
+        hhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new TakGame2D();
                 frame.setVisible(true);
-                startFrame.dispose();
+                gameModeFrame.dispose();
             }
         });
+
+        JButton hbButton = new JButton("VS Computer");
+        hbButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        hbButton.setUI(highlightUI);
+        hbButton.setBackground(new Color(226, 199, 153)); // Button color
+        hbButton.setForeground(new Color(192, 130, 97)); // Text color
+        hbButton.setFocusPainted(false); // Remove the border around the text
+        hbButton.setPreferredSize(new Dimension(200, 50)); // Button size
+        hbButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TakGame2D();
+                frame.setVisible(true);
+                gameModeFrame.dispose();
+            }
+        });
+
         // Create and style the "Instructions" button
         instructionsButton.setFont(new Font("Algerian", Font.BOLD, 24));
         instructionsButton.setUI(highlightUI);
@@ -229,11 +267,9 @@ public class TakGame2D {
         instructionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Create a panel to display the instructions
                 JPanel instructionsPanel = new JPanel();
                 instructionsPanel.setLayout(new BorderLayout());
 
-                // Create a JTextArea to display the instructions text
                 JTextArea instructionsText = new JTextArea(20, 50);
                 instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
                 instructionsText.setLineWrap(true);
@@ -261,36 +297,35 @@ public class TakGame2D {
                         // If the file doesn't exist, set some default instructions
                         instructionsText.setText("No instructions found.");
                     }
+                        instructionsPanel.add(scrollPane, BorderLayout.CENTER);
+                        JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
                 } catch (IOException exception) {
                     instructionsText.setText("Error opening instructions.");
                     exception.printStackTrace();
                 }
-
-                // Add the scrollPane to the instructions panel
-                instructionsPanel.add(scrollPane, BorderLayout.CENTER);
-
-                // Show the instructions in a dialog
-                JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
             }
         });
     
-        // Add buttons to the button panel
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
-    
-        // Add components to the startFrame
+        modeButtonPanel.add(hhButton);
+        modeButtonPanel.add(hbButton);
+
         startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         startFrame.setSize(400, 300);
         startFrame.setLocationRelativeTo(null);
         startFrame.setLayout(new BorderLayout()); // Use BorderLayout for more control
-    
-        // Add the title label to the top
         startFrame.add(topPanel, BorderLayout.NORTH);
-    
-        // Add the button panel to the center with padding
         startFrame.add(buttonPanel, BorderLayout.CENTER);
-    
         startFrame.setVisible(true);
+           
+        gameModeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        gameModeFrame.setSize(500, 200);
+        gameModeFrame.setLocationRelativeTo(null);
+        gameModeFrame.setLayout(new BorderLayout()); // Use BorderLayout for more control
+        gameModeFrame.add(modeButtonPanel, BorderLayout.CENTER);
+        gameModeFrame.setVisible(false);
+        
     }
     
     /**
@@ -313,15 +348,12 @@ public class TakGame2D {
         instructionsNewButton.setForeground(new Color(192, 130, 97)); 
         instructionsNewButton.setFocusPainted(false); 
 
-        // Add action listener for the "Instructions" button
         instructionsNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Create a panel to display the instructions
                 JPanel instructionsPanel = new JPanel();
                 instructionsPanel.setLayout(new BorderLayout());
 
-                // Create a JTextArea to display the instructions text
                 JTextArea instructionsText = new JTextArea(20, 50);
                 instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
                 instructionsText.setLineWrap(true);
@@ -469,7 +501,9 @@ public class TakGame2D {
                                 //////////////////////////////////////////////////////////////////
                                 
                             }
+                            
                         }
+                        callForEndScreen();
                     }
                 });
 
@@ -509,6 +543,18 @@ public class TakGame2D {
             colorButton.setBackground(Color.WHITE);
             colorButton.setText("WHITE TURN");
             colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
+        }
+    }
+
+    /**
+     * Checks the winning condition and shows pop-up end screen once the game is over.
+     */
+    public void callForEndScreen() {
+        if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
+            endScreen("WHITE");
+        }
+        else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
+            endScreen("BROWN");
         }
     }
 
@@ -612,12 +658,7 @@ public class TakGame2D {
                 logicBoard.checkState();
                 System.out.println(logicBoard.isGameEnded());;
 
-                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
-                    endScreen("WHITE");
-                }
-                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
-                    endScreen("BROWN");
-                }
+                callForEndScreen();
              }
             
         });
@@ -654,12 +695,7 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
-                    endScreen("WHITE");
-                }
-                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
-                    endScreen("BROWN");
-                }
+                callForEndScreen();
 
             }
         });
@@ -709,108 +745,111 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
 
-                if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
-                    endScreen("WHITE");
-                }
-                else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
-                    endScreen("BROWN");
-                }
+                callForEndScreen();
                 
             }
-        });
-
-        /*JPanel topOptionPanel = new JPanel();
-        topOptionPanel.setBounds(0, 0, 300, 100);
-        JPanel bottomOptionPanel = new JPanel();
-        bottomOptionPanel.setBounds(0, 0, 300, 100);
-        bottomOptionPanel.setLayout(new GridLayout(3, 1));
-
-        topOptionPanel.add(optionLabel);
-        bottomOptionPanel.add(flatButton);
-        bottomOptionPanel.add(standingButton);
-        bottomOptionPanel.add(capstoneButton);
-
-        optionFrame = new JFrame("Choose Piece");
-        optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        optionFrame.setSize(300, 200);
-        optionFrame.setLayout(new BorderLayout());
-        optionFrame.setLocationRelativeTo(null);
-        optionFrame.add(topOptionPanel, BorderLayout.NORTH);
-        optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
-
-
-        optionFrame.setVisible(true);*/
-
-        
+        });        
     }
 
     /**
      * Displays popup window when moving a piece on the board
      */
     public void movePiece() {
-
-        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO MOVE?");
+        // Define colors and fonts
+        Color backgroundColor = new Color(226, 199, 153);
+        Color textColor = new Color(192, 130, 97);
+        Font labelFont = new Font("Algerian", Font.BOLD, 18);
+        Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
+    
+        // Create components
+        JLabel moveLabel = new JLabel("How many to move?");
+        moveLabel.setFont(labelFont);
+        moveLabel.setForeground(textColor);
+    
         final JTextField textField = new JTextField();
+        textField.setFont(buttonFont);
+        textField.setBackground(backgroundColor);
+        textField.setForeground(textColor);
+    
         JButton button = new JButton("Confirm");
-
-
+        button.setFont(buttonFont);
+        button.setBackground(backgroundColor);
+        button.setForeground(textColor);
+    
+        // Add action listener to the "Confirm" button
         button.addActionListener(new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e){
-
+            public void actionPerformed(ActionEvent e) {
                 String txt = textField.getText();
                 int quantity = Integer.parseInt(txt);
                 setPieceQuantity(quantity);
                 moveFrame.dispose();
             }
-
         });
-
+    
+        // Create and configure panels
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
+        topMovePanel.setBackground(backgroundColor);
+    
+        // Add components to the top panel
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
         topMovePanel.add(button);
-
-
+    
+        // Create the JFrame
         moveFrame = new JFrame("Move Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);
+    
+        // Add the top panel to the frame
         moveFrame.add(topMovePanel);
-
+    
+        // Set the frame visible
         moveFrame.setVisible(true);
     }
+    
 
     /**
      * Displays popup window to specify how many pieces of a stack (or a single piece) to drop off at the current tile
      */
     public void dropPiece(int iteration) {
-        
-        JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
+        // Define colors and fonts
+        Color backgroundColor = new Color(226, 199, 153);
+        Color textColor = new Color(192, 130, 97);
+        Font labelFont = new Font("Algerian", Font.BOLD, 18);
+        Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
+    
+        // Create components
+        JLabel moveLabel = new JLabel("How many to drop?");
+        moveLabel.setFont(labelFont);
+        moveLabel.setForeground(textColor);
+    
         final JTextField textField = new JTextField();
+        textField.setFont(buttonFont);
+        textField.setBackground(backgroundColor);
+        textField.setForeground(textColor);
+    
         JButton button = new JButton("Confirm");
-
-        setDropIteration(iteration);
-
+        button.setFont(buttonFont);
+        button.setBackground(backgroundColor);
+        button.setForeground(textColor);
+    
+        // Add action listener to the "Confirm" button
         button.addActionListener(new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e){
-
+            public void actionPerformed(ActionEvent e) {
                 String txt = textField.getText();
                 int drop = Integer.parseInt(txt);
                 setDropNum(drop);
-
+    
                 int dir = targetDir(getCurrentChords(), getMoveToChords());
-
-                if(getPieceQuantity()-getDropNum()<=0){
+    
+                if (getPieceQuantity() - getDropNum() <= 0) {
                     setDropNum(getPieceQuantity());
                     setMidTurn(false);
                 }
-
-                //System.out.println("Coodinates of the button are "+currentChords[0]+" "+currentChords[1]);
-
+    
                 if(logicBoard.getHeldPieces().isEmpty()){
                     logicBoard.move(currentChords[0], currentChords[1], getPieceQuantity(), dir, getDropNum());
                     updateVisualBoard();
@@ -846,27 +885,35 @@ public class TakGame2D {
                     baselineCall(1);
                     updateVisualBoard();
                 }
+                callForEndScreen();
             }
-
+            
         });
-        
-
+    
+        // Create and configure panels
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
+        topMovePanel.setBackground(backgroundColor);
+    
+        // Add components to the top panel
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
         topMovePanel.add(button);
-        
-        
-        moveFrame = new JFrame("Move Piece");
+    
+        // Create the JFrame
+        moveFrame = new JFrame("Drop Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);
+    
+        // Add the top panel to the frame
         moveFrame.add(topMovePanel);
-
+    
+        // Set the frame visible
         moveFrame.setVisible(true);
     }
+    
 
 
     public void alterChords(int x, int y, int dir){
@@ -939,9 +986,9 @@ public class TakGame2D {
         JLabel winMessageLabel;
     
         if (currentPlayer.equals("WHITE")) {
-            winMessageLabel = new JLabel("Brown wins!");
-        } else if (currentPlayer.equals("BROWN")) {
             winMessageLabel = new JLabel("White wins!");
+        } else if (currentPlayer.equals("BROWN")) {
+            winMessageLabel = new JLabel("Brown wins!");
         } else {
             winMessageLabel = new JLabel("It's a draw!");
         }

@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.mygdx.game.GUI.GUI3D.TakPiece;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +48,7 @@ import java.io.IOException;
 
 public class board {
 
-    public TakPiece piece;
+    //public TakPiece piece;
     public ArrayList<Integer>[][] board = new ArrayList[5][5];
     private boolean isGameEnded = false;
     private static String currentPlayer = "WHITE";

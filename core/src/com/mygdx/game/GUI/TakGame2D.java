@@ -7,6 +7,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import com.mygdx.game.GameLogic.Baseline_Agent;
 import com.mygdx.game.GameLogic.board;
 import com.mygdx.game.GameLogic.game;
+import com.mygdx.game.GameLogic.MCTSAgent;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,18 +23,20 @@ import java.io.IOException;
 
 public class TakGame2D {
 
-    private JButton colorButton;
+    private JButton colorButton, menuOption;
     private final ImageIcon whiteFlatStone = loadAndResizeImage("assets/WhitePiece.png", 0.1);
     private final ImageIcon whiteStandingStone = loadAndResizeImage("assets/WhiteStanding.png", 0.1);
     private final ImageIcon whiteCapstone = loadAndResizeImage("assets/WhiteCapstone.png", 0.1);
     private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
     private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
     private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
+    public ImageIcon icon = new ImageIcon("assets/takIcon.png"); 
     public String instructions = "Instructions";
     private JButton instructionsButton = new JButton(instructions);
     private JButton instructionsNewButton = new JButton(instructions);
     private JFrame frame, optionFrame, moveFrame;
     private JLabel optionLabel, leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
+    public JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     private boardButton[][] boardButtons;
     private JPanel leftPanel, rightPanel, boardPanel;
     private int pieceQuantity = 1;
@@ -45,6 +48,7 @@ public class TakGame2D {
     private int[] moveToChords;
     private boolean midTurn = false;
     private boolean baseline=false;
+    private boolean mcts = false;
 
     public int stones = 21;
     public int capstone = 1;
@@ -58,6 +62,8 @@ public class TakGame2D {
     board logicBoard = new board();
     boardButton boardButton;
     Baseline_Agent baseline_Agent;
+    MCTSAgent mctsAgent;
+
 
     public boolean getBaseLine(){
         return baseline;
@@ -65,6 +71,14 @@ public class TakGame2D {
 
     public void setBaseline(boolean baseline){
         this.baseline=baseline;
+    }
+
+    public boolean getMCTS(){
+        return mcts;
+    }
+
+    public void setMCTS(boolean mcts){
+        this.mcts=mcts;
     }
 
     public boolean getMidTurn(){
@@ -170,6 +184,8 @@ public class TakGame2D {
         }
         final JFrame startFrame = new JFrame("Tak Menu");
         final JFrame gameModeFrame = new JFrame("Game Mode");
+        startFrame.setIconImage(icon.getImage());
+        gameModeFrame.setIconImage(icon.getImage());
         JLabel startLabel = new JLabel("Tak");
         Font titleFont = new Font("Algerian", Font.BOLD, 60);
         startLabel.setFont(titleFont);
@@ -200,7 +216,7 @@ public class TakGame2D {
         });
 
         JPanel modeButtonPanel = new JPanel();
-        modeButtonPanel.setLayout(new GridLayout(1, 2, 0, 0)); 
+        modeButtonPanel.setLayout(new GridLayout(3, 1, 0, 0)); 
         modeButtonPanel.setBackground(new Color(226, 199, 153)); 
 
         JButton hhButton = new JButton("Multiplayer");
@@ -219,19 +235,50 @@ public class TakGame2D {
             }
         });
 
-        JButton hbButton = new JButton("VS Computer");
-        hbButton.setFont(new Font("Algerian", Font.BOLD, 24));
-        hbButton.setUI(highlightUI);
-        hbButton.setBackground(new Color(226, 199, 153));
-        hbButton.setForeground(new Color(192, 130, 97)); 
-        hbButton.setFocusPainted(false); 
-        hbButton.setPreferredSize(new Dimension(200, 50)); 
-        hbButton.addActionListener(new ActionListener() {
+        JButton hbeButton = new JButton("Easy Mode");
+        hbeButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        hbeButton.setUI(highlightUI);
+        hbeButton.setBackground(new Color(226, 199, 153));
+        hbeButton.setForeground(new Color(192, 130, 97)); 
+        hbeButton.setFocusPainted(false); 
+        hbeButton.setPreferredSize(new Dimension(200, 50)); 
+        hbeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBaseline(true); // Set baseline to true when hbButton is clicked
-                baseline_Agent = new Baseline_Agent(logicBoard); // Initialize baseline agent
+                setBaseline(true); 
+                baseline_Agent = new Baseline_Agent(logicBoard); 
                 new TakGame2D();
+                rightStonesLabel.setText("");
+                rightCapstoneLabel.setText("");
+                topRightPanel.remove(colorButton);
+                frame.revalidate(); 
+                frame.repaint();    
+                frame.setVisible(true);
+                gameModeFrame.dispose();
+            }
+        });
+
+        JButton hbhButton = new JButton("Hard Mode");
+        hbhButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        hbhButton.setUI(highlightUI);
+        hbhButton.setBackground(new Color(226, 199, 153));
+        hbhButton.setForeground(new Color(192, 130, 97)); 
+        hbhButton.setFocusPainted(false); 
+        hbhButton.setPreferredSize(new Dimension(200, 50)); 
+        hbhButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+////////////////Need to connect to MCTS Agent in order to test it ! ////////////////////////
+////////////////setMCTS(true);
+////////////////mctsAgent = new MCTSAgent(currentboard);
+                setBaseline(true); 
+                baseline_Agent = new Baseline_Agent(logicBoard); 
+                new TakGame2D();
+                rightStonesLabel.setText("");
+                rightCapstoneLabel.setText("");
+                topRightPanel.remove(colorButton);
+                frame.revalidate(); 
+                frame.repaint();    
                 frame.setVisible(true);
                 gameModeFrame.dispose();
             }
@@ -253,10 +300,11 @@ public class TakGame2D {
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
         modeButtonPanel.add(hhButton);
-        modeButtonPanel.add(hbButton);
+        modeButtonPanel.add(hbeButton);
+        modeButtonPanel.add(hbhButton);
 
         gameModeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        gameModeFrame.setSize(500, 200);
+        gameModeFrame.setSize(400, 300);
         gameModeFrame.setLocationRelativeTo(null);
         gameModeFrame.setLayout(new BorderLayout()); 
         gameModeFrame.add(modeButtonPanel, BorderLayout.CENTER);
@@ -318,6 +366,10 @@ public class TakGame2D {
             baseline_Agent = new Baseline_Agent(logicBoard);
         }
 
+        if(mcts) {
+            //mctsAgent = new MCTSAgent(currentBoard);
+        }
+
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
         colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
@@ -326,15 +378,25 @@ public class TakGame2D {
         instructionsNewButton.setBackground(new Color(226, 199, 153)); 
         instructionsNewButton.setForeground(new Color(192, 130, 97)); 
         instructionsNewButton.setFocusPainted(false); 
-
         instructionsNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showInstructions();
             }
         });
+        menuOption = new JButton("Menu");
+        menuOption.setFont(new Font("Algerian", Font.PLAIN, 14));
+        menuOption.setBackground(new Color(226, 199, 153)); 
+        menuOption.setForeground(new Color(192, 130, 97)); 
+        menuOption.setFocusPainted(false);
+        menuOption.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuOption();
+            }
+        });
 
-        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.add(menuOption);
         topRightPanel.add(instructionsNewButton);
         topRightPanel.add(colorButton);
 
@@ -353,6 +415,7 @@ public class TakGame2D {
 
 
         frame = new JFrame("Tak");
+        frame.setIconImage(icon.getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 450);
         frame.setLayout(new BorderLayout());
@@ -499,6 +562,7 @@ public class TakGame2D {
     public void addPiece() {
 
         optionFrame = new JFrame("Choose Piece");
+        optionFrame.setIconImage(icon.getImage());
         optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         optionFrame.setSize(300, 200);
         optionFrame.setLayout(new BorderLayout());
@@ -694,6 +758,7 @@ public class TakGame2D {
         topMovePanel.add(button);
 
         moveFrame = new JFrame("Move Piece");
+        moveFrame.setIconImage(icon.getImage());
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
@@ -783,6 +848,7 @@ public class TakGame2D {
         topMovePanel.add(button);
     
         moveFrame = new JFrame("Drop Piece");
+        moveFrame.setIconImage(icon.getImage());
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
@@ -899,7 +965,8 @@ public class TakGame2D {
         });
 
         buttonPanel.add(startOverButton);
-    
+
+        endFrame.setIconImage(icon.getImage());
         endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         endFrame.setSize(400, 300);
         endFrame.setLocationRelativeTo(null);
@@ -908,7 +975,81 @@ public class TakGame2D {
         endFrame.add(buttonPanel);
         endFrame.setVisible(true);
     }
+
+    public void menuOption() {
+        final JFrame menuFrame = new JFrame("Tak Menu");
+        menuFrame.setIconImage(icon.getImage());
+
+        JLabel startLabel = new JLabel("Tak");
+        Font titleFont = new Font("Algerian", Font.BOLD, 60);
+        startLabel.setFont(titleFont);
+        startLabel.setForeground(new Color(226, 199, 153));
     
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20)); 
+        topPanel.setBackground(new Color(192, 130, 97));
+        topPanel.add(startLabel);
+    
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(3, 1, 0, 0)); 
+        buttonPanel.setBackground(new Color(226, 199, 153)); 
+
+        JButton restartButton = new JButton("Restart");
+        restartButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        restartButton.setUI(highlightUI);
+        restartButton.setBackground(new Color(226, 199, 153)); 
+        restartButton.setForeground(new Color(192, 130, 97)); 
+        restartButton.setFocusPainted(false); 
+        restartButton.setPreferredSize(new Dimension(200, 50)); 
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetGame();
+                startingWindow();
+                menuFrame.dispose();
+            }
+        });
+        JButton continueButton = new JButton("Continue");
+        continueButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        continueButton.setUI(highlightUI);
+        continueButton.setBackground(new Color(226, 199, 153)); 
+        continueButton.setForeground(new Color(192, 130, 97)); 
+        continueButton.setFocusPainted(false); 
+        continueButton.setPreferredSize(new Dimension(200, 50));
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuFrame.dispose();
+            }
+        });
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setFont(new Font("Algerian", Font.BOLD, 24));
+        exitButton.setUI(highlightUI);
+        exitButton.setBackground(new Color(226, 199, 153)); 
+        exitButton.setForeground(new Color(192, 130, 97)); 
+        exitButton.setFocusPainted(false); 
+        exitButton.setPreferredSize(new Dimension(200, 50)); 
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuFrame.dispose();
+                System.exit(0);
+            }
+        });
+    
+        buttonPanel.add(restartButton);
+        buttonPanel.add(continueButton);
+        buttonPanel.add(exitButton);
+
+        menuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        menuFrame.setSize(400, 300);
+        menuFrame.setLocationRelativeTo(null);
+        menuFrame.setLayout(new BorderLayout()); 
+        menuFrame.add(topPanel, BorderLayout.NORTH);
+        menuFrame.add(buttonPanel, BorderLayout.CENTER);
+        menuFrame.setVisible(true);
+    }
 
     /**
      * Updates the game board on the GUI

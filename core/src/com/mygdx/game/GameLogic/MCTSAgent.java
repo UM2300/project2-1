@@ -137,7 +137,7 @@ public class MCTSAgent {
         node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
 
         // Continue simulation to terminal state
-        if (!clonedBoard.isGameEnded()) {
+        if (!clonedBoard.isGameEnded()) { 
             do {
                 clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);

@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.mygdx.game.GameLogic.Baseline_Agent;
 import com.mygdx.game.GameLogic.board;
 import com.mygdx.game.GameLogic.game;
 
@@ -28,32 +29,22 @@ public class TakGame2D {
     private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
     private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
     private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
-
-    private JLabel leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
-
-    private JFrame frame;
-    private JFrame optionFrame;
-    private JLabel optionLabel;
-    private JFrame moveFrame;
+    public String instructions = "Instructions";
+    private JButton instructionsButton = new JButton(instructions);
+    private JButton instructionsNewButton = new JButton(instructions);
+    private JFrame frame, optionFrame, moveFrame;
+    private JLabel optionLabel, leftStonesLabel, leftCapstoneLabel, rightStonesLabel, rightCapstoneLabel;
     private boardButton[][] boardButtons;
     private JPanel leftPanel, rightPanel, boardPanel;
     private int pieceQuantity = 1;
     private int dropNum;
     private final int BOARD_SIZE = 5;
     private int dir;
-
     private int dropIteration;
-
-    Draw draw = new Draw();
-
     private int[] currentChords;
     private int[] moveToChords;
-
     private boolean midTurn = false;
-
-    board logicBoard = new board();
-
-    boardButton boardButton;
+    private boolean baseline=false;
 
     public int stones = 21;
     public int capstone = 1;
@@ -62,11 +53,10 @@ public class TakGame2D {
     public int capstone2 = 1;
     public boolean bCapstone = true;
 
-    private JButton instructionsButton = new JButton("Instructions");
-    private JButton instructionsNewButton = new JButton("Instructions");
 
-    private boolean baseline=true;
-
+    Draw draw = new Draw();
+    board logicBoard = new board();
+    boardButton boardButton;
     Baseline_Agent baseline_Agent;
 
     public boolean getBaseLine(){
@@ -155,6 +145,20 @@ public class TakGame2D {
         }
 
     }
+    ButtonUI highlightUI = new BasicButtonUI() {
+    private Color hoverColor = new Color(242, 236, 190); 
+    @Override
+    public void paint(Graphics g, JComponent c) {
+        AbstractButton button = (AbstractButton) c;
+        ButtonModel model = button.getModel();
+        if (model.isRollover()) {
+            button.setBackground(hoverColor); 
+        } else {
+            button.setBackground(new Color(226, 199, 153)); 
+        }
+        super.paint(g, c);
+    }
+};
 
     /**
      * Displays the starting window of the GUI with start and instructions button
@@ -162,55 +166,31 @@ public class TakGame2D {
     public void startingWindow() {
 
         if (frame != null) {
-            frame.dispose(); // Dispose of the existing frame if it exists
+            frame.dispose(); 
         }
         final JFrame startFrame = new JFrame("Tak Menu");
-
-        // Set up the title label
+        final JFrame gameModeFrame = new JFrame("Game Mode");
         JLabel startLabel = new JLabel("Tak");
         Font titleFont = new Font("Algerian", Font.BOLD, 60);
         startLabel.setFont(titleFont);
         startLabel.setForeground(new Color(226, 199, 153));
     
         JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20)); // Add vertical padding
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20)); 
         topPanel.setBackground(new Color(192, 130, 97));
         topPanel.add(startLabel);
     
-        // Create a button panel for the menu buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 1, 0, 0)); // Added vertical spacing
-        buttonPanel.setBackground(new Color(226, 199, 153)); // Set background color
+        buttonPanel.setLayout(new GridLayout(2, 1, 0, 0)); 
+        buttonPanel.setBackground(new Color(226, 199, 153)); 
 
-        // Define a custom ButtonUI for highlighting
-        ButtonUI highlightUI = new BasicButtonUI() {
-            private Color hoverColor = new Color(242, 236, 190); // Color when hovering
-
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                AbstractButton button = (AbstractButton) c;
-                ButtonModel model = button.getModel();
-
-                if (model.isRollover()) {
-                    button.setBackground(hoverColor); // Change the background color on hover
-                } else {
-                    button.setBackground(new Color(226, 199, 153)); // Restore the default color
-                }
-                super.paint(g, c);
-            }
-        };
-    
-        // Create and style the "Start" button
         JButton startButton = new JButton("Start");
         startButton.setFont(new Font("Algerian", Font.BOLD, 24));
         startButton.setUI(highlightUI);
-        startButton.setBackground(new Color(226, 199, 153)); // Button color
-        startButton.setForeground(new Color(192, 130, 97)); // Text color
-        startButton.setFocusPainted(false); // Remove the border around the text
-        startButton.setPreferredSize(new Dimension(200, 50)); // Button size
-
-        final JFrame gameModeFrame = new JFrame("Game Mode");
-  
+        startButton.setBackground(new Color(226, 199, 153)); 
+        startButton.setForeground(new Color(192, 130, 97)); 
+        startButton.setFocusPainted(false); 
+        startButton.setPreferredSize(new Dimension(200, 50)); 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -242,67 +222,31 @@ public class TakGame2D {
         JButton hbButton = new JButton("VS Computer");
         hbButton.setFont(new Font("Algerian", Font.BOLD, 24));
         hbButton.setUI(highlightUI);
-        hbButton.setBackground(new Color(226, 199, 153)); // Button color
-        hbButton.setForeground(new Color(192, 130, 97)); // Text color
-        hbButton.setFocusPainted(false); // Remove the border around the text
-        hbButton.setPreferredSize(new Dimension(200, 50)); // Button size
+        hbButton.setBackground(new Color(226, 199, 153));
+        hbButton.setForeground(new Color(192, 130, 97)); 
+        hbButton.setFocusPainted(false); 
+        hbButton.setPreferredSize(new Dimension(200, 50)); 
         hbButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setBaseline(true); // Set baseline to true when hbButton is clicked
+                baseline_Agent = new Baseline_Agent(logicBoard); // Initialize baseline agent
                 new TakGame2D();
                 frame.setVisible(true);
                 gameModeFrame.dispose();
             }
         });
 
-        // Create and style the "Instructions" button
         instructionsButton.setFont(new Font("Algerian", Font.BOLD, 24));
         instructionsButton.setUI(highlightUI);
-        instructionsButton.setBackground(new Color(226, 199, 153)); // Button color
-        instructionsButton.setForeground(new Color(192, 130, 97)); // Text color
-        instructionsButton.setFocusPainted(false); // Remove the border around the text
-        instructionsButton.setPreferredSize(new Dimension(200, 50)); // Button size
-    
-        // Add action listener for the "Instructions" button
+        instructionsButton.setBackground(new Color(226, 199, 153)); 
+        instructionsButton.setForeground(new Color(192, 130, 97)); 
+        instructionsButton.setFocusPainted(false); 
+        instructionsButton.setPreferredSize(new Dimension(200, 50));
         instructionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel instructionsPanel = new JPanel();
-                instructionsPanel.setLayout(new BorderLayout());
-
-                JTextArea instructionsText = new JTextArea(20, 50);
-                instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
-                instructionsText.setLineWrap(true);
-                instructionsText.setWrapStyleWord(true);
-                instructionsText.setEditable(false); // Make it read-only
-
-                // Add a JScrollPane to the JTextArea for scrolling if needed
-                JScrollPane scrollPane = new JScrollPane(instructionsText);
-
-                // Load instructions from a file or set the text directly
-                try {
-                    File instructionsFile = new File("core\\src\\com\\mygdx\\game\\Instructions.txt");
-                    if (instructionsFile.exists()) {
-                        // Load instructions from the file
-                        BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
-                        String line;
-                        StringBuilder instructions = new StringBuilder();
-                        while ((line = reader.readLine()) != null) {
-                            instructions.append(line).append("\n");
-                        }
-                        reader.close();
-                        instructionsText.setText(instructions.toString());
-                        instructionsText.setCaretPosition(0);
-                    } else {
-                        // If the file doesn't exist, set some default instructions
-                        instructionsText.setText("No instructions found.");
-                    }
-                        instructionsPanel.add(scrollPane, BorderLayout.CENTER);
-                        JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
-                } catch (IOException exception) {
-                    instructionsText.setText("Error opening instructions.");
-                    exception.printStackTrace();
-                }
+                showInstructions();
             }
         });
     
@@ -311,21 +255,57 @@ public class TakGame2D {
         modeButtonPanel.add(hhButton);
         modeButtonPanel.add(hbButton);
 
-        startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        startFrame.setSize(400, 300);
-        startFrame.setLocationRelativeTo(null);
-        startFrame.setLayout(new BorderLayout()); // Use BorderLayout for more control
-        startFrame.add(topPanel, BorderLayout.NORTH);
-        startFrame.add(buttonPanel, BorderLayout.CENTER);
-        startFrame.setVisible(true);
-           
         gameModeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         gameModeFrame.setSize(500, 200);
         gameModeFrame.setLocationRelativeTo(null);
-        gameModeFrame.setLayout(new BorderLayout()); // Use BorderLayout for more control
+        gameModeFrame.setLayout(new BorderLayout()); 
         gameModeFrame.add(modeButtonPanel, BorderLayout.CENTER);
         gameModeFrame.setVisible(false);
+
+        startFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        startFrame.setSize(400, 300);
+        startFrame.setLocationRelativeTo(null);
+        startFrame.setLayout(new BorderLayout()); 
+        startFrame.add(topPanel, BorderLayout.NORTH);
+        startFrame.add(buttonPanel, BorderLayout.CENTER);
+        startFrame.setVisible(true);
         
+    }
+    /**
+     * This method shows used to check the Instructions file and show it when button is pressed
+     */
+
+    public void showInstructions() {
+        JPanel instructionsPanel = new JPanel();
+        instructionsPanel.setLayout(new BorderLayout());
+
+        JTextArea instructionsText = new JTextArea(20, 50);
+        instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
+        instructionsText.setLineWrap(true);
+        instructionsText.setWrapStyleWord(true);
+        instructionsText.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(instructionsText);
+        try {
+            File instructionsFile = new File("core\\src\\com\\mygdx\\game\\Instructions.txt");                    
+                if (instructionsFile.exists()) {
+                BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
+                String line;
+                StringBuilder instructions = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    instructions.append(line).append("\n");
+                }
+                reader.close();
+                instructionsText.setText(instructions.toString());
+                instructionsText.setCaretPosition(0);
+                instructionsPanel.add(scrollPane, BorderLayout.CENTER);
+                JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                instructionsText.setText("No instructions found.");
+            }
+        } catch (IOException exception) {
+            instructionsText.setText("Error opening instructions.");
+            exception.printStackTrace();
+        }
     }
     
     /**
@@ -338,7 +318,6 @@ public class TakGame2D {
             baseline_Agent = new Baseline_Agent(logicBoard);
         }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
         colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
@@ -351,49 +330,9 @@ public class TakGame2D {
         instructionsNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel instructionsPanel = new JPanel();
-                instructionsPanel.setLayout(new BorderLayout());
-
-                JTextArea instructionsText = new JTextArea(20, 50);
-                instructionsText.setFont(new Font("Arial", Font.PLAIN, 16));
-                instructionsText.setLineWrap(true);
-                instructionsText.setWrapStyleWord(true);
-                instructionsText.setEditable(false); // Make it read-only
-
-                // Add a JScrollPane to the JTextArea for scrolling if needed
-                JScrollPane scrollPane = new JScrollPane(instructionsText);
-
-                // Load instructions from a file or set the text directly
-                try {
-                    File instructionsFile = new File("core\\src\\com\\mygdx\\game\\Instructions.txt");                    
-                        if (instructionsFile.exists()) {
-                        // Load instructions from the file
-                        BufferedReader reader = new BufferedReader(new FileReader(instructionsFile));
-                        String line;
-                        StringBuilder instructions = new StringBuilder();
-                        while ((line = reader.readLine()) != null) {
-                            instructions.append(line).append("\n");
-                        }
-                        reader.close();
-                        instructionsText.setText(instructions.toString());
-                        instructionsText.setCaretPosition(0);
-                    } else {
-                        // If the file doesn't exist, set some default instructions
-                        instructionsText.setText("No instructions found.");
-                    }
-                } catch (IOException exception) {
-                    instructionsText.setText("Error opening instructions.");
-                    exception.printStackTrace();
-                }
-
-                // Add the scrollPane to the instructions panel
-                instructionsPanel.add(scrollPane, BorderLayout.CENTER);
-
-                // Show the instructions in a dialog
-                JOptionPane.showMessageDialog(null, instructionsPanel, "Instructions", JOptionPane.PLAIN_MESSAGE);
+                showInstructions();
             }
         });
-
 
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topRightPanel.add(instructionsNewButton);
@@ -444,11 +383,9 @@ public class TakGame2D {
             for (int j = 0; j < BOARD_SIZE; j++) {
 
                 int[] chords = {i+1,j+1};
-
                 boardButtons[i][j] = new boardButton(chords,true);
-                boardButtons[i][j].setOpaque(true); // This is to make sure the background color is visible
+                boardButtons[i][j].setOpaque(true); 
                 boardButtons[i][j].addActionListener(new ActionListener() {
-
 
                     public void actionPerformed(ActionEvent e){
 
@@ -463,20 +400,13 @@ public class TakGame2D {
                         int xChord = source.getXChord();
                         int yChord = source.getYChord();
                         int[] buttonChords = {xChord,yChord};
-
                         boolean checker = boardButtons[xChord-1][yChord-1].getIsEmpty();
-
                         if(checker||midTurn||(logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)<=2 && logicBoard.getCurrentPlayer().equals("WHITE"))||
                         (logicBoard.getBoard()[xChord-1][yChord-1].get(logicBoard.getBoard()[xChord-1][yChord-1].size()-1)>2 && logicBoard.getCurrentPlayer().equals("BROWN"))){
                             
                             if(getMidTurn()){
-                            
                                 setMoveToChords(buttonChords);
-                                //int dir = targetDir(getCurrentChords(), getMoveToChords());
-                                
                                 dropPiece(1);
-
-                                //logicBoard.move(currentChords[0], currentChords[1], pieceQuantity, dir, pieceQuantity);
                                 setMidTurn(false);
                                 source.setIsEmpty(false);
                             }
@@ -492,16 +422,10 @@ public class TakGame2D {
                                     setMidTurn(true);
                                 }
                             }
-
                             System.out.println(xChord+" "+yChord);
-
                             if(!getMidTurn()){
-
-
-                                //////////////////////////////////////////////////////////////////
-                                
+                                //???                                
                             }
-                            
                         }
                         callForEndScreen();
                     }
@@ -515,13 +439,10 @@ public class TakGame2D {
                 }
             }
         }
-
-        // Adding panels to the main frame
         frame.add(leftPanel, BorderLayout.WEST);
         frame.add(rightPanel, BorderLayout.EAST);
         frame.add(boardPanel, BorderLayout.CENTER);
 
-        // Optional: Setting some preferred sizes and colors for visualization purposes
         leftPanel.setPreferredSize(new Dimension(150, 400));
         rightPanel.setPreferredSize(new Dimension(150, 400));
         leftPanel.setBackground(new Color(242, 236, 190));
@@ -577,39 +498,34 @@ public class TakGame2D {
      */
     public void addPiece() {
 
-        // Create and configure optionFrame
         optionFrame = new JFrame("Choose Piece");
         optionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         optionFrame.setSize(300, 200);
         optionFrame.setLayout(new BorderLayout());
         optionFrame.setLocationRelativeTo(null);
 
-        // Create a top panel for the title label
         JPanel topOptionPanel = new JPanel();
-        topOptionPanel.setBackground(new Color(242, 236, 190)); // Set background color
-        topOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        topOptionPanel.setBackground(new Color(242, 236, 190)); 
+        topOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
         optionFrame.add(topOptionPanel, BorderLayout.NORTH);
 
-        // Create a label with a custom font and add it to the top panel
         optionLabel = new JLabel("Choose a piece to add");
-        optionLabel.setFont(new Font("Algerian", Font.PLAIN, 18)); // Custom font
+        optionLabel.setFont(new Font("Algerian", Font.PLAIN, 18)); 
         optionLabel.setForeground(new Color(192, 130, 97));
         optionLabel.setBackground(new Color(192, 130, 97));
         topOptionPanel.add(optionLabel);
 
-        // Create a bottom panel for the radio buttons
         JPanel bottomOptionPanel = new JPanel();
-        bottomOptionPanel.setBackground(new Color(242, 236, 190)); // Set background color
+        bottomOptionPanel.setBackground(new Color(242, 236, 190)); 
         bottomOptionPanel.setLayout(new GridLayout(3, 1));
-        bottomOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        bottomOptionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         optionFrame.add(bottomOptionPanel, BorderLayout.SOUTH);
 
-        // Create and style the radio buttons
         JRadioButton flatButton = new JRadioButton("Add Flat Stone");
         JRadioButton standingButton = new JRadioButton("Add Standing Stone");
         final JRadioButton capstoneButton = new JRadioButton("Add Capstone");
 
-        Font radioButtonFont = new Font("Algerian", Font.PLAIN, 16); // Custom font for radio buttons
+        Font radioButtonFont = new Font("Algerian", Font.PLAIN, 16); 
         flatButton.setBackground(new Color(242, 236, 190));
         flatButton.setFont(radioButtonFont);
         flatButton.setForeground(new Color(192, 130, 97));
@@ -620,7 +536,6 @@ public class TakGame2D {
         capstoneButton.setFont(radioButtonFont);
         capstoneButton.setForeground(new Color(192, 130, 97));
 
-        // Add radio buttons to the bottom panel
         bottomOptionPanel.add(flatButton);
         bottomOptionPanel.add(standingButton);
         bottomOptionPanel.add(capstoneButton);
@@ -657,12 +572,10 @@ public class TakGame2D {
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
                 System.out.println(logicBoard.isGameEnded());;
-
                 callForEndScreen();
              }
             
         });
-
 
         standingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
@@ -694,7 +607,6 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-
                 callForEndScreen();
 
             }
@@ -702,13 +614,10 @@ public class TakGame2D {
 
         capstoneButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-
                 if(logicBoard.getCurrentPlayer().equals("WHITE")){
 
                     if (!wCapstone) capstoneButton.setVisible(false);
-
                     else {
-
                         logicBoard.addPiece(2, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(whiteCapstone);
                         wCapstone = false;
@@ -722,15 +631,10 @@ public class TakGame2D {
                         logicBoard.checkState();
                         baselineCall(1);
                         updateVisualBoard();
-
                     }
-
                 } else {
-
                     if (!bCapstone) capstoneButton.setVisible(false);
-
                     else {
-
                         logicBoard.addPiece(5, getCurrentChords()[0], getCurrentChords()[1]);
                         boardButtons[getCurrentChords()[0] - 1][getCurrentChords()[1] - 1].setIcon(brownCapstone);
                         bCapstone = false;
@@ -738,13 +642,11 @@ public class TakGame2D {
                         rightCapstoneLabel.setText(" Brown Capstone: " + capstone2);
                         switchTurnLabel();
                         optionFrame.dispose();
-
                     }
                 }
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-
                 callForEndScreen();
                 
             }
@@ -755,13 +657,11 @@ public class TakGame2D {
      * Displays popup window when moving a piece on the board
      */
     public void movePiece() {
-        // Define colors and fonts
         Color backgroundColor = new Color(226, 199, 153);
         Color textColor = new Color(192, 130, 97);
         Font labelFont = new Font("Algerian", Font.BOLD, 18);
         Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
     
-        // Create components
         JLabel moveLabel = new JLabel("How many to move?");
         moveLabel.setFont(labelFont);
         moveLabel.setForeground(textColor);
@@ -775,8 +675,7 @@ public class TakGame2D {
         button.setFont(buttonFont);
         button.setBackground(backgroundColor);
         button.setForeground(textColor);
-    
-        // Add action listener to the "Confirm" button
+   
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String txt = textField.getText();
@@ -786,27 +685,20 @@ public class TakGame2D {
             }
         });
     
-        // Create and configure panels
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
         topMovePanel.setBackground(backgroundColor);
     
-        // Add components to the top panel
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
         topMovePanel.add(button);
-    
-        // Create the JFrame
+
         moveFrame = new JFrame("Move Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);
-    
-        // Add the top panel to the frame
         moveFrame.add(topMovePanel);
-    
-        // Set the frame visible
         moveFrame.setVisible(true);
     }
     
@@ -815,13 +707,12 @@ public class TakGame2D {
      * Displays popup window to specify how many pieces of a stack (or a single piece) to drop off at the current tile
      */
     public void dropPiece(int iteration) {
-        // Define colors and fonts
+
         Color backgroundColor = new Color(226, 199, 153);
         Color textColor = new Color(192, 130, 97);
         Font labelFont = new Font("Algerian", Font.BOLD, 18);
         Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
     
-        // Create components
         JLabel moveLabel = new JLabel("How many to drop?");
         moveLabel.setFont(labelFont);
         moveLabel.setForeground(textColor);
@@ -836,13 +727,11 @@ public class TakGame2D {
         button.setBackground(backgroundColor);
         button.setForeground(textColor);
     
-        // Add action listener to the "Confirm" button
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String txt = textField.getText();
                 int drop = Integer.parseInt(txt);
                 setDropNum(drop);
-    
                 int dir = targetDir(getCurrentChords(), getMoveToChords());
     
                 if (getPieceQuantity() - getDropNum() <= 0) {
@@ -857,7 +746,6 @@ public class TakGame2D {
                     moveFrame.dispose();
                 }
                 else{
-                    //System.out.println("Last piece is above "+currentChords[0]+" "+currentChords[1]+" going "+getDir());
                     logicBoard.move(currentChords[0], currentChords[1], logicBoard.getHeldPieces(), getDir(), getDropNum());
                     updateVisualBoard();
                     logicBoard.checkState();
@@ -865,7 +753,6 @@ public class TakGame2D {
                 }
 
                 if(!logicBoard.getHeldPieces().isEmpty()){
-                    //System.out.println("Coming from "+currentChords[0]+" "+currentChords[1]+" "+dir);
                     if(getDropIteration()==1){
                         setDir(dir);
                         alterChords(currentChords[0]-1, currentChords[1]-1, getDir());
@@ -878,7 +765,6 @@ public class TakGame2D {
                 }
                 else{
                     switchTurnLabel();
-
                     logicBoard.checkWinCondition();
                     logicBoard.winBoardFull();
                     logicBoard.checkState();
@@ -889,32 +775,21 @@ public class TakGame2D {
             }
             
         });
-    
-        // Create and configure panels
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
         topMovePanel.setBackground(backgroundColor);
-    
-        // Add components to the top panel
         topMovePanel.add(moveLabel);
         topMovePanel.add(textField);
         topMovePanel.add(button);
     
-        // Create the JFrame
         moveFrame = new JFrame("Drop Piece");
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         moveFrame.setSize(300, 200);
         moveFrame.setLayout(new BorderLayout());
         moveFrame.setLocationRelativeTo(null);
-    
-        // Add the top panel to the frame
         moveFrame.add(topMovePanel);
-    
-        // Set the frame visible
         moveFrame.setVisible(true);
     }
-    
-
 
     public void alterChords(int x, int y, int dir){
         
@@ -940,7 +815,6 @@ public class TakGame2D {
      * Resets the game board 
      */
     public void resetGame() {
-        // Clear game state and update the board
         logicBoard = new board();
         pieceQuantity = 1;
         dropNum = 0;
@@ -960,11 +834,8 @@ public class TakGame2D {
             }
         }
         frame.dispose();
-
-        // Update the logicBoard with its initial state if necessary
         logicBoard = new board();
 
-        // Update the JLabels
         leftStonesLabel.setText("White Stones: " + stones);
         leftCapstoneLabel.setText("White Capstone: " + capstone);
         rightStonesLabel.setText("Brown Stones: " + stones2);
@@ -996,7 +867,6 @@ public class TakGame2D {
         Font messageFont = new Font("Algerian", Font.BOLD, 24);
         winMessageLabel.setFont(messageFont);
     
-        // Create a panel for the messages
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         messagePanel.setBackground(new Color(192, 130, 97));
@@ -1005,27 +875,9 @@ public class TakGame2D {
         winLabel.setForeground(new Color(226, 199, 153));
         winMessageLabel.setForeground(new Color(226, 199, 153));
     
-        // Create a panel for the buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(new Color(226, 199, 153));
-
-        ButtonUI highlightUI = new BasicButtonUI() {
-            private Color hoverColor = new Color(242, 236, 190); // Color when hovering
-
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                AbstractButton button = (AbstractButton) c;
-                ButtonModel model = button.getModel();
-
-                if (model.isRollover()) {
-                    button.setBackground(hoverColor); // Change the background color on hover
-                } else {
-                    button.setBackground(new Color(226, 199, 153)); // Restore the default color
-                }
-                super.paint(g, c);
-            }
-        };
 
         JButton startOverButton = new JButton("Start Over");
         startOverButton.setFont(new Font("Algerian", Font.BOLD, 24));
@@ -1035,7 +887,6 @@ public class TakGame2D {
         startOverButton.setFocusPainted(false); 
         startOverButton.setPreferredSize(new Dimension(200, 50)); 
     
-        // Add action listener for the "Start" button
         startOverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1049,18 +900,12 @@ public class TakGame2D {
 
         buttonPanel.add(startOverButton);
     
-        // Add components to the endFrame
         endFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         endFrame.setSize(400, 300);
         endFrame.setLocationRelativeTo(null);
         endFrame.setLayout(new GridLayout(2, 1));
-    
-        // Add the message panel to the top
         endFrame.add(messagePanel);
-    
-        // Add the button panel to the bottom
         endFrame.add(buttonPanel);
-    
         endFrame.setVisible(true);
     }
     
@@ -1099,27 +944,17 @@ public class TakGame2D {
     }
 
     public void baselineCall(int num){
-
-        if(baseline){
-
-            //try {   
-                if(num==1){
-                    //Thread.sleep(2000);
-                } 
-                baseline_Agent.chooseMove(logicBoard, "BROWN");
-            //} catch //(InterruptedException f) {
-                //f.printStackTrace();
-            //}           
-            
+        if(baseline){  
+            if(num==1){
+            } 
+            baseline_Agent.chooseMove(logicBoard, "BROWN");
             if(logicBoard.getCurrentPlayer().equals("BROWN")){
                 baselineCall(num++);
             }
         }
-
     }
 
     public static void main(String[] args) {
-
         TakGame2D game = new TakGame2D();
         game.startingWindow();
     }

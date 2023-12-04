@@ -1,7 +1,5 @@
-package com.mygdx.game.GUI;
+package com.mygdx.game.GameLogic;
 import java.util.ArrayList;
-
-import com.mygdx.game.GameLogic.board;
 
 
 public class Baseline_Agent {
@@ -11,7 +9,6 @@ public class Baseline_Agent {
     public Baseline_Agent(board logicBoard){
         this.logicBoard=logicBoard;
     }
-
 
     public boolean isAStack (int x, int y) {
         if (logicBoard.getBoard()[x][y].size() > 1 ) {
@@ -91,7 +88,6 @@ public class Baseline_Agent {
         }
 
     }
-
 
     public void dropRecursion(int x, int y,int dir){
 

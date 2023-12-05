@@ -11,15 +11,7 @@ public class Baseline_Agent {
     public Baseline_Agent(board logicBoard){
         this.logicBoard=logicBoard;
     }
-
-
-    public boolean isAStack (int x, int y) {
-        if (logicBoard.getBoard()[x][y].size() > 1 ) {
-            return true;
-        }
-        return false;
-    }
-
+    
     public ArrayList<int []> getAvailableTiles (board logicBoard, String currentPlayer) {
 
         ArrayList<int []> availableTiles = new ArrayList<>();   //ArrayList of arrays 
@@ -91,7 +83,6 @@ public class Baseline_Agent {
         }
 
     }
-
 
     public void dropRecursion(int x, int y,int dir){
 

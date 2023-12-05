@@ -1,6 +1,5 @@
 package com.mygdx.game.GameLogic;
 
-import com.mygdx.game.GUI.Baseline_Agent;
 import com.mygdx.game.GUI.EvalFunc;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -138,7 +137,7 @@ public class MCTSAgent {
         node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
 
         // Continue simulation to terminal state
-        if (!clonedBoard.isGameEnded()) {
+        if (!clonedBoard.isGameEnded()) { 
             do {
                 clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);

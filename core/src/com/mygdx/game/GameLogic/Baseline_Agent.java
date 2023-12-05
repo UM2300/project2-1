@@ -1,7 +1,5 @@
-package com.mygdx.game.GUI;
+package com.mygdx.game.GameLogic;
 import java.util.ArrayList;
-
-import com.mygdx.game.GameLogic.board;
 
 
 public class Baseline_Agent {
@@ -11,7 +9,14 @@ public class Baseline_Agent {
     public Baseline_Agent(board logicBoard){
         this.logicBoard=logicBoard;
     }
-    
+
+    public boolean isAStack (int x, int y) {
+        if (logicBoard.getBoard()[x][y].size() > 1 ) {
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<int []> getAvailableTiles (board logicBoard, String currentPlayer) {
 
         ArrayList<int []> availableTiles = new ArrayList<>();   //ArrayList of arrays 
@@ -64,7 +69,7 @@ public class Baseline_Agent {
             if(currentPlayer.equals("BROWN")){
                 pieceAdded=pieceAdded+3;
             }
-            System.out.println("Adding at machine choords "+(moveChords[0])+" "+(moveChords[1]));
+            System.out.println("Adding at machine chords "+(moveChords[0])+" "+(moveChords[1]));
             logicBoard.addPiece(moveChords[0], moveChords[1], pieceAdded);
         }
         else{
@@ -73,7 +78,7 @@ public class Baseline_Agent {
 
             int dropNum = (int)(Math.random()*(quant-1)+1);
 
-            System.out.println("Moving at machine choords "+(moveChords[0])+" "+(moveChords[1]));
+            System.out.println("Moving at machine chords "+(moveChords[0])+" "+(moveChords[1]));
             logicBoard.move(moveChords[0]+1, moveChords[1]+1, quant, moveDir, dropNum);
 
             if(!logicBoard.getHeldPieces().isEmpty()){

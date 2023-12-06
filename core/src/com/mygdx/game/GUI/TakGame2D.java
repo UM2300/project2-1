@@ -426,7 +426,8 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-                baselineCall(1);
+                baselineCall();
+                MCTSCall();
                 updateVisualBoard();
                 
                 // Check if WHITE player has no capstones left
@@ -475,7 +476,8 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-                baselineCall(1);
+                baselineCall();
+                MCTSCall();
                 updateVisualBoard();
             
             } else {
@@ -510,7 +512,8 @@ public class TakGame2D {
             logicBoard.checkWinCondition();
             logicBoard.winBoardFull();
             logicBoard.checkState();
-            baselineCall(1);
+            baselineCall();
+            MCTSCall();
             updateVisualBoard();
             
         } else {

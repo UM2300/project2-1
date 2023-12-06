@@ -564,12 +564,19 @@ public class board {
                 for (int j = 0; j < board[i].length; j++) {
 
                     ArrayList<Integer> arrayList = board[i][j];
-                    int lastElement = arrayList.get(arrayList.size() - 1);
 
-                    if (lastElement == 0 || lastElement == 2)
-                        wCounter += 1;
-                    else if (lastElement == 3 || lastElement == 5)
-                        bCounter += 1;
+                    int lastElement=0;
+
+                    if(!arrayList.isEmpty()){
+                        lastElement = arrayList.get(arrayList.size() - 1);
+                    
+                    
+
+                        if (lastElement == 0 || lastElement == 2)
+                            wCounter += 1;
+                        else if (lastElement == 3 || lastElement == 5)
+                            bCounter += 1;
+                    }
                 }
             }
             if (wCounter > bCounter) 

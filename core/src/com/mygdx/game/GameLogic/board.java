@@ -257,6 +257,8 @@ public class board {
     }
 
     
+
+    
     /**
      * Moves a piece / stack to a specified cell / block 
      * 
@@ -722,6 +724,55 @@ public class board {
 
         dropFrame.setVisible(true);
     }
+
+    /**
+     * Adds a piece to the board with the colour of the current player, and switches the turn to the opponent after the piece has been added
+     * 
+     * Uses human index
+     * 
+     * @param num the number representing the piece (see key above)
+     * @param x x coordinate on the board
+     * @param y y coordinate on the board
+     */
+    public void addPieceMCTS(int num,int x, int y){
+
+        //System.out.println("this method ran: "+x+" "+y);
+
+        if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
+            System.out.println("Not browns turn");
+            return;
+        } else if (currentPlayer.equals("BROWN")&&(num < 3 || num > 5)) {
+            System.out.println("Not whites turn");
+            return;
+            }
+
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board.length; j++){
+                if(x-1==i && y-1==j){
+
+                    if(!board[i][j].isEmpty()){
+                        System.out.println("Not an empty space");
+                    }
+                    else{
+                        board[i][j].add(num);
+
+                        if (currentPlayer.equals("WHITE")) {
+                            wCounter++;
+                        } else if (currentPlayer.equals("BROWN")) {
+                            bCounter++;
+                        }
+
+                        int inum= i+1;
+                        int jnum=j+1;
+                        System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
+
+                    }
+                }
+            }
+        }
+
+    }
 }
+
 
 

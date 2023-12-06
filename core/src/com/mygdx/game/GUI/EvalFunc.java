@@ -202,6 +202,7 @@ public class EvalFunc {
         if(!logicBoard.getBoard()[x][y].isEmpty()){
             best.add(logicBoard.getBoard()[x][y].get(logicBoard.getBoard()[x][y].size()-1));
             roadChords.add(new int[]{x,y});
+            visited[x][y]=true;
 
             if(direction.equals("vu")){
 

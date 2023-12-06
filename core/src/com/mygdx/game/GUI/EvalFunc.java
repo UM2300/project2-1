@@ -16,6 +16,14 @@ public class EvalFunc {
         return this.visited;
     }
 
+
+    /**
+     * This method is the main call of the evaluation function that adds up the different scoring elements
+     * defined below and returns the final sum.
+     * 
+     * @param logicBoard The state of the game board
+     * @return score for the state of the board from the view of the AI player
+     */
     public int evaluation(board logicBoard){
 
         boolean[][] newVisited = new boolean[5][5];
@@ -38,6 +46,13 @@ public class EvalFunc {
         return finalScore;
     }
 
+    /**
+     * This method finds an element of the final evaluation score by assigning value to each piece on the board and 
+     * returning the sum of their values.
+     * 
+     * @param logicBoard the state of the game board
+     * @return score added for each piece present on the board
+     */
     public int pieceCount(board logicBoard){
 
         int boardSum=0;
@@ -87,6 +102,15 @@ public class EvalFunc {
 
 
 
+
+    /**
+     * This method iterates over the edge spaces of the board and checks for roads in the four cardinal directions. Any found will have their
+     * score saved. The final return is the sum of the scores of any found roads on the board.
+     * 
+     * @param player player that has the current turn
+     * @param logicBoard current state of the game board
+     * @return evaluation score for any existing roads on the board
+     */
     public int checkRoadScoreForPlayer(String player, board logicBoard) {
 
         int score=0;
@@ -113,17 +137,22 @@ public class EvalFunc {
 
             int j = logicBoard.getBoard().length-1-i;
 
-            ArrayList<Integer>[] vertDown = checkRoadIncremental(0, j, player, "vu", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            ArrayList<Integer>[] vertDown = checkRoadIncremental(0, j, player, "vd", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
             setVisited(newVisited);
-            ArrayList<Integer>[] horiLeft = checkRoadIncremental(j, 0, player, "hr", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
+            ArrayList<Integer>[] horiLeft = checkRoadIncremental(j, 0, player, "hl", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<int[]>());
             setVisited(newVisited);
 
-            int vertUpScore = vertUp[0].size()*vertUp[0].size()+1;
-            int vertDownScore = vertDown[0].size()*vertDown[0].size()+1;
-            int horiRightScore = horiRight[0].size()*horiRight[0].size()+1;
-            int horiLeftScore = horiLeft[0].size()*horiLeft[0].size()+1;
+            int vertUpScoreBest = vertUp[0].size()*(vertUp[0].size()+1)*2;
+            int vertDownScoreBest = vertDown[0].size()*(vertDown[0].size()+1)*2;
+            int horiRightScoreBest = horiRight[0].size()*(horiRight[0].size()+1)*2;
+            int horiLeftScoreBest = horiLeft[0].size()*(horiLeft[0].size()+1)*2;
 
-            score=score+vertDownScore+vertUpScore+horiLeftScore+horiRightScore;
+            int vertUpScoreGood = vertUp[0].size()*vertUp[0].size()+1;
+            int vertDownScoreGood = vertDown[0].size()*vertDown[0].size()+1;
+            int horiRightScoreGood = horiRight[0].size()*horiRight[0].size()+1;
+            int horiLeftScoreGood = horiLeft[0].size()*horiLeft[0].size()+1;
+
+            score=score+vertDownScoreBest+vertUpScoreBest+horiLeftScoreBest+horiRightScoreBest+vertUpScoreGood+vertDownScoreGood+horiLeftScoreGood+horiRightScoreGood;
 
         }
         
@@ -134,7 +163,22 @@ public class EvalFunc {
         return score;
     }
 
-
+    /**
+     * This method takes a starting coordinate and attempts to find a road from it to the other side. Whenever a piece is
+     * found to be part of the road and taking the shortest path to the oppsite side it is added to the best list, if it 
+     * is part of the road but is not taking the shortest path it is added to the good list. So long as adjascent pieces 
+     * that can be part of the road exist and have not been visited the method will recursively travel back to iterate over
+     * those as well.
+     * 
+     * @param x x coordinate of current road piece
+     * @param y y coordinate of current road piece
+     * @param player player who has current turn
+     * @param direction direction for which the road is being checked
+     * @param best list of pieces part of a road but not on the shortest path to the opposite side
+     * @param good list of pieces part of a road and on the shortest path to the opposite side
+     * @param roadChords a list of pieces that are part of the current road
+     * @return score of the current found road
+     */
     public ArrayList<Integer>[] checkRoadIncremental(int x, int y, String player, String direction, ArrayList<Integer> best, ArrayList<Integer> good, ArrayList<int[]> roadChords){
 
         //ArrayList<Integer> best = new ArrayList<Integer>();
@@ -242,7 +286,7 @@ public class EvalFunc {
         
 
 
-        setVisited(visited);
+        //setVisited(visited);
 
         for (int i=0; i<best.size(); i++){
             int oldX=roadChords.get(i)[0];
@@ -282,6 +326,16 @@ public class EvalFunc {
     }
 
 
+    /**
+     * This method seeks to check all adjascent spaces of the x and y inputs to check if there is a space that has
+     * not been visited and could be part of road of the current player
+     * 
+     * @param x x coordinate of board space
+     * @param y y coordinate of board space
+     * @param visited 2d array of booleans denoting previously visited spaces with true
+     * @param player player who has the current turn
+     * @return true if there exists an adjascent space that has not been visited and could be a part of a road
+     */
     public boolean checkAdj(int x, int y, boolean[][] visited, String player){
 
         boolean left=false;
@@ -311,6 +365,15 @@ public class EvalFunc {
 
     }
 
+    /**
+     * This method simply checks the top piece at coordinate x,y to see if the piece belongs to the current
+     * player and could be part of their road. It will return true if it is the case and false otherwise.
+     * 
+     * @param x x coordinate of board space
+     * @param y y coordinate of board space
+     * @param player player who has current turn
+     * @return true if the space x, y has a piece that could be a part of the road for current player
+     */
     public boolean isPartOfRoad(int x, int y, String player) {
         ArrayList<Integer> stack = logicBoard.getBoard()[x][y];
         if (stack.isEmpty()) {

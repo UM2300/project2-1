@@ -21,7 +21,7 @@ public class MCTSNode {
     public MCTSNode(board gameState) {
         this.gameState = gameState;
         this.children = new ArrayList<>();
-        this.evalScore = new EvalFunc().evaluation(gameState); // Calculate evaluation score
+        this.evalScore = new EvalFunc().evaluation(getGameState()); // Calculate evaluation score
     }
 
 

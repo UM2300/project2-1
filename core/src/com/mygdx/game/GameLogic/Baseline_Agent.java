@@ -64,13 +64,13 @@ public class Baseline_Agent {
 
         if(logicBoard.getBoard()[moveChords[0]][moveChords[1]].isEmpty()){
 
-            int pieceAdded = (int)(Math.random()*2);
+            int pieceAdded = (int)(Math.random()*3);
 
             if(currentPlayer.equals("BROWN")){
                 pieceAdded=pieceAdded+3;
             }
-            System.out.println("Adding at machine chords "+(moveChords[0])+" "+(moveChords[1]));
-            logicBoard.addPiece(moveChords[0], moveChords[1], pieceAdded);
+            //System.out.println("Adding at machine chords "+(moveChords[0])+" "+(moveChords[1]));
+            logicBoard.addPiece(pieceAdded, moveChords[0]+1, moveChords[1]+1);
         }
         else{
             int moveDir = (int)(Math.random()*3);
@@ -78,7 +78,7 @@ public class Baseline_Agent {
 
             int dropNum = (int)(Math.random()*(quant-1)+1);
 
-            System.out.println("Moving at machine chords "+(moveChords[0])+" "+(moveChords[1]));
+            //System.out.println("Moving at machine chords "+(moveChords[0])+" "+(moveChords[1]));
             logicBoard.move(moveChords[0]+1, moveChords[1]+1, quant, moveDir, dropNum);
 
             if(!logicBoard.getHeldPieces().isEmpty()){

@@ -28,6 +28,7 @@ public class MCTSAgent {
                 expandNode(promisingNode, currentBoard);  // Expand the selected node, (artur added currentBoard)
             }
 
+
             MCTSNode nodeToExplore = promisingNode;
             if (!promisingNode.getChildren().isEmpty()) {
                 nodeToExplore = promisingNode.getRandomChildNode();  // Select a random child node for exploration
@@ -87,12 +88,13 @@ public class MCTSAgent {
 
         board currentState = node.getGameState();
 
-        while (legalMoves.size() < MAX_ITERATIONS) {
+        while (legalMoves.size() < 72) {
             // Clone the current state before applying the move
             board clonedState = currentState.clone();
 
             String currentPlayer = clonedState.getCurrentPlayer();
             baselineAgent.chooseMove(clonedState, currentPlayer);
+            clonedState.togglePlayer();
 
             // Check if the move is not a repetition
             if (!containsBoard(legalMoves, clonedState)) {
@@ -134,13 +136,16 @@ public class MCTSAgent {
 
         // Simulate the next player move and evaluate it
         baselineAgent.chooseMove(clonedBoard, currentPlayer);
+        currentPlayer = clonedBoard.getCurrentPlayer();
         node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
+        
 
         // Continue simulation to terminal state
         if (!clonedBoard.isGameEnded()) { 
             do {
-                clonedBoard.togglePlayer();
+                //clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);
+                currentPlayer = clonedBoard.getCurrentPlayer();
             } while (!clonedBoard.isGameEnded());
         }
 

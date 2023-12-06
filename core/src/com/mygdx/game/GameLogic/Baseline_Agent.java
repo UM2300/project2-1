@@ -87,6 +87,8 @@ public class Baseline_Agent {
 
         }
 
+        logicBoard.checkState();
+
     }
 
     public void dropRecursion(int x, int y,int dir){

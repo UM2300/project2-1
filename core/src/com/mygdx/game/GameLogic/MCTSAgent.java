@@ -88,7 +88,7 @@ public class MCTSAgent {
 
         board currentState = node.getGameState();
 
-        while (legalMoves.size() < 72) {
+        while (legalMoves.size() < 10) {
             // Clone the current state before applying the move
             board clonedState = currentState.clone();
 
@@ -139,6 +139,7 @@ public class MCTSAgent {
         currentPlayer = clonedBoard.getCurrentPlayer();
         node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
         
+        int tempLimit=0;
 
         // Continue simulation to terminal state
         if (!clonedBoard.isGameEnded()) { 
@@ -146,6 +147,7 @@ public class MCTSAgent {
                 //clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);
                 currentPlayer = clonedBoard.getCurrentPlayer();
+                clonedBoard.winBoardFull();
             } while (!clonedBoard.isGameEnded());
         }
 

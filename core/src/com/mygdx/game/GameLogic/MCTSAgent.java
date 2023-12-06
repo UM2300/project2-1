@@ -9,7 +9,7 @@ import java.util.Iterator;
  * It uses an evaluation function to guide the tree search process and integrates a Baseline_Agent for random move generation during simulations.
  */
 public class MCTSAgent {
-    private final int MAX_ITERATIONS = 10000; // Maximum number of iterations for the MCTS algorithm
+    private final int MAX_ITERATIONS = 100; // Maximum number of iterations for the MCTS algorithm
 
     /**
      * Finds the next best move based on the current state of the game board.

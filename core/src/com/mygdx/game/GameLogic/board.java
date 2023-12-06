@@ -218,7 +218,7 @@ public class board {
      */
     public void addPiece(int num,int x, int y){
 
-        System.out.println("this method ran: "+x+" "+y);
+        //System.out.println("this method ran: "+x+" "+y);
 
         if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
             System.out.println("Not browns turn");

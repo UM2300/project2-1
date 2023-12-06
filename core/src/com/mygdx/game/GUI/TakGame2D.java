@@ -5,6 +5,7 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import com.mygdx.game.GameLogic.Baseline_Agent;
+import com.mygdx.game.GameLogic.MCTSAgent;
 import com.mygdx.game.GameLogic.board;
 import com.mygdx.game.GameLogic.game;
 import com.mygdx.game.GameLogic.MCTSAgent;
@@ -64,17 +65,8 @@ public class TakGame2D {
     Baseline_Agent baseline_Agent;
     MCTSAgent mctsAgent;
 
-
-    public boolean getBaseLine(){
-        return baseline;
-    }
-
     public void setBaseline(boolean baseline){
         this.baseline=baseline;
-    }
-
-    public boolean getMCTS(){
-        return mcts;
     }
 
     public void setMCTS(boolean mcts){
@@ -245,8 +237,8 @@ public class TakGame2D {
         hbeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBaseline(true); 
-                baseline_Agent = new Baseline_Agent(logicBoard); 
+                setBaseline(true);
+                baseline_Agent = new Baseline_Agent(logicBoard);
                 new TakGame2D();
                 rightStonesLabel.setText("");
                 rightCapstoneLabel.setText("");
@@ -268,11 +260,10 @@ public class TakGame2D {
         hbhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-////////////////Need to connect to MCTS Agent in order to test it ! ////////////////////////
-////////////////setMCTS(true);
-////////////////mctsAgent = new MCTSAgent(currentboard);
-                setBaseline(true); 
-                baseline_Agent = new Baseline_Agent(logicBoard); 
+
+                setMCTS(true);
+                mctsAgent = new MCTSAgent();
+
                 new TakGame2D();
                 rightStonesLabel.setText("");
                 rightCapstoneLabel.setText("");
@@ -362,13 +353,6 @@ public class TakGame2D {
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
-        if(baseline){
-            baseline_Agent = new Baseline_Agent(logicBoard);
-        }
-
-        if(mcts) {
-            //mctsAgent = new MCTSAgent(currentBoard);
-        }
 
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
@@ -620,7 +604,8 @@ public class TakGame2D {
                     logicBoard.checkWinCondition();
                     logicBoard.winBoardFull();
                     logicBoard.checkState();
-                    baselineCall(1);
+                    baselineCall();
+                    MCTSCall();
                     updateVisualBoard();
                 
                 } else {
@@ -655,7 +640,8 @@ public class TakGame2D {
                     logicBoard.checkWinCondition();
                     logicBoard.winBoardFull();
                     logicBoard.checkState();
-                    baselineCall(1);
+                    baselineCall();
+                    MCTSCall();
                     updateVisualBoard();
                     
                 } else {
@@ -693,7 +679,8 @@ public class TakGame2D {
                         logicBoard.checkWinCondition();
                         logicBoard.winBoardFull();
                         logicBoard.checkState();
-                        baselineCall(1);
+                        baselineCall();
+                        MCTSCall();
                         updateVisualBoard();
                     }
                 } else {
@@ -833,7 +820,8 @@ public class TakGame2D {
                     logicBoard.checkWinCondition();
                     logicBoard.winBoardFull();
                     logicBoard.checkState();
-                    baselineCall(1);
+                    baselineCall();
+                    MCTSCall();
                     updateVisualBoard();
                 }
                 callForEndScreen();
@@ -1084,13 +1072,21 @@ public class TakGame2D {
         }
     }
 
-    public void baselineCall(int num){
-        if(baseline){  
-            if(num==1){
-            } 
+    public void baselineCall(){
+        if(baseline){
             baseline_Agent.chooseMove(logicBoard, "BROWN");
             if(logicBoard.getCurrentPlayer().equals("BROWN")){
-                baselineCall(num++);
+                baselineCall();
+            }
+        }
+    }
+
+    public void MCTSCall(){
+        if(mcts){
+            mctsAgent.findNextMove(logicBoard);
+            // add a line to assign the MCTS resulting board to the actual playing boardd
+            if(logicBoard.getCurrentPlayer().equals("BROWN")){
+                MCTSCall();
             }
         }
     }

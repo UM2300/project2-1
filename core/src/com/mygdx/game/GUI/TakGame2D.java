@@ -73,6 +73,10 @@ public class TakGame2D {
         this.mcts=mcts;
     }
 
+    public void setLogicBoard(board board){
+        this.logicBoard=board;
+    }
+
     public boolean getMidTurn(){
         return midTurn;
     }

@@ -564,14 +564,12 @@ public class board {
                 for (int j = 0; j < board[i].length; j++) {
 
                     ArrayList<Integer> arrayList = board[i][j];
-
+                    
                     int lastElement=0;
-
                     if(!arrayList.isEmpty()){
                         lastElement = arrayList.get(arrayList.size() - 1);
                     
                     
-
                         if (lastElement == 0 || lastElement == 2)
                             wCounter += 1;
                         else if (lastElement == 3 || lastElement == 5)
@@ -731,6 +729,7 @@ public class board {
 
         dropFrame.setVisible(true);
     }
+    
 
     /**
      * Adds a piece to the board with the colour of the current player, and switches the turn to the opponent after the piece has been added

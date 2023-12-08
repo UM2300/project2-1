@@ -13,6 +13,8 @@ import com.mygdx.game.GameLogic.MCTSAgent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -255,6 +257,7 @@ public class TakGame2D {
                 leftPanel.add(standingButton);
                 leftPanel.add(Box.createVerticalStrut(1)); // Adjust the vertical spacing as needed
                 leftPanel.add(capstoneButton);
+                topRightPanel.add(colorButton);
                 frame.revalidate(); 
                 frame.repaint();    
                 frame.setVisible(true);
@@ -273,6 +276,7 @@ public class TakGame2D {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setBaseline(true);
+                setMCTS(false);
                 baseline_Agent = new Baseline_Agent(logicBoard);
                 new TakGame2D();
                 rightStonesLabel.setText("");
@@ -298,10 +302,8 @@ public class TakGame2D {
         hbhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 setMCTS(true);
                 mctsAgent = new MCTSAgent();
-
                 new TakGame2D();
                 rightStonesLabel.setText("");
                 rightCapstoneLabel.setText("");
@@ -853,7 +855,7 @@ public class TakGame2D {
         textField.setBackground(backgroundColor);
         textField.setForeground(textColor);
     
-        JButton button = new JButton("Confirm");
+        final JButton button = new JButton("Confirm");
         button.setFont(buttonFont);
         button.setBackground(backgroundColor);
         button.setForeground(textColor);
@@ -864,6 +866,14 @@ public class TakGame2D {
                 int quantity = Integer.parseInt(txt);
                 setPieceQuantity(quantity);
                 moveFrame.dispose();
+            }
+        });
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    button.doClick(); // Simulate a button click
+                }
             }
         });
     
@@ -905,7 +915,7 @@ public class TakGame2D {
         textField.setBackground(backgroundColor);
         textField.setForeground(textColor);
     
-        JButton button = new JButton("Confirm");
+        final JButton button = new JButton("Confirm");
         button.setFont(buttonFont);
         button.setBackground(backgroundColor);
         button.setForeground(textColor);
@@ -959,6 +969,14 @@ public class TakGame2D {
             }
             
         });
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    button.doClick(); // Simulate a button click
+                }
+            }
+        });
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
         topMovePanel.setBackground(backgroundColor);
@@ -1000,6 +1018,9 @@ public class TakGame2D {
      * Resets the game board 
      */
     public void resetGame() {
+
+        setMCTS(false);
+        setBaseline(false);
 
         //logicBoard = new board();
         for(int i=0; i< boardButtons.length; i++){

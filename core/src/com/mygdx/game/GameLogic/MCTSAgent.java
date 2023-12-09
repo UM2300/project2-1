@@ -100,7 +100,13 @@ public class MCTSAgent {
 
             Baseline_Agent baselineAgent = new Baseline_Agent(clonedState);
 
-            baselineAgent.chooseMove(clonedState, currentPlayer);
+            boolean test = boardsAreEqual(currentState.getBoard(), clonedState.getBoard());
+
+            while(boardsAreEqual(currentState.getBoard(), clonedState.getBoard())){
+                baselineAgent.chooseMove(clonedState, currentPlayer);
+            }
+
+            
             clonedState.togglePlayer();
 
             // Check if the move is not a repetition
@@ -166,6 +172,22 @@ public class MCTSAgent {
         }
     }
 
+    public boolean boardsAreEqual(ArrayList<Integer>[][] board1, ArrayList<Integer>[][] board2){
+
+        if (board1.length != board2.length || board1[0].length != board2[0].length) {
+            return false; 
+        }
+    
+        for (int i = 0; i < board1.length; i++) {
+            for (int j = 0; j < board1[0].length; j++) {
+                if (!board1[i][j].equals(board2[i][j])) {
+                    return false;
+                }
+            }
+        }
+    
+        return true;
+    } 
 
 
 

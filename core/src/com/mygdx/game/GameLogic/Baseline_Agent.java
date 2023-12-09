@@ -20,6 +20,11 @@ public class Baseline_Agent {
         this.logicBoard=logicBoard;
     }
 
+    public Baseline_Agent(board logicBoard, int pieceMultiplier){
+        this.logicBoard=logicBoard;
+        this.pieceMultiplier=pieceMultiplier;
+    }
+
     public boolean isAStack (int x, int y) {
         if (logicBoard.getBoard()[x][y].size() > 1 ) {
             return true;

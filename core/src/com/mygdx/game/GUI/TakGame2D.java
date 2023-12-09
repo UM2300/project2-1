@@ -32,7 +32,7 @@ public class TakGame2D {
     private final ImageIcon whiteCapstone = loadAndResizeImage("assets/WhiteCapstone.png", 0.1);
     private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
     private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
-    private final ImageIcon brownCapstone = loadAndResizeImage("assets/BrownCapstone.png", 0.1);
+    private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
     public ImageIcon icon = new ImageIcon("assets/takIcon.png"); 
     public String instructions = "Instructions";
     private JButton instructionsButton = new JButton(instructions);
@@ -470,7 +470,7 @@ public class TakGame2D {
             logicBoard.checkWinCondition();
             logicBoard.winBoardFull();
             logicBoard.checkState();
-            callForEndScreen();
+            
     };  
 
     public void flatListener() {
@@ -509,7 +509,7 @@ public class TakGame2D {
             logicBoard.winBoardFull();
             logicBoard.checkState();
             System.out.println(logicBoard.isGameEnded());
-            callForEndScreen();
+          
     };
 
     public void standingListener() {
@@ -547,7 +547,7 @@ public class TakGame2D {
         logicBoard.winBoardFull();
         logicBoard.checkState();
         System.out.println(logicBoard.isGameEnded());
-        callForEndScreen();
+   
     };
   
     /**

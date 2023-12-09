@@ -6,6 +6,16 @@ public class Baseline_Agent {
 
     private board logicBoard;
 
+    private int pieceMultiplier=3;
+
+    public int getPieceMultiplier(){
+        return this.pieceMultiplier;
+    }
+
+    public void setPieceMultiplier(int pieceMultiplier){
+        this.pieceMultiplier=pieceMultiplier;
+    }
+
     public Baseline_Agent(board logicBoard){
         this.logicBoard=logicBoard;
     }
@@ -64,7 +74,11 @@ public class Baseline_Agent {
 
         if(logicBoard.getBoard()[moveChords[0]][moveChords[1]].isEmpty()){
 
-            int pieceAdded = (int)(Math.random()*3);
+            int pieceAdded = (int)(Math.random()*getPieceMultiplier());
+
+            if(pieceAdded==2){
+                setPieceMultiplier(2);
+            }
 
             if(currentPlayer.equals("BROWN")){
                 pieceAdded=pieceAdded+3;

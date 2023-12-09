@@ -583,6 +583,7 @@ public class board {
                 System.out.println("Brown Wins.");
             else 
                 System.out.println("It's a Draw.");
+                winner = "It's a Draw";
             
             isGameEnded = true;
         }
@@ -661,6 +662,10 @@ public class board {
      * Checks if either player ("WHITE" or "BROWN") has won the game by forming a road.
      * If a player has won, an appropriate message is printed to the console, and the game ends.
      */
+    private String winner = "NONE";
+    public String getWinner() {
+        return winner;
+    }
 
     public void checkWinCondition() {
         boolean whiteWins = checkRoadForPlayer("WHITE");
@@ -669,13 +674,16 @@ public class board {
         if (whiteWins && brownWins) {
             System.out.println("WHITE Wins, as the player who made the move wins."); //based on the rules
             isGameEnded = true;
+            winner = "WHITE wins!";
         } else if (whiteWins) {
             System.out.println("WHITE Wins by making a road.");
             isGameEnded = true;
+            winner = "WHITE wins!";
         } else if (brownWins) {
             System.out.println("BROWN Wins by making a road.");
             isGameEnded = true;
-        }
+            winner = "BROWN wins!";
+        } 
     }
 
 

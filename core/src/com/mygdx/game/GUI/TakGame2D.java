@@ -33,7 +33,7 @@ public class TakGame2D {
     private final ImageIcon whiteCapstone = loadAndResizeImage("assets/WhiteCapstone.png", 0.1);
     private final ImageIcon brownFlatStone = loadAndResizeImage("assets/BlackPiece.png", 0.1);
     private final ImageIcon brownStandingStone = loadAndResizeImage("assets/BlackStanding.png", 0.1);
-    private final ImageIcon brownCapstone = loadAndResizeImage("assets/BrownCapstone.png", 0.1);
+    private final ImageIcon brownCapstone = loadAndResizeImage("assets/BlackCapstone.png", 0.1);
     public ImageIcon icon = new ImageIcon("assets/takIcon.png"); 
     public String instructions = "Instructions";
     private JButton instructionsButton = new JButton(instructions);
@@ -431,8 +431,12 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-                baselineCall();
-                MCTSCall();
+
+                if(logicBoard.getWinner().equals("NONE")){
+                    baselineCall();
+                    MCTSCall();
+                }
+                
                 updateVisualBoard();
                 
                 // Check if WHITE player has no capstones left
@@ -467,7 +471,7 @@ public class TakGame2D {
             logicBoard.checkWinCondition();
             logicBoard.winBoardFull();
             logicBoard.checkState();
-            callForEndScreen();
+            
     };  
 
     public void flatListener() {
@@ -481,8 +485,11 @@ public class TakGame2D {
                 logicBoard.checkWinCondition();
                 logicBoard.winBoardFull();
                 logicBoard.checkState();
-                baselineCall();
-                MCTSCall();
+
+                if(logicBoard.getWinner().equals("NONE")){
+                    baselineCall();
+                    MCTSCall();
+                }
                 updateVisualBoard();
             
             } else {
@@ -503,7 +510,7 @@ public class TakGame2D {
             logicBoard.winBoardFull();
             logicBoard.checkState();
             System.out.println(logicBoard.isGameEnded());
-            callForEndScreen();
+          
     };
 
     public void standingListener() {
@@ -517,8 +524,10 @@ public class TakGame2D {
             logicBoard.checkWinCondition();
             logicBoard.winBoardFull();
             logicBoard.checkState();
-            baselineCall();
-            MCTSCall();
+            if(logicBoard.getWinner().equals("NONE")){
+                baselineCall();
+                MCTSCall();
+            }
             updateVisualBoard();
             
         } else {
@@ -539,7 +548,7 @@ public class TakGame2D {
         logicBoard.winBoardFull();
         logicBoard.checkState();
         System.out.println(logicBoard.isGameEnded());
-        callForEndScreen();
+   
     };
   
     /**
@@ -970,8 +979,12 @@ public class TakGame2D {
                     logicBoard.checkWinCondition();
                     logicBoard.winBoardFull();
                     logicBoard.checkState();
-                    baselineCall();
-                    MCTSCall();
+
+                    if(logicBoard.getWinner().equals("NONE")){
+                        baselineCall();
+                        MCTSCall();
+                    }
+                    
                     updateVisualBoard();
                 }
                 callForEndScreen();
@@ -1075,7 +1088,7 @@ public class TakGame2D {
 
     /**
      * Displays the endscreen when a winning condition is met
-     * @param currentPlayer the player who just performed a move (ie. the current player whose turn it is)
+     * @param winner the player who just performed a move (ie. the current player whose turn it is)
      */
     public void endScreen(String winner) {
         final JFrame endFrame = new JFrame("Game Over");
@@ -1269,7 +1282,7 @@ public class TakGame2D {
             setLogicBoard(NewState);
             // add a line to assign the MCTS resulting board to the actual playing boardd
             if(logicBoard.getCurrentPlayer().equals("BROWN")){
-                //MCTSCall();
+                logicBoard.togglePlayer();
             }
         }
     }

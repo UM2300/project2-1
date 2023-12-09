@@ -60,6 +60,8 @@ public class TakGame2D {
     public int capstone2 = 1;
     public boolean bCapstone = true;
 
+    private int moveCounter = 0;
+
 
     Draw draw = new Draw();
     board logicBoard = new board();
@@ -814,6 +816,7 @@ public class TakGame2D {
         if(!winner.equals("NONE")){
             endScreen(winner);
         }
+        
         /* if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
             endScreen("WHITE");
         }
@@ -1119,6 +1122,7 @@ public class TakGame2D {
                 resetGame(); 
                 startingWindow();
                 endFrame.dispose();
+                moveCounter = 0;
 
             }
         });
@@ -1246,6 +1250,8 @@ public class TakGame2D {
     public void baselineCall(){
         if(baseline){
             baseline_Agent.chooseMove(logicBoard, "BROWN");
+            moveCounter++;
+            System.out.println("Move count: " + moveCounter);
             if(logicBoard.getCurrentPlayer().equals("BROWN")){
                 baselineCall();
             }
@@ -1266,5 +1272,6 @@ public class TakGame2D {
     public static void main(String[] args) {
         TakGame2D game = new TakGame2D();
         game.startingWindow();
+       
     }
 }

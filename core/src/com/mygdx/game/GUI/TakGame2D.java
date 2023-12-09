@@ -809,12 +809,17 @@ public class TakGame2D {
      * Checks the winning condition and shows pop-up end screen once the game is over.
      */
     public void callForEndScreen() {
-        if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
+        logicBoard.checkWinCondition();
+        String winner = logicBoard.getWinner();
+        if(!winner.equals("NONE")){
+            endScreen(winner);
+        }
+        /* if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "WHITE") {
             endScreen("WHITE");
         }
         else if(logicBoard.isGameEnded() && logicBoard.getCurrentPlayer() == "BROWN") {
             endScreen("BROWN");
-        }
+        }*/
     }
 
     /**
@@ -1068,22 +1073,22 @@ public class TakGame2D {
      * Displays the endscreen when a winning condition is met
      * @param currentPlayer the player who just performed a move (ie. the current player whose turn it is)
      */
-    public void endScreen(String currentPlayer) {
+    public void endScreen(String winner) {
         final JFrame endFrame = new JFrame("Game Over");
     
         JLabel winLabel = new JLabel("Congratulations!");
         Font titleFont = new Font("Algerian", Font.BOLD, 35);
         winLabel.setFont(titleFont);
     
-        JLabel winMessageLabel;
+        JLabel winMessageLabel = new JLabel(winner);
     
-        if (currentPlayer.equals("WHITE")) {
+        /*if (currentPlayer.equals("WHITE")) {
             winMessageLabel = new JLabel("White wins!");
         } else if (currentPlayer.equals("BROWN")) {
             winMessageLabel = new JLabel("Brown wins!");
         } else {
             winMessageLabel = new JLabel("It's a draw!");
-        }
+        }*/
     
         Font messageFont = new Font("Algerian", Font.BOLD, 24);
         winMessageLabel.setFont(messageFont);
@@ -1253,7 +1258,7 @@ public class TakGame2D {
             setLogicBoard(NewState);
             // add a line to assign the MCTS resulting board to the actual playing boardd
             if(logicBoard.getCurrentPlayer().equals("BROWN")){
-                MCTSCall();
+                //MCTSCall();
             }
         }
     }

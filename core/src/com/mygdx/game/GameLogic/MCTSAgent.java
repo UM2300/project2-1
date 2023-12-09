@@ -9,7 +9,7 @@ import java.util.Iterator;
  * It uses an evaluation function to guide the tree search process and integrates a Baseline_Agent for random move generation during simulations.
  */
 public class MCTSAgent {
-    private final int MAX_ITERATIONS = 3; // Maximum number of iterations for the MCTS algorithm
+    private final int MAX_ITERATIONS = 1; // Maximum number of iterations for the MCTS algorithm
 
     /**
      * Finds the next best move based on the current state of the game board.
@@ -50,7 +50,11 @@ public class MCTSAgent {
      * @return The most promising node as determined by the evaluation function.
      */
     private MCTSNode selectPromisingNode(MCTSNode rootNode) {
+        
         MCTSNode node = rootNode;
+
+        int childNum=node.getChildren().size();
+
         if (node.getChildren().size() != 0) {
             do {
                 node = findBestNodeWithEvalFunc(node);
@@ -84,15 +88,18 @@ public class MCTSAgent {
 
     private void expandNode(MCTSNode node, board currentBoard) {
         ArrayList<board> legalMoves = new ArrayList<>();
-        Baseline_Agent baselineAgent = new Baseline_Agent(currentBoard);
+        
 
         board currentState = node.getGameState();
 
-        while (legalMoves.size() < 10) {
+        while (legalMoves.size() < 1) {
             // Clone the current state before applying the move
             board clonedState = currentState.clone();
 
             String currentPlayer = clonedState.getCurrentPlayer();
+
+            Baseline_Agent baselineAgent = new Baseline_Agent(clonedState);
+
             baselineAgent.chooseMove(clonedState, currentPlayer);
             clonedState.togglePlayer();
 
@@ -104,18 +111,11 @@ public class MCTSAgent {
 
             for (int i = 0; i < legalMoves.size(); i++) {
                 board nextState = legalMoves.get(i);
-                MCTSNode newNode = new MCTSNode(nextState);
+                MCTSNode newNode = new MCTSNode(nextState); 
                 newNode.setParent(node);
                 newNode.setExpandedNodeScore(new EvalFunc().evaluation(nextState));
                 node.addChild(newNode);
             }
-        }
-
-        for (int i = 0; i < legalMoves.size(); i++) {
-            board nextState = legalMoves.get(i);
-            MCTSNode newNode = new MCTSNode(nextState);
-            newNode.setParent(node);
-            node.addChild(newNode);
         }
     }
 
@@ -132,6 +132,7 @@ public class MCTSAgent {
     private int simulateRandomPlayout(MCTSNode node) {
         board clonedBoard = node.getGameState().clone();
         Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard);
+        clonedBoard.togglePlayer();
         String currentPlayer = clonedBoard.getCurrentPlayer();
 
         // Simulate the next player move and evaluate it

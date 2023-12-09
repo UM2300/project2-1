@@ -1087,7 +1087,7 @@ public class TakGame2D {
 
     /**
      * Displays the endscreen when a winning condition is met
-     * @param currentPlayer the player who just performed a move (ie. the current player whose turn it is)
+     * @param winner the player who just performed a move (ie. the current player whose turn it is)
      */
     public void endScreen(String winner) {
         final JFrame endFrame = new JFrame("Game Over");

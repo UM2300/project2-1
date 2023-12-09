@@ -106,7 +106,7 @@ public class MCTSAgent {
                 baselineAgent.chooseMove(clonedState, currentPlayer);
             }
 
-            
+
             clonedState.togglePlayer();
 
             // Check if the move is not a repetition
@@ -141,14 +141,6 @@ public class MCTSAgent {
         clonedBoard.togglePlayer();
         String currentPlayer = clonedBoard.getCurrentPlayer();
 
-        // Simulate the next player move and evaluate it
-
-        //baselineAgent.chooseMove(clonedBoard, currentPlayer);
-        //currentPlayer = clonedBoard.getCurrentPlayer();
-        //node.setSimulatedMoveScore(new EvalFunc().evaluation(clonedBoard));
-        
-        int tempLimit=0;
-
         // Continue simulation to terminal state
         if (!clonedBoard.isGameEnded()) { 
             do {
@@ -164,20 +156,22 @@ public class MCTSAgent {
         return terminalScore; // Or return a combined score
     }
 
-    private void backPropagate(MCTSNode node, int gameResult) {
-        while (node != null) {
-            node.incrementVisitCount();
-            node.updateScore(gameResult);
-            node = node.getParent();
+    private void backPropagate(MCTSNode nodeToExplore, int terminalStateScore) {
+        MCTSNode tempNode = nodeToExplore;
+        while (tempNode != null) {
+            // Update the score of the node. The updated score is the sum of the existing evaluation score and the terminal state score.
+            int updatedScore = tempNode.getExpandedNodeScore() + terminalStateScore;
+            tempNode.setExpandedNodeScore(updatedScore);
+            tempNode = tempNode.getParent(); // Move to the parent node
         }
     }
 
     public boolean boardsAreEqual(ArrayList<Integer>[][] board1, ArrayList<Integer>[][] board2){
 
         if (board1.length != board2.length || board1[0].length != board2[0].length) {
-            return false; 
+            return false;
         }
-    
+
         for (int i = 0; i < board1.length; i++) {
             for (int j = 0; j < board1[0].length; j++) {
                 if (!board1[i][j].equals(board2[i][j])) {
@@ -185,9 +179,9 @@ public class MCTSAgent {
                 }
             }
         }
-    
+
         return true;
-    } 
+    }
 
 
 

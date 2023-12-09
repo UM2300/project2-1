@@ -32,6 +32,10 @@ public class Baseline_Agent {
         return false;
     }
 
+    /**  Complexity: O(1) 
+    Even though there are two nested loops, the number of iterations they perform is constant 
+    and does not depend on any variable input size. They will always perform 25 iterations in total
+    */
     public ArrayList<int []> getAvailableTiles (board logicBoard, String currentPlayer) {
 
         ArrayList<int []> availableTiles = new ArrayList<>();   //ArrayList of arrays 
@@ -71,6 +75,7 @@ public class Baseline_Agent {
         return availableTiles;
     }
 
+    // Complexity: O(1) 
     public void chooseMove(board logicBoard, String currentPlayer){
         ArrayList<int[]> chords = new ArrayList<int[]>();
         chords = getAvailableTiles(logicBoard, currentPlayer);
@@ -110,6 +115,7 @@ public class Baseline_Agent {
 
     }
 
+    // Complexity: O(1) As the size of getHeldPieces is always reasonably small < 5
     public void dropRecursion(int x, int y,int dir){
 
         int newDropNum = (int)Math.random()*(logicBoard.getHeldPieces().size()-1)+1;

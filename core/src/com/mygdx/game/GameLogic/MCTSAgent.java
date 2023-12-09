@@ -18,6 +18,12 @@ public class MCTSAgent {
      * @param currentBoard The current state of the game board.
      * @return The best move as determined by the MCTS algorithm.
      */
+
+     /** Complexity: O(bh + m + d)
+      * bh is from selectPromisingNode
+      * m is from simulateRandomPlayout
+      * d is from backPropagate
+      */
     public MCTSNode findNextMove(board currentBoard) {
         MCTSNode rootNode = new MCTSNode(currentBoard); // Initialize the root node of the MCTS tree
         rootNode.setParent(null);
@@ -49,6 +55,11 @@ public class MCTSAgent {
      * @param rootNode The root node of the tree from which to start the selection process.
      * @return The most promising node as determined by the evaluation function.
      */
+
+      /**Complexity: O(bh)
+     * b = max number of children for any node
+     * h = the height of the tree
+     */ 
     private MCTSNode selectPromisingNode(MCTSNode rootNode) {
         
         MCTSNode node = rootNode;
@@ -71,6 +82,11 @@ public class MCTSAgent {
      * @param node The node whose children are to be evaluated.
      * @return The child node with the highest evaluation score.
      */
+
+     /**Complexity: O(bh)
+     * b = max number of children for any node
+     * h = the height of the tree
+     */ 
     private MCTSNode findBestNodeWithEvalFunc(MCTSNode node) {
         int maxScore = Integer.MIN_VALUE;
         MCTSNode bestNode = null;
@@ -86,6 +102,7 @@ public class MCTSAgent {
         return bestNode;
     }
 
+    // Complexity: O(1)
     private void expandNode(MCTSNode node, board currentBoard) {
         ArrayList<board> legalMoves = new ArrayList<>();
         
@@ -125,7 +142,8 @@ public class MCTSAgent {
         }
     }
 
-
+    // Complexity: O(n)
+    // n is the number of elements in the boards list
     private boolean containsBoard(ArrayList<board> boards, board nextState) {
         for (board existingBoard : boards) {
             if (existingBoard.equals(nextState)) {
@@ -135,6 +153,8 @@ public class MCTSAgent {
         return false;
     }
 
+    // Complexity: O(m)
+    // m is the average number of iterations required to reach a terminal game state
     private int simulateRandomPlayout(MCTSNode node) {
         board clonedBoard = node.getGameState().clone();
         Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard);
@@ -156,6 +176,8 @@ public class MCTSAgent {
         return terminalScore; // Or return a combined score
     }
 
+    // Complexity: O(d)
+    // d is the depth of the node in the MCTS tree   
     private void backPropagate(MCTSNode nodeToExplore, int terminalStateScore) {
         MCTSNode tempNode = nodeToExplore;
         while (tempNode != null) {

@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class represents the 2D GUI version of the game
@@ -61,7 +62,7 @@ public class TakGame2D {
     public boolean bCapstone = true;
 
     private int moveCounter = 0;
-
+    private ArrayList<Integer> moveCountList;
 
     Draw draw = new Draw();
     board logicBoard = new board();
@@ -1122,6 +1123,10 @@ public class TakGame2D {
                 resetGame(); 
                 startingWindow();
                 endFrame.dispose();
+                if (logicBoard.getWinner().equals("BROWN")) {
+                    moveCountList.add(moveCounter);
+                    System.out.println(moveCountList.toString());
+                }
                 moveCounter = 0;
 
             }

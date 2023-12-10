@@ -204,6 +204,8 @@ public class MCTSAgent {
         }
     }
 
+    // Complexity: O(1)
+    // As stated before we are looping over a nxn board where n is always 5 and remains unchanged hence O(1) not O(n^2)
     public boolean boardsAreEqual(ArrayList<Integer>[][] board1, ArrayList<Integer>[][] board2){
 
         if (board1.length != board2.length || board1[0].length != board2[0].length) {

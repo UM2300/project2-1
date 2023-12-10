@@ -11,6 +11,16 @@ import java.util.Iterator;
 public class MCTSAgent {
     private final int MAX_ITERATIONS = 10; // Maximum number of iterations for the MCTS algorithm
 
+    private int maxPiece=3;
+
+    public void setMaxPiece(int maxPiece){
+        this.maxPiece=maxPiece;
+    }
+
+    public int getMaxPiece(){
+        return this.maxPiece;
+    }
+
     /**
      * Finds the next best move based on the current state of the game board.
      * It performs a Monte Carlo Tree Search by iterating through a series of steps: selection, expansion, simulation, and backpropagation.
@@ -98,12 +108,15 @@ public class MCTSAgent {
 
             String currentPlayer = clonedState.getCurrentPlayer();
 
-            Baseline_Agent baselineAgent = new Baseline_Agent(clonedState);
+            Baseline_Agent baselineAgent = new Baseline_Agent(clonedState,getMaxPiece());
 
             boolean test = boardsAreEqual(currentState.getBoard(), clonedState.getBoard());
 
             while(boardsAreEqual(currentState.getBoard(), clonedState.getBoard())){
                 baselineAgent.chooseMove(clonedState, currentPlayer);
+                if(baselineAgent.getPieceMultiplier()!=getMaxPiece()){
+                    setMaxPiece(baselineAgent.getPieceMultiplier());
+                }
             }
 
 
@@ -137,7 +150,7 @@ public class MCTSAgent {
 
     private int simulateRandomPlayout(MCTSNode node) {
         board clonedBoard = node.getGameState().clone();
-        Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard);
+        Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard,maxPiece);
         clonedBoard.togglePlayer();
         String currentPlayer = clonedBoard.getCurrentPlayer();
 
@@ -146,6 +159,9 @@ public class MCTSAgent {
             do {
                 //clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);
+                if(baselineAgent.getPieceMultiplier()!=getMaxPiece()){
+                    setMaxPiece(baselineAgent.getPieceMultiplier());
+                }
                 currentPlayer = clonedBoard.getCurrentPlayer();
                 clonedBoard.winBoardFull();
             } while (!clonedBoard.isGameEnded());

@@ -1235,6 +1235,11 @@ public class TakGame2D {
         loseLabel.setFont(titleFont);
         loseLabel.setForeground(new Color(226, 199, 153));
         loseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel wonLabel = new JLabel("You Won!");
+        wonLabel.setFont(titleFont);
+        wonLabel.setForeground(new Color(226, 199, 153));
+        wonLabel.setHorizontalAlignment(SwingConstants.CENTER);
     
         JLabel winMessageLabel = new JLabel(winner);
         Font messageFont = new Font("Algerian", Font.BOLD, 24);
@@ -1248,11 +1253,15 @@ public class TakGame2D {
         if(mcts || baseline) {
            if (logicBoard.getWinner().equals("BROWN won!")) {
                 messagePanel.add(loseLabel);
-           }messagePanel.add(winLabel);
-        }else {messagePanel.add(winLabel);}
-        
-        messagePanel.add(winMessageLabel);
-
+                messagePanel.add(winMessageLabel);
+           }else {
+            messagePanel.add(winLabel);
+            messagePanel.add(wonLabel);
+           }
+        }else {
+            messagePanel.add(winLabel);
+            messagePanel.add(winMessageLabel);
+        }
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));

@@ -1,7 +1,7 @@
 # project2-1
 
 README
-->Run TakGame2D to test the first version of the game.
+->Run TakGame2D to test the second version of the game.
     project2-1\core\src\com\mygdx\game\GUI\TakGame2D.java
 
 A 2D version of a human vs human playable board game of Tak - Group 02

@@ -1229,28 +1229,31 @@ public class TakGame2D {
         JLabel winLabel = new JLabel("Congratulations!");
         Font titleFont = new Font("Algerian", Font.BOLD, 35);
         winLabel.setFont(titleFont);
+        winLabel.setForeground(new Color(226, 199, 153));
+
+        JLabel loseLabel = new JLabel("Oh no! You Lost :(  ");
+        loseLabel.setFont(titleFont);
+        loseLabel.setForeground(new Color(226, 199, 153));
+        loseLabel.setHorizontalAlignment(SwingConstants.CENTER);
     
         JLabel winMessageLabel = new JLabel(winner);
-    
-        /*if (currentPlayer.equals("WHITE")) {
-            winMessageLabel = new JLabel("White wins!");
-        } else if (currentPlayer.equals("BROWN")) {
-            winMessageLabel = new JLabel("Brown wins!");
-        } else {
-            winMessageLabel = new JLabel("It's a draw!");
-        }*/
-    
         Font messageFont = new Font("Algerian", Font.BOLD, 24);
         winMessageLabel.setFont(messageFont);
-    
+        winMessageLabel.setForeground(new Color(226, 199, 153));
+
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         messagePanel.setBackground(new Color(192, 130, 97));
-        messagePanel.add(winLabel);
+
+        if(mcts || baseline) {
+           if (logicBoard.getWinner().equals("BROWN won!")) {
+                messagePanel.add(loseLabel);
+           }messagePanel.add(winLabel);
+        }else {messagePanel.add(winLabel);}
+        
         messagePanel.add(winMessageLabel);
-        winLabel.setForeground(new Color(226, 199, 153));
-        winMessageLabel.setForeground(new Color(226, 199, 153));
-    
+
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(new Color(226, 199, 153));
@@ -1269,7 +1272,7 @@ public class TakGame2D {
                 resetGame(); 
                 startingWindow();
                 endFrame.dispose();
-                if (logicBoard.getWinner().equals("BROWN")) {
+                if (logicBoard.getWinner().equals("BROWN wins!")) {
                     moveCountList.add(moveCounter);
                     System.out.println(moveCountList.toString());
                 }

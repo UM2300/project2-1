@@ -674,15 +674,15 @@ public class board {
         if (whiteWins && brownWins) {
             System.out.println("WHITE Wins, as the player who made the move wins."); //based on the rules
             isGameEnded = true;
-            winner = "WHITE wins!";
+            winner = "WHITE won!";
         } else if (whiteWins) {
             System.out.println("WHITE Wins by making a road.");
             isGameEnded = true;
-            winner = "WHITE wins!";
+            winner = "WHITE won!";
         } else if (brownWins) {
             System.out.println("BROWN Wins by making a road.");
             isGameEnded = true;
-            winner = "BROWN wins!";
+            winner = "BROWN won!";
         } 
     }
 

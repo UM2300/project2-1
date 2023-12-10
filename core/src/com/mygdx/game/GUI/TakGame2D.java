@@ -870,7 +870,7 @@ public class TakGame2D {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
         buttonPanel.setBackground(backgroundColor);
     
-        JButton minusButton = new JButton("-");
+        final JButton minusButton = new JButton("-");
         minusButton.setFont(buttonFont);
         minusButton.setBackground(backgroundColor);
         minusButton.setForeground(textColor);
@@ -882,7 +882,7 @@ public class TakGame2D {
         numberLabel.setForeground(textColor);
         buttonPanel.add(numberLabel);
     
-        JButton plusButton = new JButton("+");
+        final JButton plusButton = new JButton("+");
         plusButton.setFont(buttonFont);
         plusButton.setBackground(backgroundColor);
         plusButton.setForeground(textColor);
@@ -906,7 +906,7 @@ public class TakGame2D {
                 numberLabel.setText(String.valueOf(currentNumber));
             }
         });
-    
+
         JButton button = new JButton("Confirm");
         button.setFont(buttonFont);
         button.setBackground(backgroundColor);
@@ -920,7 +920,7 @@ public class TakGame2D {
                 moveFrame.dispose();
             }
         });
-
+        
         Action enterAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -928,7 +928,21 @@ public class TakGame2D {
                 setPieceQuantity(selectedNumber);
                 moveFrame.dispose();
             }
-        };    
+        };   
+        Action minusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minusButton.doClick(); // Simulate click on minusButton
+            }
+        };
+
+        Action plusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plusButton.doClick(); // Simulate click on plusButton
+            }
+        };
+ 
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3,1));
         topMovePanel.setBackground(backgroundColor);
@@ -940,6 +954,14 @@ public class TakGame2D {
         InputMap inputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(enterKey), enterKey);
         topMovePanel.getActionMap().put(enterKey, enterAction);
+        String leftArrowKey = "LEFT";
+        InputMap leftInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        leftInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), leftArrowKey);
+        topMovePanel.getActionMap().put(leftArrowKey, minusAction);
+        String rightArrowKey = "RIGHT";
+        InputMap rightInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        rightInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), rightArrowKey);
+        topMovePanel.getActionMap().put(rightArrowKey, plusAction);
     
         moveFrame = new JFrame("Move Piece");
         moveFrame.setIconImage(icon.getImage());
@@ -969,7 +991,7 @@ public class TakGame2D {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
         buttonPanel.setBackground(backgroundColor);
     
-        JButton minusButton = new JButton("-");
+        final JButton minusButton = new JButton("-");
         minusButton.setFont(buttonFont);
         minusButton.setBackground(backgroundColor);
         minusButton.setForeground(textColor);
@@ -981,7 +1003,7 @@ public class TakGame2D {
         numberLabel.setForeground(textColor);
         buttonPanel.add(numberLabel);
     
-        JButton plusButton = new JButton("+");
+        final JButton plusButton = new JButton("+");
         plusButton.setFont(buttonFont);
         plusButton.setBackground(backgroundColor);
         plusButton.setForeground(textColor);
@@ -1126,6 +1148,20 @@ public class TakGame2D {
                 callForEndScreen();
             }
         }; 
+        Action minusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minusButton.doClick(); // Simulate click on minusButton
+            }
+        };
+
+        Action plusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plusButton.doClick(); // Simulate click on plusButton
+            }
+        };
+
 
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
@@ -1138,6 +1174,14 @@ public class TakGame2D {
         InputMap inputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(enterKey), enterKey);
         topMovePanel.getActionMap().put(enterKey, enterAction);
+        String leftArrowKey = "LEFT";
+        InputMap leftInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        leftInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), leftArrowKey);
+        topMovePanel.getActionMap().put(leftArrowKey, minusAction);
+        String rightArrowKey = "RIGHT";
+        InputMap rightInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        rightInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), rightArrowKey);
+        topMovePanel.getActionMap().put(rightArrowKey, plusAction);
     
         moveFrame = new JFrame("Drop Piece");
         moveFrame.setIconImage(icon.getImage());

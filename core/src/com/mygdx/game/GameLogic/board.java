@@ -72,6 +72,10 @@ public class board {
         return currentPlayer;
     }
 
+    public void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+
     public ArrayList<Integer>[][] getBoard(){
         return board;
     }

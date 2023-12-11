@@ -1254,11 +1254,11 @@ public class TakGame2D {
         String currentPlayer = logicBoard.getCurrentPlayer();
         if (!currentPlayer.equals("WHITE")) {
             logicBoard.setCurrentPlayer("WHITE"); // Set the current player to "WHITE"
-            colorButton.setForeground(new Color(192, 130, 97));
-            colorButton.setBackground(Color.WHITE);
-            colorButton.setText("WHITE TURN");
-            colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
         }
+        colorButton.setForeground(new Color(192, 130, 97));
+        colorButton.setBackground(Color.WHITE);
+        colorButton.setText("WHITE TURN");
+        colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
         capstoneButton.setVisible(true);
         capstoneButtonR.setVisible(true);
         flatButton.setSelected(false); 

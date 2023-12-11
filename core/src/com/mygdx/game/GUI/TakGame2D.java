@@ -227,6 +227,7 @@ public class TakGame2D {
         startButton.setForeground(new Color(192, 130, 97)); 
         startButton.setFocusPainted(false); 
         startButton.setPreferredSize(new Dimension(200, 50)); 
+        startButton.setBorderPainted(false);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -246,6 +247,7 @@ public class TakGame2D {
         hhButton.setForeground(new Color(192, 130, 97)); 
         hhButton.setFocusPainted(false); 
         hhButton.setPreferredSize(new Dimension(200, 50)); 
+        hhButton.setBorderPainted(false);
         hhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -275,6 +277,7 @@ public class TakGame2D {
         hbeButton.setForeground(new Color(192, 130, 97)); 
         hbeButton.setFocusPainted(false); 
         hbeButton.setPreferredSize(new Dimension(200, 50)); 
+        hbeButton.setBorderPainted(false);
         hbeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -302,6 +305,7 @@ public class TakGame2D {
         hbhButton.setForeground(new Color(192, 130, 97)); 
         hbhButton.setFocusPainted(false); 
         hbhButton.setPreferredSize(new Dimension(200, 50)); 
+        hbhButton.setBorderPainted(false);
         hbhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -331,6 +335,7 @@ public class TakGame2D {
         instructionsButton.setForeground(new Color(192, 130, 97)); 
         instructionsButton.setFocusPainted(false); 
         instructionsButton.setPreferredSize(new Dimension(200, 50));
+        instructionsButton.setBorderPainted(false);
 
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
@@ -653,7 +658,6 @@ public class TakGame2D {
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
-
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
         colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
@@ -676,7 +680,7 @@ public class TakGame2D {
                 menuOption();
             }
         });
-
+        topRightPanel.setBackground(new Color(242, 236, 190));
         topRightPanel.add(menuOption);
         topRightPanel.add(instructionsNewButton);
         topRightPanel.add(colorButton);
@@ -1370,7 +1374,8 @@ public class TakGame2D {
         restartButton.setBackground(new Color(226, 199, 153)); 
         restartButton.setForeground(new Color(192, 130, 97)); 
         restartButton.setFocusPainted(false); 
-        restartButton.setPreferredSize(new Dimension(200, 50)); 
+        restartButton.setPreferredSize(new Dimension(200, 50));
+        restartButton.setBorderPainted(false); 
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1386,6 +1391,7 @@ public class TakGame2D {
         continueButton.setForeground(new Color(192, 130, 97)); 
         continueButton.setFocusPainted(false); 
         continueButton.setPreferredSize(new Dimension(200, 50));
+        continueButton.setBorderPainted(false);
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1400,6 +1406,7 @@ public class TakGame2D {
         exitButton.setForeground(new Color(192, 130, 97)); 
         exitButton.setFocusPainted(false); 
         exitButton.setPreferredSize(new Dimension(200, 50)); 
+        exitButton.setBorderPainted(false);
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

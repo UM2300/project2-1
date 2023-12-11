@@ -105,6 +105,9 @@ public class board {
     }
 
 
+    /**
+     * Handles the turns of players 
+     */
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
             currentPlayer = "BROWN";
@@ -113,7 +116,11 @@ public class board {
         }
     }
 
-    //////////////////////////////////////////
+////////////////////////////////
+
+    /**
+     * Responsible for creating a clone of a current game state
+     */
     public board clone() {
         board newBoard = new board();
 
@@ -161,6 +168,13 @@ public class board {
         }
         setHeldPieces(new ArrayList<Integer>());
     }
+
+    /**
+     * Returns the piece(s) at a certain tile on the board
+     * @param i x coordinate on the board
+     * @param j y coordinate on the board
+     * @return the piece(s) present at the specified tile
+     */
     public int getPieceAt(int i, int j) {
         ArrayList<Integer> stack = board[i][j];
         if (stack.isEmpty()) {
@@ -169,6 +183,12 @@ public class board {
         return stack.get(stack.size() - 1);
     }
 
+    /**
+     * Responsible for showing the stacks visually in the GUI
+     * @param i x coordinate
+     * @param j y coordinate
+     * @return the stack present at the specified tile
+     */
     public String getStackDetails(int i, int j) {
         StringBuilder tooltip = new StringBuilder("<html>");
 
@@ -204,11 +224,6 @@ public class board {
         tooltip.append("</html>");
         return tooltip.toString();
     }
-
-
-
-
-
 
 
     /**
@@ -259,8 +274,6 @@ public class board {
         }
 
     }
-
-    
 
     
     /**
@@ -366,7 +379,6 @@ public class board {
      * @param dir direction (up, down, left, right) to continue move
      * @param dropNum number of pieces to drop of in the current tile (if a stack dropNum >= 1, else dropNum = 1)
      */
-
     public void move(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
         //System.out.println("\ncontinue move\n");
 
@@ -671,6 +683,9 @@ public class board {
         return winner;
     }
 
+    /**
+     * Checks which player has won a game
+     */
     public void checkWinCondition() {
         boolean whiteWins = checkRoadForPlayer("WHITE");
         boolean brownWins = checkRoadForPlayer("BROWN");
@@ -690,7 +705,13 @@ public class board {
         } 
     }
 
-
+    /**
+     * Responsible for the dropping off of pieces while moving a stack
+     * @param x
+     * @param y
+     * @param temp
+     * @param dir
+     */
     public void continueDropPiece(int x, int y, ArrayList<Integer> temp, int dir) {
         //System.out.println("Created");
 

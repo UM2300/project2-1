@@ -40,7 +40,7 @@ Option A:
 
 5. After pressing start, another window is displayed with the types of game modes
 
-6. Option 1 is Multiplayer, which is baisically your human player vs another human player
+6. Option 1 is Multiplayer, which is basically your human player vs another human player
 
 7. Option 2 is Easy Mode, where you can play against our baseline agent
 
@@ -55,7 +55,7 @@ Option A:
 Option B:
 
 
-1. Open the folder using your preffered IDE or code compiler
+1. Open the folder using your preferred IDE or code compiler
 
 2. In order to run the space simulation select:
 - GUI

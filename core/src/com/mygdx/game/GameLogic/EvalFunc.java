@@ -1,10 +1,12 @@
-package com.mygdx.game.GUI;
+package com.mygdx.game.GameLogic;
 import java.util.ArrayList;
 
-import com.mygdx.game.GameLogic.board;
+/**
+ * This class represents the implementation of the evaluation function
+ */
 
 public class EvalFunc {
- 
+
     private board logicBoard;
     private boolean[][] visited;
 
@@ -109,8 +111,6 @@ public class EvalFunc {
         }
         return boardSum;
     }
-
-
 
 
     /**
@@ -415,6 +415,12 @@ public class EvalFunc {
         }
     }
 
+    /**
+     * Checks if a tile is within the dimensions of the 5x5 board
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return true if the tile is a valid space, false otherwise
+     */
     public boolean isValidSpace(int x, int y){
         if(x<0||x>4||y<0||y>4){
             return false;

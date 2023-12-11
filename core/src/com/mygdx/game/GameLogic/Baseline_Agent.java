@@ -1,6 +1,9 @@
 package com.mygdx.game.GameLogic;
 import java.util.ArrayList;
 
+/**
+ * This class represents the implementation of the baseline agent
+ */
 
 public class Baseline_Agent {
 
@@ -25,6 +28,12 @@ public class Baseline_Agent {
         this.pieceMultiplier=pieceMultiplier;
     }
 
+    /**
+     * Checks if a tile on the board contains a stack
+     * @param x x coordinate on the board
+     * @param y y coordinate on the board
+     * @return true if the tile has a stack, false otherwise
+     */
     public boolean isAStack (int x, int y) {
         if (logicBoard.getBoard()[x][y].size() > 1 ) {
             return true;
@@ -32,6 +41,14 @@ public class Baseline_Agent {
         return false;
     }
 
+    
+    /**
+     * Returns a list of tiles on the game board that are available to the current player, ie. tiles that are
+     * empty or tiles that have stacks which the current player controls
+     * @param logicBoard the current state of the board
+     * @param currentPlayer the current player (brown or white)
+     * @return a list of tiles available for the current player to make a move
+     */
     /**  Complexity: O(1) 
     Even though there are two nested loops, the number of iterations they perform is constant 
     and does not depend on any variable input size. They will always perform 25 iterations in total
@@ -75,6 +92,11 @@ public class Baseline_Agent {
         return availableTiles;
     }
 
+    /**
+     * Randomly chooses a move using the Math.random function
+     * @param logicBoard current state of the board
+     * @param currentPlayer the current player making the move
+     */
     // Complexity: O(1) 
     public void chooseMove(board logicBoard, String currentPlayer){
         ArrayList<int[]> chords = new ArrayList<int[]>();
@@ -115,6 +137,12 @@ public class Baseline_Agent {
 
     }
 
+    /**
+     * Handles the process of dropping off pieces while moving a stack  
+     * @param x x coordinate on the board
+     * @param y y coordinate on the board
+     * @param dir direction the stack is moving
+     */
     // Complexity: O(1) As the size of getHeldPieces is always reasonably small < 5
     public void dropRecursion(int x, int y,int dir){
 

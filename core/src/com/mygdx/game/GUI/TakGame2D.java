@@ -1329,6 +1329,7 @@ public class TakGame2D {
         startOverButton.setBackground(new Color(226, 199, 153)); 
         startOverButton.setForeground(new Color(192, 130, 97)); 
         startOverButton.setFocusPainted(false); 
+        startOverButton.setBorderPainted(false);
         startOverButton.setPreferredSize(new Dimension(200, 50)); 
     
         startOverButton.addActionListener(new ActionListener() {

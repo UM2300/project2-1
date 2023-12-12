@@ -227,6 +227,7 @@ public class TakGame2D {
         startButton.setForeground(new Color(192, 130, 97)); 
         startButton.setFocusPainted(false); 
         startButton.setPreferredSize(new Dimension(200, 50)); 
+        startButton.setBorderPainted(false);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -246,6 +247,7 @@ public class TakGame2D {
         hhButton.setForeground(new Color(192, 130, 97)); 
         hhButton.setFocusPainted(false); 
         hhButton.setPreferredSize(new Dimension(200, 50)); 
+        hhButton.setBorderPainted(false);
         hhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -275,6 +277,7 @@ public class TakGame2D {
         hbeButton.setForeground(new Color(192, 130, 97)); 
         hbeButton.setFocusPainted(false); 
         hbeButton.setPreferredSize(new Dimension(200, 50)); 
+        hbeButton.setBorderPainted(false);
         hbeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -302,6 +305,7 @@ public class TakGame2D {
         hbhButton.setForeground(new Color(192, 130, 97)); 
         hbhButton.setFocusPainted(false); 
         hbhButton.setPreferredSize(new Dimension(200, 50)); 
+        hbhButton.setBorderPainted(false);
         hbhButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -331,6 +335,7 @@ public class TakGame2D {
         instructionsButton.setForeground(new Color(192, 130, 97)); 
         instructionsButton.setFocusPainted(false); 
         instructionsButton.setPreferredSize(new Dimension(200, 50));
+        instructionsButton.setBorderPainted(false);
 
         buttonPanel.add(startButton);
         buttonPanel.add(instructionsButton);
@@ -653,7 +658,6 @@ public class TakGame2D {
     public TakGame2D() {
         ToolTipManager.sharedInstance().setInitialDelay(0);
 
-
         colorButton = new JButton("WHITE TURN");
         colorButton.setForeground(new Color(192, 130, 97));
         colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
@@ -676,7 +680,7 @@ public class TakGame2D {
                 menuOption();
             }
         });
-
+        topRightPanel.setBackground(new Color(242, 236, 190));
         topRightPanel.add(menuOption);
         topRightPanel.add(instructionsNewButton);
         topRightPanel.add(colorButton);
@@ -849,60 +853,120 @@ public class TakGame2D {
         return new ImageIcon(resizedImage);
     }
 
-    /**
-     * Displays popup when adding a piece to the board
-     */
-    //public void addPiece() {      
-    //}
-
+    public int selectedNumber = 1;
+    public int getSelectedNumber() {
+        return selectedNumber;
+    }
     /**
      * Displays popup window when moving a piece on the board
      */
     public void movePiece() {
         Color backgroundColor = new Color(226, 199, 153);
         Color textColor = new Color(192, 130, 97);
-        Font labelFont = new Font("Algerian", Font.BOLD, 18);
-        Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
+        Font labelFont = new Font("Algerian", Font.BOLD, 20);
+        Font buttonFont = new Font("Algerian", Font.PLAIN, 18);
     
         JLabel moveLabel = new JLabel("How many to move?");
         moveLabel.setFont(labelFont);
         moveLabel.setForeground(textColor);
+        moveLabel.setHorizontalAlignment(SwingConstants.CENTER);
     
-        final JTextField textField = new JTextField();
-        textField.setFont(buttonFont);
-        textField.setBackground(backgroundColor);
-        textField.setForeground(textColor);
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
+        buttonPanel.setBackground(backgroundColor);
     
-        final JButton button = new JButton("Confirm");
-        button.setFont(buttonFont);
-        button.setBackground(backgroundColor);
-        button.setForeground(textColor);
-   
-        button.addActionListener(new ActionListener() {
+        final JButton minusButton = new JButton("-");
+        minusButton.setFont(buttonFont);
+        minusButton.setBackground(backgroundColor);
+        minusButton.setForeground(textColor);
+        minusButton.setBorderPainted(false);
+        buttonPanel.add(minusButton);
+    
+        final JLabel numberLabel = new JLabel("1", SwingConstants.CENTER);
+        numberLabel.setFont(buttonFont);
+        numberLabel.setForeground(textColor);
+        buttonPanel.add(numberLabel);
+    
+        final JButton plusButton = new JButton("+");
+        plusButton.setFont(buttonFont);
+        plusButton.setBackground(backgroundColor);
+        plusButton.setForeground(textColor);
+        plusButton.setBorderPainted(false);
+        buttonPanel.add(plusButton);
+    
+        minusButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String txt = textField.getText();
-                int quantity = Integer.parseInt(txt);
-                setPieceQuantity(quantity);
-                moveFrame.dispose();
-            }
-        });
-        textField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    button.doClick(); // Simulate a button click
+                int currentNumber = Integer.parseInt(numberLabel.getText());
+                if (currentNumber > 1) {
+                    currentNumber--;
+                    numberLabel.setText(String.valueOf(currentNumber));
                 }
             }
         });
     
+        plusButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int currentNumber = Integer.parseInt(numberLabel.getText());
+                currentNumber++;
+                numberLabel.setText(String.valueOf(currentNumber));
+            }
+        });
+
+        JButton button = new JButton("Confirm");
+        button.setFont(buttonFont);
+        button.setBackground(backgroundColor);
+        button.setForeground(textColor);
+        button.setBorderPainted(false);
+    
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                selectedNumber = Integer.parseInt(numberLabel.getText()); // Update selectedNumber on confirm
+                setPieceQuantity(selectedNumber);
+                moveFrame.dispose();
+            }
+        });
+        
+        Action enterAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedNumber = Integer.parseInt(numberLabel.getText()); // Update selectedNumber on Enter key press
+                setPieceQuantity(selectedNumber);
+                moveFrame.dispose();
+            }
+        };   
+        Action minusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minusButton.doClick(); // Simulate click on minusButton
+            }
+        };
+
+        Action plusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plusButton.doClick(); // Simulate click on plusButton
+            }
+        };
+ 
         JPanel topMovePanel = new JPanel();
-        topMovePanel.setLayout(new GridLayout(3, 1));
+        topMovePanel.setLayout(new GridLayout(3,1));
         topMovePanel.setBackground(backgroundColor);
     
-        topMovePanel.add(moveLabel);
-        topMovePanel.add(textField);
-        topMovePanel.add(button);
-
+        topMovePanel.add(moveLabel, BorderLayout.NORTH);
+        topMovePanel.add(buttonPanel, BorderLayout.CENTER);
+        topMovePanel.add(button, BorderLayout.SOUTH);
+        String enterKey = "ENTER";
+        InputMap inputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke(enterKey), enterKey);
+        topMovePanel.getActionMap().put(enterKey, enterAction);
+        String leftArrowKey = "LEFT";
+        InputMap leftInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        leftInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), leftArrowKey);
+        topMovePanel.getActionMap().put(leftArrowKey, minusAction);
+        String rightArrowKey = "RIGHT";
+        InputMap rightInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        rightInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), rightArrowKey);
+        topMovePanel.getActionMap().put(rightArrowKey, plusAction);
+    
         moveFrame = new JFrame("Move Piece");
         moveFrame.setIconImage(icon.getImage());
         moveFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -913,7 +977,6 @@ public class TakGame2D {
         moveFrame.setVisible(true);
     }
     
-
     /**
      * Displays popup window to specify how many pieces of a stack (or a single piece) to drop off at the current tile
      */
@@ -921,29 +984,74 @@ public class TakGame2D {
 
         Color backgroundColor = new Color(226, 199, 153);
         Color textColor = new Color(192, 130, 97);
-        Font labelFont = new Font("Algerian", Font.BOLD, 18);
-        Font buttonFont = new Font("Algerian", Font.PLAIN, 14);
+        Font labelFont = new Font("Algerian", Font.BOLD, 20);
+        Font buttonFont = new Font("Algerian", Font.PLAIN, 18);
     
         JLabel moveLabel = new JLabel("How many to drop?");
         moveLabel.setFont(labelFont);
         moveLabel.setForeground(textColor);
+        moveLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
+        buttonPanel.setBackground(backgroundColor);
     
-        final JTextField textField = new JTextField();
-        textField.setFont(buttonFont);
-        textField.setBackground(backgroundColor);
-        textField.setForeground(textColor);
+        final JButton minusButton = new JButton("-");
+        minusButton.setFont(buttonFont);
+        minusButton.setBackground(backgroundColor);
+        minusButton.setForeground(textColor);
+        minusButton.setBorderPainted(false);
+        buttonPanel.add(minusButton);
+    
+        final JLabel numberLabel = new JLabel("1", SwingConstants.CENTER);
+        numberLabel.setFont(buttonFont);
+        numberLabel.setForeground(textColor);
+        buttonPanel.add(numberLabel);
+    
+        final JButton plusButton = new JButton("+");
+        plusButton.setFont(buttonFont);
+        plusButton.setBackground(backgroundColor);
+        plusButton.setForeground(textColor);
+        plusButton.setBorderPainted(false);
+        buttonPanel.add(plusButton);
+    
+        minusButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int currentNumber = Integer.parseInt(numberLabel.getText());
+                if (currentNumber > 1) {
+                    currentNumber--;
+                    numberLabel.setText(String.valueOf(currentNumber));
+                }
+            }
+        });
+    
+        plusButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int currentNumber = Integer.parseInt(numberLabel.getText());
+                currentNumber++;
+                numberLabel.setText(String.valueOf(currentNumber));
+            }
+        });
+    
     
         final JButton button = new JButton("Confirm");
         button.setFont(buttonFont);
         button.setBackground(backgroundColor);
         button.setForeground(textColor);
+        button.setBorderPainted(false);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                selectedNumber = Integer.parseInt(numberLabel.getText()); // Update selectedNumber on confirm
+                setPieceQuantity(selectedNumber);
+                moveFrame.dispose();
+            }
+        });
     
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String txt = textField.getText();
-                int drop = Integer.parseInt(txt);
-                setDropNum(drop);
-                int dir = targetDir(getCurrentChords(), getMoveToChords());
+                selectedNumber = Integer.parseInt(numberLabel.getText());
+                setDropNum(selectedNumber);
+                dir = targetDir(getCurrentChords(), getMoveToChords());
     
                 if (getPieceQuantity() - getDropNum() <= 0) {
                     setDropNum(getPieceQuantity());
@@ -991,20 +1099,93 @@ public class TakGame2D {
             }
             
         });
-        textField.addKeyListener(new KeyAdapter() {
+
+        Action enterAction = new AbstractAction() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    button.doClick(); // Simulate a button click
+            public void actionPerformed(ActionEvent e) {
+                selectedNumber = Integer.parseInt(numberLabel.getText());
+                setDropNum(selectedNumber);
+                dir = targetDir(getCurrentChords(), getMoveToChords());
+    
+                if (getPieceQuantity() - getDropNum() <= 0) {
+                    setDropNum(getPieceQuantity());
+                    setMidTurn(false);
                 }
+    
+                if(logicBoard.getHeldPieces().isEmpty()){
+                    logicBoard.move(currentChords[0], currentChords[1], getPieceQuantity(), dir, getDropNum());
+                    updateVisualBoard();
+                    logicBoard.checkState();
+                    moveFrame.dispose();
+                }
+                else{
+                    logicBoard.move(currentChords[0], currentChords[1], logicBoard.getHeldPieces(), getDir(), getDropNum());
+                    updateVisualBoard();
+                    logicBoard.checkState();
+                    moveFrame.dispose();
+                }
+
+                if(!logicBoard.getHeldPieces().isEmpty()){
+                    if(getDropIteration()==1){
+                        setDir(dir);
+                        alterChords(currentChords[0]-1, currentChords[1]-1, getDir());
+                    }
+                    else{
+                        alterChords(currentChords[0], currentChords[1], getDir());
+                    }
+                    moveFrame.dispose();
+                    dropPiece(getDropIteration()+1);
+                }
+                else{
+                    switchTurnLabel();
+                    logicBoard.checkWinCondition();
+                    logicBoard.winBoardFull();
+                    logicBoard.checkState();
+
+                    if(logicBoard.getWinner().equals("NONE")){
+                        baselineCall();
+                        MCTSCall();
+                    }
+                    
+                    updateVisualBoard();
+                }
+                callForEndScreen();
             }
-        });
+        }; 
+        Action minusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minusButton.doClick(); // Simulate click on minusButton
+            }
+        };
+
+        Action plusAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plusButton.doClick(); // Simulate click on plusButton
+            }
+        };
+
+
         JPanel topMovePanel = new JPanel();
         topMovePanel.setLayout(new GridLayout(3, 1));
         topMovePanel.setBackground(backgroundColor);
-        topMovePanel.add(moveLabel);
-        topMovePanel.add(textField);
-        topMovePanel.add(button);
+    
+        topMovePanel.add(moveLabel, BorderLayout.NORTH);
+        topMovePanel.add(buttonPanel, BorderLayout.CENTER);
+        topMovePanel.add(button, BorderLayout.SOUTH);
+        String enterKey = "ENTER";
+        InputMap inputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke(enterKey), enterKey);
+        topMovePanel.getActionMap().put(enterKey, enterAction);
+        String leftArrowKey = "LEFT";
+        InputMap leftInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        leftInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), leftArrowKey);
+        topMovePanel.getActionMap().put(leftArrowKey, minusAction);
+        String rightArrowKey = "RIGHT";
+        InputMap rightInputMap = topMovePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        rightInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), rightArrowKey);
+        topMovePanel.getActionMap().put(rightArrowKey, plusAction);
     
         moveFrame = new JFrame("Drop Piece");
         moveFrame.setIconImage(icon.getImage());
@@ -1070,6 +1251,14 @@ public class TakGame2D {
         }
         frame.dispose();
         logicBoard = new board();
+        String currentPlayer = logicBoard.getCurrentPlayer();
+        if (!currentPlayer.equals("WHITE")) {
+            logicBoard.setCurrentPlayer("WHITE"); // Set the current player to "WHITE"
+        }
+        colorButton.setForeground(new Color(192, 130, 97));
+        colorButton.setBackground(Color.WHITE);
+        colorButton.setText("WHITE TURN");
+        colorButton.setFont(new Font("Algerian", Font.PLAIN, 14));
         capstoneButton.setVisible(true);
         capstoneButtonR.setVisible(true);
         flatButton.setSelected(false); 
@@ -1096,28 +1285,40 @@ public class TakGame2D {
         JLabel winLabel = new JLabel("Congratulations!");
         Font titleFont = new Font("Algerian", Font.BOLD, 35);
         winLabel.setFont(titleFont);
+        winLabel.setForeground(new Color(226, 199, 153));
+
+        JLabel loseLabel = new JLabel("Oh no! You Lost :(  ");
+        loseLabel.setFont(titleFont);
+        loseLabel.setForeground(new Color(226, 199, 153));
+        loseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel wonLabel = new JLabel("You Won!");
+        wonLabel.setFont(titleFont);
+        wonLabel.setForeground(new Color(226, 199, 153));
+        wonLabel.setHorizontalAlignment(SwingConstants.CENTER);
     
         JLabel winMessageLabel = new JLabel(winner);
-    
-        /*if (currentPlayer.equals("WHITE")) {
-            winMessageLabel = new JLabel("White wins!");
-        } else if (currentPlayer.equals("BROWN")) {
-            winMessageLabel = new JLabel("Brown wins!");
-        } else {
-            winMessageLabel = new JLabel("It's a draw!");
-        }*/
-    
         Font messageFont = new Font("Algerian", Font.BOLD, 24);
         winMessageLabel.setFont(messageFont);
-    
+        winMessageLabel.setForeground(new Color(226, 199, 153));
+
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         messagePanel.setBackground(new Color(192, 130, 97));
-        messagePanel.add(winLabel);
-        messagePanel.add(winMessageLabel);
-        winLabel.setForeground(new Color(226, 199, 153));
-        winMessageLabel.setForeground(new Color(226, 199, 153));
-    
+
+        if(mcts || baseline) {
+           if (logicBoard.getWinner().equals("BROWN won!")) {
+                messagePanel.add(loseLabel);
+                messagePanel.add(winMessageLabel);
+           }else {
+            messagePanel.add(winLabel);
+            messagePanel.add(wonLabel);
+           }
+        }else {
+            messagePanel.add(winLabel);
+            messagePanel.add(winMessageLabel);
+        }
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(new Color(226, 199, 153));
@@ -1128,6 +1329,7 @@ public class TakGame2D {
         startOverButton.setBackground(new Color(226, 199, 153)); 
         startOverButton.setForeground(new Color(192, 130, 97)); 
         startOverButton.setFocusPainted(false); 
+        startOverButton.setBorderPainted(false);
         startOverButton.setPreferredSize(new Dimension(200, 50)); 
     
         startOverButton.addActionListener(new ActionListener() {
@@ -1136,7 +1338,7 @@ public class TakGame2D {
                 resetGame(); 
                 startingWindow();
                 endFrame.dispose();
-                if (logicBoard.getWinner().equals("BROWN")) {
+                if (logicBoard.getWinner().equals("BROWN wins!")) {
                     moveCountList.add(moveCounter);
                     System.out.println(moveCountList.toString());
                 }
@@ -1181,7 +1383,8 @@ public class TakGame2D {
         restartButton.setBackground(new Color(226, 199, 153)); 
         restartButton.setForeground(new Color(192, 130, 97)); 
         restartButton.setFocusPainted(false); 
-        restartButton.setPreferredSize(new Dimension(200, 50)); 
+        restartButton.setPreferredSize(new Dimension(200, 50));
+        restartButton.setBorderPainted(false); 
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1197,6 +1400,7 @@ public class TakGame2D {
         continueButton.setForeground(new Color(192, 130, 97)); 
         continueButton.setFocusPainted(false); 
         continueButton.setPreferredSize(new Dimension(200, 50));
+        continueButton.setBorderPainted(false);
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1211,6 +1415,7 @@ public class TakGame2D {
         exitButton.setForeground(new Color(192, 130, 97)); 
         exitButton.setFocusPainted(false); 
         exitButton.setPreferredSize(new Dimension(200, 50)); 
+        exitButton.setBorderPainted(false);
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

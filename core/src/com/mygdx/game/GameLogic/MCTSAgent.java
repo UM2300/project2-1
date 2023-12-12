@@ -1,6 +1,5 @@
 package com.mygdx.game.GameLogic;
 
-import com.mygdx.game.GUI.EvalFunc;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -29,10 +28,11 @@ public class MCTSAgent {
      * @return The best move as determined by the MCTS algorithm.
      */
 
-     /** Complexity: O(bh + m + d)
+     /** Complexity: O(bh + m + d + n)
       * bh is from selectPromisingNode
       * m is from simulateRandomPlayout
       * d is from backPropagate
+      * n is from expandNode
       */
     public MCTSNode findNextMove(board currentBoard) {
         MCTSNode rootNode = new MCTSNode(currentBoard); // Initialize the root node of the MCTS tree
@@ -112,7 +112,16 @@ public class MCTSAgent {
         return bestNode;
     }
 
-    // Complexity: O(1)
+    /**
+     * Expands the given MCTS (Monte Carlo Tree Search) node by generating a set of legal moves and creating child nodes for each move.
+     * The expansion process involves simulating potential game states by applying moves to the current game state.
+     * The legal moves are generated until a specified limit is reached, and child nodes are created for each unique resulting game state.
+     *
+     * @param node The MCTS node to be expanded.
+     * @param currentBoard The current game board state represented by the MCTS node.
+     */
+    // Complexity: O(n)
+    // n = the number of expanded nodes
     private void expandNode(MCTSNode node, board currentBoard) {
         ArrayList<board> legalMoves = new ArrayList<>();
         
@@ -155,6 +164,13 @@ public class MCTSAgent {
         }
     }
 
+/**
+     * Checks whether a given game state (represented by a board object) is already present in a list of existing game states.
+     *
+     * @param boards The list of existing game states to check against.
+     * @param nextState The game state to check for existence in the list.
+     * @return true if the given game state is found in the list, false otherwise.
+     */
     // Complexity: O(n)
     // n is the number of elements in the boards list
     private boolean containsBoard(ArrayList<board> boards, board nextState) {
@@ -166,6 +182,14 @@ public class MCTSAgent {
         return false;
     }
 
+/**
+     * Simulates a random playout from the given MCTS (Monte Carlo Tree Search) node until a terminal game state is reached.
+     * The simulation involves making random moves using a baseline agent until the game reaches a terminal state.
+     * The evaluation of the terminal state is calculated using an evaluation function, and the score is assigned to the node.
+     *
+     * @param node The MCTS node from which the random playout simulation starts.
+     * @return The score of the terminal state reached during the random playout.
+     */
     // Complexity: O(m)
     // m is the average number of iterations required to reach a terminal game state
     private int simulateRandomPlayout(MCTSNode node) {
@@ -192,6 +216,13 @@ public class MCTSAgent {
         return terminalScore; // Or return a combined score
     }
 
+/**
+     * Backpropagates the result of a simulated playout from a terminal state up the Monte Carlo Tree Search (MCTS) tree.
+     * Starting from the given node, the method traverses up the tree to update the scores of all parent nodes based on the terminal state score.
+     *
+     * @param nodeToExplore The MCTS node from which the backpropagation starts.
+     * @param terminalStateScore The score obtained from the terminal state reached during the simulation.
+     */
     // Complexity: O(d)
     // d is the depth of the node in the MCTS tree   
     private void backPropagate(MCTSNode nodeToExplore, int terminalStateScore) {
@@ -204,6 +235,16 @@ public class MCTSAgent {
         }
     }
 
+/**
+     * Checks whether two 2D arrays of ArrayLists representing game boards are equal.
+     * Equality is determined based on the dimensions and the content of the ArrayLists in corresponding positions.
+     *
+     * @param board1 The first 2D array representing a game board.
+     * @param board2 The second 2D array representing another game board for comparison.
+     * @return true if the dimensions and content of corresponding ArrayLists in both boards are equal, false otherwise.
+     */
+    // Complexity: O(1)
+    // As stated before we are looping over a nxn board where n is always 5 and remains unchanged hence O(1) not O(n^2)
     public boolean boardsAreEqual(ArrayList<Integer>[][] board1, ArrayList<Integer>[][] board2){
 
         if (board1.length != board2.length || board1[0].length != board2[0].length) {
@@ -220,8 +261,5 @@ public class MCTSAgent {
 
         return true;
     }
-
-
-
 
 }

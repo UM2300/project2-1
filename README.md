@@ -1,7 +1,7 @@
 # project2-1
 
 README
-->Run TakGame2D to test the first version of the game.
+->Run TakGame2D to test the second version of the game.
     project2-1\core\src\com\mygdx\game\GUI\TakGame2D.java
 
 A 2D version of a human vs human playable board game of Tak - Group 02
@@ -36,27 +36,44 @@ Option A:
 3. Followed by
     - java GUI.TakGame2D
 
-4. You will now have a starting screen
+4. You will now have a starting screen showing "Tak" with the start button and the game instruction button
 
-5. After pressing start, another window is displayed with the game board and you can begin playing.
+5. After pressing start, another window is displayed with the types of game modes
 
-6. Once a player has met a winning condition, the game is over and an end screen is displayed. 
+6. Option 1 is Multiplayer, which is basically your human player vs another human player
+
+7. Option 2 is Easy Mode, where you can play against our baseline agent
+
+8. Option 3 is Hard Mode, where you can play against our more advanced MCTS agent
+
+9. On each game mode you have a menu button where you can choose to exit game (exit), return to main menu (restart), or continue (continue)
+
+10. Once a player/agent has met a winning condition, the game is over and an end screen is displayed.
 
 
 
 Option B:
 
 
-1. Open the folder using your preffered IDE or code compiler
+1. Open the folder using your preferred IDE or code compiler
 
 2. In order to run the space simulation select:
 - GUI
     - TakGame2D.java
 
-3. You will now have a start screen showing "Tak"
+3. You will now have a starting screen showing "Tak" with the start button and the game instruction button
 
-4. After pressing start, another window is displayed with the game board and you can begin playing.
- 
-5. Once a player has met a winning condition, the game is over and an end screen is displayed.
+4. After pressing start, another window is displayed with the types of game modes
+
+5. Option 1 is Multiplayer, which is baisically your human player vs another human player
+
+6. Option 2 is Easy Mode, where you can play against our baseline agent
+
+7. Option 3 is Hard Mode, where you can play against our more advanced MCTS agent
+
+8. On each game mode you have a menu button where you can choose to exit game (exit), return to main menu (restart), or continue (continue)
+
+9. Once a player/agent has met a winning condition, the game is over and an end screen is displayed.
+
 
 Enjoy!

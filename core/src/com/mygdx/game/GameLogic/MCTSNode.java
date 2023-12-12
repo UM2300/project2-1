@@ -1,5 +1,4 @@
 package com.mygdx.game.GameLogic;
-import com.mygdx.game.GUI.EvalFunc;
 import java.util.ArrayList;
 
 public class MCTSNode {

@@ -72,6 +72,10 @@ public class board {
         return currentPlayer;
     }
 
+    public void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+
     public ArrayList<Integer>[][] getBoard(){
         return board;
     }
@@ -101,6 +105,9 @@ public class board {
     }
 
 
+    /**
+     * Handles the turns of players 
+     */
     public void togglePlayer() {
         if (currentPlayer.equals("WHITE")) {
             currentPlayer = "BROWN";
@@ -109,7 +116,11 @@ public class board {
         }
     }
 
-    //////////////////////////////////////////
+////////////////////////////////
+
+    /**
+     * Responsible for creating a clone of a current game state
+     */
     public board clone() {
         board newBoard = new board();
 
@@ -157,6 +168,13 @@ public class board {
         }
         setHeldPieces(new ArrayList<Integer>());
     }
+
+    /**
+     * Returns the piece(s) at a certain tile on the board
+     * @param i x coordinate on the board
+     * @param j y coordinate on the board
+     * @return the piece(s) present at the specified tile
+     */
     public int getPieceAt(int i, int j) {
         ArrayList<Integer> stack = board[i][j];
         if (stack.isEmpty()) {
@@ -165,6 +183,12 @@ public class board {
         return stack.get(stack.size() - 1);
     }
 
+    /**
+     * Responsible for showing the stacks visually in the GUI
+     * @param i x coordinate
+     * @param j y coordinate
+     * @return the stack present at the specified tile
+     */
     public String getStackDetails(int i, int j) {
         StringBuilder tooltip = new StringBuilder("<html>");
 
@@ -202,11 +226,6 @@ public class board {
     }
 
 
-
-
-
-
-
     /**
      * Adds a piece to the board with the colour of the current player, and switches the turn to the opponent after the piece has been added
      * 
@@ -221,10 +240,10 @@ public class board {
         //System.out.println("this method ran: "+x+" "+y);
 
         if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
-            System.out.println("Not browns turn");
+            //System.out.println("Not browns turn");
             return;
         } else if (currentPlayer.equals("BROWN")&&(num < 3 || num > 5)) {
-            System.out.println("Not whites turn");
+            //System.out.println("Not whites turn");
             return;
             }
 
@@ -233,7 +252,7 @@ public class board {
                 if(x-1==i && y-1==j){
 
                     if(!board[i][j].isEmpty()){
-                        System.out.println("Not an empty space");
+                        //System.out.println("Not an empty space");
                     }
                     else{
                         board[i][j].add(num);
@@ -247,7 +266,7 @@ public class board {
                         togglePlayer();
                         int inum= i+1;
                         int jnum=j+1;
-                        System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
+                        //System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
 
                     }
                 }
@@ -255,8 +274,6 @@ public class board {
         }
 
     }
-
-    
 
     
     /**
@@ -283,10 +300,10 @@ public class board {
             }
 
             if(currentPlayer.equals("WHITE") && (temp.get(temp.size()-1)==3||temp.get(temp.size()-1)==4||temp.get(temp.size()-1)==5)){
-                System.out.println("Not browns turn");
+                //System.out.println("Not browns turn");
             }
             else if(currentPlayer.equals("BROWN") && (temp.get(temp.size()-1)==0||temp.get(temp.size()-1)==1||temp.get(temp.size()-1)==2)){
-                System.out.println("Not whites turn");
+                //System.out.println("Not whites turn");
             }
             else{
                 ArrayList<Integer> target = new ArrayList<Integer>();
@@ -324,7 +341,7 @@ public class board {
                         ArrayList<Integer> drop = dropOff(temp, dropNum);
 
                         board[xChord][yChord].addAll(drop);
-                        System.out.println("moved");
+                        //System.out.println("moved");
 
                         if(temp.size()>0){
                             //continueMove(xChord, yChord, temp, dir, 0);
@@ -337,18 +354,18 @@ public class board {
                         togglePlayer();
                     }
                     else{
-                        System.out.println("Invalid move");
+                        //System.out.println("Invalid move");
                         board[x][y].addAll(temp);
                     }
                 }
                 else{
-                    System.out.println("Invalid space");
+                    //System.out.println("Invalid space");
                     board[x][y].addAll(temp);
                 }
             }            
         }
-        else
-            System.out.println("Invalid quantity");
+        //else
+            //System.out.println("Invalid quantity");
     }
 
     /**
@@ -362,11 +379,10 @@ public class board {
      * @param dir direction (up, down, left, right) to continue move
      * @param dropNum number of pieces to drop of in the current tile (if a stack dropNum >= 1, else dropNum = 1)
      */
-
     public void move(int x, int y, ArrayList<Integer> temp, int dir, int dropNum){
-        System.out.println("\ncontinue move\n");
+        //System.out.println("\ncontinue move\n");
 
-        System.out.println("input machine coords are "+x+" "+y+" going "+dir);
+        //System.out.println("input machine coords are "+x+" "+y+" going "+dir);
 
         ArrayList<Integer> target = new ArrayList<Integer>();
         int xChord=x;
@@ -401,7 +417,7 @@ public class board {
                     }
 
                     ArrayList<Integer> drop = dropOff(temp, dropNum);
-                    System.out.println("Hovering piece was added at machine chords "+xChord+" "+yChord);                    
+                    //System.out.println("Hovering piece was added at machine chords "+xChord+" "+yChord);                    
                     board[xChord][yChord].addAll(drop);
                     //System.out.println("moved");
 
@@ -415,12 +431,12 @@ public class board {
                     }
                 }
                 else{
-                    System.out.println("Invalid move");
+                    //System.out.println("Invalid move");
                     board[x][y].addAll(temp);
                 }
             }
             else{
-                System.out.println("Invalid space");
+                //System.out.println("Invalid space");
                 board[x][y].addAll(temp);
             }      
     }
@@ -436,7 +452,7 @@ public class board {
     public ArrayList<Integer> dropOff(ArrayList<Integer> temp, int quant){
 
         if(quant>temp.size()){
-            System.out.println("invalid quantity");
+            //System.out.println("invalid quantity");
             return null;
         }
         else{
@@ -522,14 +538,14 @@ public class board {
                 ArrayList<Integer> list = board[i][j];
 
                 if (!list.isEmpty()) {
-                    System.out.print("[");
+                   // System.out.print("[");
                     for (Integer item : list) {
-                        System.out.print(item + " ");
+                        //System.out.print(item + " ");
                     }
-                    System.out.print("]");
-                } else System.out.print("[]");
+                   // System.out.print("]");
+                } //else System.out.print("[]");
             }
-            System.out.println();
+            //System.out.println();
         }
     }
 
@@ -667,6 +683,9 @@ public class board {
         return winner;
     }
 
+    /**
+     * Checks which player has won a game
+     */
     public void checkWinCondition() {
         boolean whiteWins = checkRoadForPlayer("WHITE");
         boolean brownWins = checkRoadForPlayer("BROWN");
@@ -674,21 +693,27 @@ public class board {
         if (whiteWins && brownWins) {
             System.out.println("WHITE Wins, as the player who made the move wins."); //based on the rules
             isGameEnded = true;
-            winner = "WHITE wins!";
+            winner = "WHITE won!";
         } else if (whiteWins) {
             System.out.println("WHITE Wins by making a road.");
             isGameEnded = true;
-            winner = "WHITE wins!";
+            winner = "WHITE won!";
         } else if (brownWins) {
             System.out.println("BROWN Wins by making a road.");
             isGameEnded = true;
-            winner = "BROWN wins!";
+            winner = "BROWN won!";
         } 
     }
 
-
+    /**
+     * Responsible for the dropping off of pieces while moving a stack
+     * @param x
+     * @param y
+     * @param temp
+     * @param dir
+     */
     public void continueDropPiece(int x, int y, ArrayList<Integer> temp, int dir) {
-        System.out.println("Created");
+        //System.out.println("Created");
 
         JLabel moveLabel = new JLabel("HOW MANY PIECES DO YOU WANT TO DROP?");
         final JTextField textField = new JTextField();
@@ -713,7 +738,7 @@ public class board {
                 else{
                     
                     dropFrame.dispose();
-                    System.out.println("disposed");
+                    //System.out.println("disposed");
 
                     move(getChordsAndDir()[0], getChordsAndDir()[1], getHeldPieces(), getChordsAndDir()[2], drop);
                 }                
@@ -753,10 +778,10 @@ public class board {
         //System.out.println("this method ran: "+x+" "+y);
 
         if (currentPlayer.equals("WHITE")&&(num < 0 || num > 2)) {
-            System.out.println("Not browns turn");
+            //System.out.println("Not browns turn");
             return;
         } else if (currentPlayer.equals("BROWN")&&(num < 3 || num > 5)) {
-            System.out.println("Not whites turn");
+            //System.out.println("Not whites turn");
             return;
             }
 
@@ -765,7 +790,7 @@ public class board {
                 if(x-1==i && y-1==j){
 
                     if(!board[i][j].isEmpty()){
-                        System.out.println("Not an empty space");
+                        //System.out.println("Not an empty space");
                     }
                     else{
                         board[i][j].add(num);
@@ -778,7 +803,7 @@ public class board {
 
                         int inum= i+1;
                         int jnum=j+1;
-                        System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
+                        //System.out.println("added "+num+" at: ["+inum+"]["+jnum+"]");
 
                     }
                 }

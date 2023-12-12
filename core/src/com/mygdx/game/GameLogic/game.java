@@ -96,7 +96,6 @@ public class game {
         }
         board.checkState();
         togglePlayer();
-
     }
 
 

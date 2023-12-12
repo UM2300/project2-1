@@ -158,10 +158,10 @@ public class EvalFunc {
             int horiRightScoreBest = horiRight[0].size()*(horiRight[0].size()+1)*2;
             int horiLeftScoreBest = horiLeft[0].size()*(horiLeft[0].size()+1)*2;
 
-            int vertUpScoreGood = vertUp[0].size()*(vertUp[0].size()+1);
-            int vertDownScoreGood = vertDown[0].size()*(vertDown[0].size()+1);
-            int horiRightScoreGood = horiRight[0].size()*(horiRight[0].size()+1);
-            int horiLeftScoreGood = horiLeft[0].size()*(horiLeft[0].size()+1);
+            int vertUpScoreGood = vertUp[1].size()*(vertUp[1].size()+1);
+            int vertDownScoreGood = vertDown[1].size()*(vertDown[1].size()+1);
+            int horiRightScoreGood = horiRight[1].size()*(horiRight[1].size()+1);
+            int horiLeftScoreGood = horiLeft[1].size()*(horiLeft[1].size()+1);
 
             score=score+vertDownScoreBest+vertUpScoreBest+horiLeftScoreBest+horiRightScoreBest+vertUpScoreGood+vertDownScoreGood+horiLeftScoreGood+horiRightScoreGood;
 

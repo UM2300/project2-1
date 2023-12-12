@@ -28,10 +28,11 @@ public class MCTSAgent {
      * @return The best move as determined by the MCTS algorithm.
      */
 
-     /** Complexity: O(bh + m + d)
+     /** Complexity: O(bh + m + d + n)
       * bh is from selectPromisingNode
       * m is from simulateRandomPlayout
       * d is from backPropagate
+      * n is from expandNode
       */
     public MCTSNode findNextMove(board currentBoard) {
         MCTSNode rootNode = new MCTSNode(currentBoard); // Initialize the root node of the MCTS tree
@@ -119,7 +120,8 @@ public class MCTSAgent {
      * @param node The MCTS node to be expanded.
      * @param currentBoard The current game board state represented by the MCTS node.
      */
-    // Complexity: O(1)
+    // Complexity: O(n)
+    // n = the number of expanded nodes
     private void expandNode(MCTSNode node, board currentBoard) {
         ArrayList<board> legalMoves = new ArrayList<>();
         
@@ -162,7 +164,7 @@ public class MCTSAgent {
         }
     }
 
-    /**
+/**
      * Checks whether a given game state (represented by a board object) is already present in a list of existing game states.
      *
      * @param boards The list of existing game states to check against.
@@ -180,7 +182,7 @@ public class MCTSAgent {
         return false;
     }
 
-    /**
+/**
      * Simulates a random playout from the given MCTS (Monte Carlo Tree Search) node until a terminal game state is reached.
      * The simulation involves making random moves using a baseline agent until the game reaches a terminal state.
      * The evaluation of the terminal state is calculated using an evaluation function, and the score is assigned to the node.
@@ -214,7 +216,7 @@ public class MCTSAgent {
         return terminalScore; // Or return a combined score
     }
 
-    /**
+/**
      * Backpropagates the result of a simulated playout from a terminal state up the Monte Carlo Tree Search (MCTS) tree.
      * Starting from the given node, the method traverses up the tree to update the scores of all parent nodes based on the terminal state score.
      *
@@ -233,7 +235,7 @@ public class MCTSAgent {
         }
     }
 
-    /**
+/**
      * Checks whether two 2D arrays of ArrayLists representing game boards are equal.
      * Equality is determined based on the dimensions and the content of the ArrayLists in corresponding positions.
      *

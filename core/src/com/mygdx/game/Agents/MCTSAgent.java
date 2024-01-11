@@ -1,16 +1,18 @@
-package com.mygdx.game.GameLogic;
+package com.mygdx.game.Agents;
+
+import com.mygdx.game.GameLogic.board;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
+import static com.mygdx.game.Agents.HelperFunctions.boardsAreEqual;
+import static com.mygdx.game.Agents.HelperFunctions.containsBoard;
 
 /**
  * MCTSAgent class implements the Monte Carlo Tree Search (MCTS) algorithm for decision-making in games.
  * It uses an evaluation function to guide the tree search process and integrates a Baseline_Agent for random move generation during simulations.
  */
 public class MCTSAgent {
-    private final int MAX_ITERATIONS = 10; // Maximum number of iterations for the MCTS algorithm
-
-    private int maxPiece=3;
+    private int maxPiece = 3;
 
     public void setMaxPiece(int maxPiece){
         this.maxPiece=maxPiece;
@@ -32,30 +34,31 @@ public class MCTSAgent {
       * bh is from selectPromisingNode
       * m is from simulateRandomPlayout
       * d is from backPropagate
-      * n is from expandNode
       */
-    public MCTSNode findNextMove(board currentBoard) {
-        MCTSNode rootNode = new MCTSNode(currentBoard); // Initialize the root node of the MCTS tree
-        rootNode.setParent(null);
+     public MCTSNode findNextMove(board currentBoard) {
+         MCTSNode rootNode = new MCTSNode(currentBoard);
+         rootNode.setParent(null);
 
-        for (int i = 0; i < MAX_ITERATIONS; i++) {
-            MCTSNode promisingNode = selectPromisingNode(rootNode); // Select the most promising node
-            if (!promisingNode.getGameState().isGameEnded()) {
-                expandNode(promisingNode, currentBoard);  // Expand the selected node, (artur added currentBoard)
-            }
+         long startTime = System.currentTimeMillis();
+         // Time limit in milliseconds (seconds = TIME_LIMIT/1000)
+         long TIME_LIMIT = 10000;
+         while (System.currentTimeMillis() - startTime < TIME_LIMIT) {
+             MCTSNode promisingNode = selectPromisingNode(rootNode);
+             if (!promisingNode.getGameState().isGameEnded()) {
+                 expandNode(promisingNode, currentBoard);
+             }
 
+             MCTSNode nodeToExplore = promisingNode;
+             if (!promisingNode.getChildren().isEmpty()) {
+                 nodeToExplore = promisingNode.getRandomChildNode();
+             }
 
-            MCTSNode nodeToExplore = promisingNode;
-            if (!promisingNode.getChildren().isEmpty()) {
-                nodeToExplore = promisingNode.getRandomChildNode();  // Select a random child node for exploration
-            }
+             int playoutResult = simulateRandomPlayout(nodeToExplore);
+             backPropagate(nodeToExplore, playoutResult);
+         }
 
-            int playoutResult = simulateRandomPlayout(nodeToExplore);  // Simulate a random playout from the selected node
-            backPropagate(nodeToExplore, playoutResult);  // Update the tree based on the simulation result
-        }
-
-        return rootNode.getChildWithMaxScore(); // Return the child of the root node with the highest score
-    }
+         return rootNode.getChildWithMaxScore();
+     }
 
 
     /**
@@ -69,9 +72,9 @@ public class MCTSAgent {
       /**Complexity: O(bh)
      * b = max number of children for any node
      * h = the height of the tree
-     */ 
+     */
     private MCTSNode selectPromisingNode(MCTSNode rootNode) {
-        
+
         MCTSNode node = rootNode;
 
         int childNum=node.getChildren().size();
@@ -96,7 +99,7 @@ public class MCTSAgent {
      /**Complexity: O(bh)
      * b = max number of children for any node
      * h = the height of the tree
-     */ 
+     */
     private MCTSNode findBestNodeWithEvalFunc(MCTSNode node) {
         int maxScore = Integer.MIN_VALUE;
         MCTSNode bestNode = null;
@@ -124,7 +127,7 @@ public class MCTSAgent {
     // n = the number of expanded nodes
     private void expandNode(MCTSNode node, board currentBoard) {
         ArrayList<board> legalMoves = new ArrayList<>();
-        
+
 
         board currentState = node.getGameState();
 
@@ -156,7 +159,7 @@ public class MCTSAgent {
 
             for (int i = 0; i < legalMoves.size(); i++) {
                 board nextState = legalMoves.get(i);
-                MCTSNode newNode = new MCTSNode(nextState); 
+                MCTSNode newNode = new MCTSNode(nextState);
                 newNode.setParent(node);
                 newNode.setExpandedNodeScore(new EvalFunc().evaluation(nextState));
                 node.addChild(newNode);
@@ -164,23 +167,7 @@ public class MCTSAgent {
         }
     }
 
-/**
-     * Checks whether a given game state (represented by a board object) is already present in a list of existing game states.
-     *
-     * @param boards The list of existing game states to check against.
-     * @param nextState The game state to check for existence in the list.
-     * @return true if the given game state is found in the list, false otherwise.
-     */
-    // Complexity: O(n)
-    // n is the number of elements in the boards list
-    private boolean containsBoard(ArrayList<board> boards, board nextState) {
-        for (board existingBoard : boards) {
-            if (existingBoard.equals(nextState)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
 /**
      * Simulates a random playout from the given MCTS (Monte Carlo Tree Search) node until a terminal game state is reached.
@@ -199,7 +186,7 @@ public class MCTSAgent {
         String currentPlayer = clonedBoard.getCurrentPlayer();
 
         // Continue simulation to terminal state
-        if (!clonedBoard.isGameEnded()) { 
+        if (!clonedBoard.isGameEnded()) {
             do {
                 //clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);
@@ -224,7 +211,7 @@ public class MCTSAgent {
      * @param terminalStateScore The score obtained from the terminal state reached during the simulation.
      */
     // Complexity: O(d)
-    // d is the depth of the node in the MCTS tree   
+    // d is the depth of the node in the MCTS tree
     private void backPropagate(MCTSNode nodeToExplore, int terminalStateScore) {
         MCTSNode tempNode = nodeToExplore;
         while (tempNode != null) {
@@ -235,31 +222,9 @@ public class MCTSAgent {
         }
     }
 
-/**
-     * Checks whether two 2D arrays of ArrayLists representing game boards are equal.
-     * Equality is determined based on the dimensions and the content of the ArrayLists in corresponding positions.
-     *
-     * @param board1 The first 2D array representing a game board.
-     * @param board2 The second 2D array representing another game board for comparison.
-     * @return true if the dimensions and content of corresponding ArrayLists in both boards are equal, false otherwise.
-     */
-    // Complexity: O(1)
-    // As stated before we are looping over a nxn board where n is always 5 and remains unchanged hence O(1) not O(n^2)
-    public boolean boardsAreEqual(ArrayList<Integer>[][] board1, ArrayList<Integer>[][] board2){
 
-        if (board1.length != board2.length || board1[0].length != board2[0].length) {
-            return false;
-        }
 
-        for (int i = 0; i < board1.length; i++) {
-            for (int j = 0; j < board1[0].length; j++) {
-                if (!board1[i][j].equals(board2[i][j])) {
-                    return false;
-                }
-            }
-        }
 
-        return true;
-    }
+
 
 }

@@ -4,16 +4,13 @@ import javax.swing.*;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import com.mygdx.game.GameLogic.Baseline_Agent;
-import com.mygdx.game.GameLogic.MCTSAgent;
+import com.mygdx.game.Agents.Baseline_Agent;
+import com.mygdx.game.Agents.MCTSAgent;
 import com.mygdx.game.GameLogic.board;
-import com.mygdx.game.GameLogic.game;
-import com.mygdx.game.GameLogic.MCTSAgent;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
  */
 
 public class TakGame2D {
-
     private JButton colorButton, menuOption;
     private final ImageIcon whiteFlatStone = loadAndResizeImage("assets/WhitePiece.png", 0.1);
     private final ImageIcon whiteStandingStone = loadAndResizeImage("assets/WhiteStanding.png", 0.1);

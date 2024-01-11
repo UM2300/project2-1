@@ -1,4 +1,6 @@
-package com.mygdx.game.GameLogic;
+package com.mygdx.game.Agents;
+import com.mygdx.game.GameLogic.board;
+
 import java.util.ArrayList;
 
 /**

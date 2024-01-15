@@ -1,6 +1,8 @@
 # project2-1
 
 README
+
+-> First of all run "pip install -r requirements.txt" in IDE terminal.
 ->Run TakGame2D to test the second version of the game.
     project2-1\core\src\com\mygdx\game\GUI\TakGame2D.java
 

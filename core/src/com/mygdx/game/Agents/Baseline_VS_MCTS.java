@@ -1,5 +1,7 @@
 package com.mygdx.game.Agents;
 
+import java.util.Arrays;
+
 import com.mygdx.game.GameLogic.board;
 
 public class Baseline_VS_MCTS {
@@ -43,6 +45,7 @@ public class Baseline_VS_MCTS {
                 break; // Exit the loop if the game has ended
             }
         }
+        logicBoard.checkFinalState();
     }
     
     public static void main(String[] args) {

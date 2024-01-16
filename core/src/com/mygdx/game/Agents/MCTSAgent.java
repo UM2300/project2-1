@@ -41,7 +41,7 @@ public class MCTSAgent {
 
          long startTime = System.currentTimeMillis();
          // Time limit in milliseconds (seconds = TIME_LIMIT/1000)
-         long TIME_LIMIT = 20000;
+         long TIME_LIMIT = 10000;
          while (System.currentTimeMillis() - startTime < TIME_LIMIT) {
              MCTSNode promisingNode = selectPromisingNode(rootNode);
              if (!promisingNode.getGameState().isGameEnded()) {

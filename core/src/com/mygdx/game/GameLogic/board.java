@@ -549,6 +549,27 @@ public class board {
         }
     }
 
+    /** Checks the final state of the game board 
+    */
+    public void checkFinalState() {
+        System.out.println("Final Game State: ");
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                ArrayList<Integer> list = board[i][j];
+
+                if (!list.isEmpty()) {
+                    System.out.print("[");
+                    for (Integer item : list) {
+                        System.out.print(item + " ");
+                    }
+                    System.out.print("]");
+                } else System.out.print("[  ]");
+            }
+            System.out.println();
+        }
+    }
+
+
     /**
      * Checks if the board is full, ie if a player has used up all their pieces or if there are no more empty tiles.
      * 

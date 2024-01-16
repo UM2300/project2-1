@@ -593,14 +593,14 @@ public class board {
                     }
                 }
             }
-            if (wCounter > bCounter) 
-                System.out.println("White Wins.");
-            else if (wCounter < bCounter) 
-                System.out.println("Brown Wins.");
-            else {
-                System.out.println("It's a Draw.");
-                winner = "It's a Draw";
-            }
+            // if (wCounter > bCounter) 
+            //     System.out.println("");
+            // else if (wCounter < bCounter) 
+            //     System.out.println("");
+            // else {
+            //     System.out.println("");
+            //     winner = "It's a Draw";
+            // }
             isGameEnded = true;
         }
     }

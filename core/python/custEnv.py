@@ -95,7 +95,6 @@ class TakEnv(gym.Env):
 
         return self.state, reward, done, {}
 
-
     def calculate_reward(self, player):
         # Implement your reward calculation logic
         # Return a scalar value representing the reward
@@ -113,35 +112,82 @@ class TakEnv(gym.Env):
                 elif BoardState[x][y] > 2:
                     brownscore=brownscore+1
 
-        
-        if player=="white":
+
+        if player=="brown":
             whitescore=whitescore*-1
         else:
             brownscore=brownscore*-1
-                
+
         return whitescore+brownscore
 
 
     def is_game_over(self):
-
         print("checking")
-        BoardState=self.state.reshape((5,5))
-
-        pieceCount=0
-
-        for x in range(5):
-            for y in range(5):
-
-                if(BoardState[x][y]==-1):
-                    print("maybe")
-                else:
-                    pieceCount=pieceCount+1
-
-        print("ended")
-
-        if pieceCount>=10:
+        BoardState = self.state.reshape((5, 5))
+    # Check if the board is full
+        if np.all(BoardState != -1):
+            print("board is full")
+            self.print_game_state()
             return True
-        else:
+    # Check for road creation
+        if self.check_road_creation():
+            print("A road was created")
+            self.print_game_state()
+            return True
+        return False
+
+
+    def check_road_creation(self):
+        BoardState = self.state.reshape((5, 5))
+        for player_pieces in [[0, 2], [3, 5]]:  # Including stones and capstones for white and brown
+            if self.has_player_formed_road(BoardState, player_pieces):
+                return True
+        return False
+
+    def has_player_formed_road(self, board, player_pieces):
+        for row in range(5):
+            if self.is_continuous_path(board, (row, 0), player_pieces, 'horizontal') or \
+                    self.is_continuous_path(board, (0, row), player_pieces, 'vertical'):
+                return True
+        return False
+
+    def is_continuous_path(self, board, start, player_pieces, direction):
+        visited = set()
+        return self.dfs(board, start, player_pieces, direction, visited)
+
+
+    def dfs(self, board, position, player_pieces, direction, visited):
+        x, y = position
+         # Check if position is out of bounds or already visited
+        if x < 0 or x >= 5 or y < 0 or y >= 5 or (x, y) in visited or board[x][y] not in player_pieces:
             return False
-        
+
+         # Mark the current position as visited
+        visited.add((x, y))
+
+    # Check if the edge of the board is reached in the given direction
+        if (direction == 'horizontal' and y == 4) or (direction == 'vertical' and x == 4):
+            return True
+
+    # Explore adjacent cells based on the direction
+        if direction == 'horizontal':
+        # Check right, above, and below
+            return self.dfs(board, (x, y + 1), player_pieces, direction, visited) or \
+                self.dfs(board, (x + 1, y), player_pieces, direction, visited) or \
+                self.dfs(board, (x - 1, y), player_pieces, direction, visited)
+        elif direction == 'vertical':
+        # Check below, right, and left
+            return self.dfs(board, (x + 1, y), player_pieces, direction, visited) or \
+                self.dfs(board, (x, y + 1), player_pieces, direction, visited) or \
+                self.dfs(board, (x, y - 1), player_pieces, direction, visited)
+
+    def print_game_state(self):
+        # Reshape the state into a 5x5 matrix and print it
+        board_size = int(np.sqrt(self.board_size))
+        board_matrix = self.state.reshape((board_size, board_size))
+        print("\nGame Board State:")
+        print(board_matrix)
+
+
+
 

@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-
+import time
 import keras
 
 from keras.layers import Dense
@@ -115,9 +115,10 @@ agentBrown = DQNAgent(state_size, action_size)
 
 current_player = "white"
 
-num_episodes = 10
+num_episodes = 2
 
 for episode in range(num_episodes):
+    start_time = time.time()
     state = env.reset()
     state = np.reshape(state, [1, state_size])
 
@@ -145,5 +146,11 @@ for episode in range(num_episodes):
         else:
             current_player = "white"
 
+
+
         # Set the next state as the current state for the next iteration
         state = next_state
+
+    end_time = time.time()  # End the timer
+    duration = end_time - start_time  # Calculate the duration
+    print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode

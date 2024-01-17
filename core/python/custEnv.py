@@ -2,6 +2,7 @@ import gym
 from gym import spaces
 import numpy as np
 import actionConv
+import rewardHelpers
 
 class TakEnv(gym.Env):
     def __init__(self, board_size=25):
@@ -99,6 +100,7 @@ class TakEnv(gym.Env):
         # Implement your reward calculation logic
         # Return a scalar value representing the reward
 
+
         whitescore=0
         brownscore=0
 
@@ -132,7 +134,13 @@ class TakEnv(gym.Env):
                 visited = [[False] * 5 for _ in range(5)]
 
                 if(x==0 or x==4 or y==0 or y==4):
-                    ws, wb, wbb, bs, bb, bbw = self.road_Score(player, visited, x, y)
+
+                    BoardState=self.state.reshape((5,5))
+
+                    #ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
+
+                    ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
+
 
                     ws*=3
                     wb*=2
@@ -253,237 +261,7 @@ class TakEnv(gym.Env):
 
         return above or below or left or right
     
-
-
-    def road_Score(self, player, visited, x, y):
-
-        print("new scoring")
-
-        BoardState=self.state.reshape((5,5))
-
-        whiteStraight=0
-        whiteBranch=0
-        whiteBlockedBrown=0
-
-        brownStraight=0
-        brownBranch=0
-        brownBlockedWhite=0
-
-        prevRoadChords=[]
-
-        print("check 1 " + str(x) +" "+ str(y))
-        print("Board State is " + str(BoardState[x][y]))
-
-        if(x==0):
-
-            if(BoardState[x][y]==0 or BoardState[x][y]==2):
-                whiteStraight += 1
-
-                while (self.checkAdj(x,y,"white",visited) and x!=4):
-                    
-                    print("while loop")
-
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x+1][y]==0 or BoardState[x+1][y]==2):
-                        x=x+1
-                        whiteStraight += 1
-                    elif(y<4 and (BoardState[x][y+1]==0 or BoardState[x][y+1]==2)):
-                        y=y+1
-                        whiteBranch+=1
-                    elif(y>0 and (BoardState[x][y-1]==0 or BoardState[x][y-1]==2)):
-                        y=y-1
-                        whiteBranch+=1
-                    elif(BoardState[x+1][y]==4):
-                        brownBlockedWhite+=1
-
-            elif(BoardState[x][y]==3 or BoardState[x][y]==5):
-                brownStraight += 1
-
-                while (self.checkAdj(x,y,"brown",visited) and x!=4):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x+1][y]==3 or BoardState[x+1][y]==5):
-                        x=x+1
-                        brownStraight += 1
-                    elif(y<4 and (BoardState[x][y+1]==3 or BoardState[x][y+1]==5)):
-                        y=y+1
-                        brownBranch+=1
-                    elif(y>0 and (BoardState[x][y-1]==3 or BoardState[x][y-1]==5)):
-                        y=y-1
-                        brownBranch+=1
-                    elif(BoardState[x+1][y]==1):
-                        whiteBlockedBrown+=1
-
-        elif(x==4):
-
-            if(BoardState[x][y]==0 or BoardState[x][y]==2):
-                whiteStraight += 1
-
-                while (self.checkAdj(x,y,"white",visited) and x!=0):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x-1][y]==0 or BoardState[x-1][y]==2):
-                        x=x-1
-                        whiteStraight += 1
-                    elif(y<4 and (BoardState[x][y+1]==0 or BoardState[x][y+1]==2)):
-                        y=y+1
-                        whiteBranch+=1
-                    elif(y>0 and (BoardState[x][y-1]==0 or BoardState[x][y-1]==2)):
-                        y=y-1
-                        whiteBranch+=1
-                    elif(BoardState[x-1][y]==4):
-                        brownBlockedWhite+=1
-
-            elif(BoardState[x][y]==3 or BoardState[x][y]==5):
-                brownStraight += 1
-
-                while (self.checkAdj(x,y,"brown",visited) and x!=0):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x-1][y]==3 or BoardState[x-1][y]==5):
-                        x=x-1
-                        brownStraight += 1
-                    elif(y<4 and (BoardState[x][y+1]==3 or BoardState[x][y+1]==5)):
-                        y=y+1
-                        brownBranch+=1
-                    elif(y>0 and (BoardState[x][y-1]==3 or BoardState[x][y-1]==5)):
-                        y=y-1
-                        brownBranch+=1
-                    elif(BoardState[x-1][y]==1):
-                        whiteBlockedBrown+=1
-
-        elif(y==0):
-
-            if(BoardState[x][y]==0 or BoardState[x][y]==2):
-                whiteStraight += 1
-
-                while (self.checkAdj(x,y,"white",visited) and y!=4):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x][y+1]==0 or BoardState[x][y+1]==2):
-                        y=y+1
-                        whiteStraight += 1
-                    elif(x<4 and (BoardState[x+1][y]==0 or BoardState[x+1][y]==2)):
-                        x=x+1
-                        whiteBranch+=1
-                    elif(x>0 and (BoardState[x-1][y]==0 or BoardState[x-1][y]==2)):
-                        x=x-1
-                        whiteBranch+=1
-                    elif(BoardState[x][y+1]==4):
-                        brownBlockedWhite+=1
-
-            elif(BoardState[x][y]==3 or BoardState[x][y]==5):
-                brownStraight += 1
-
-                while (self.checkAdj(x,y,"brown",visited) and x!=0):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x][y+1]==3 or BoardState[x][y+1]==5):
-                        y=y+1
-                        brownStraight += 1
-                    elif(x<4 and (BoardState[x+1][y]==3 or BoardState[x+1][y]==5)):
-                        x=x+1
-                        brownBranch+=1
-                    elif(x>0 and (BoardState[x-1][y]==3 or BoardState[x-1][y]==5)):
-                        x=x-1
-                        brownBranch+=1
-                    elif(BoardState[x][y+1]==1):
-                        whiteBlockedBrown+=1
-
-        elif(y==4):
-
-            if(BoardState[x][y]==0 or BoardState[x][y]==2):
-                whiteStraight += 1
-
-                while (self.checkAdj(x,y,"white",visited) and y!=0):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x][y-1]==0 or BoardState[x][y-1]==2):
-                        y=y-1
-                        whiteStraight += 1
-                    elif(x<4 and (BoardState[x+1][y]==0 or BoardState[x+1][y]==2)):
-                        x=x+1
-                        whiteBranch+=1
-                    elif(x>0 and (BoardState[x-1][y]==0 or BoardState[x-1][y]==2)):
-                        x=x-1
-                        whiteBranch+=1
-                    elif(BoardState[x][y-1]==4):
-                        brownBlockedWhite+=1
-
-            elif(BoardState[x][y]==3 or BoardState[x][y]==5):
-                brownStraight += 1
-
-                while (self.checkAdj(x,y,"brown",visited) and x!=0):
-                    visited[x][y]=True
-                    prevRoadChords.append((x,y))
-
-                    if(BoardState[x][y-1]==3 or BoardState[x][y-1]==5):
-                        y=y-1
-                        brownStraight += 1
-                    elif(x<4 and (BoardState[x+1][y]==3 or BoardState[x+1][y]==5)):
-                        x=x+1
-                        brownBranch+=1
-                    elif(x>0 and (BoardState[x-1][y]==3 or BoardState[x-1][y]==5)):
-                        x=x-1
-                        brownBranch+=1
-                    elif(BoardState[x][y-1]==1):
-                        whiteBlockedBrown+=1
-
-
-            print("check 2")
-
-
-        ws2 = 0
-        wb2 = 0
-        wbb2 = 0
-        bs2 = 0
-        bb2 = 0
-        bbw2 = 0
-
-        if(whiteStraight>0):
-            for x, y in prevRoadChords:
-                oldX=x
-                oldY=y
-
-                whiteRoad=[0,2]
-                brownRoad=[3,5]
-
-                
-
-                if(BoardState[oldX][oldY] in whiteRoad):
-
-                    print("reached rec call")
-                
-                    if(0<=x+1<=4 and BoardState[x+1][y] in whiteRoad and visited[x+1][y]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x+1, y)
-                    elif(0<=x-1<=4 and BoardState[x-1][y] in whiteRoad and visited[x-1][y]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x-1, y)
-                    elif(0<=y+1<=4 and BoardState[x][y+1] in whiteRoad and visited[x][y+1]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x, y+1)
-                    elif(0<=y-1<=4 and BoardState[x][y-1] in whiteRoad and visited[x][y-1]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x, y-1)
-
-                elif(BoardState[oldX][oldY] in brownRoad):
-                    if(0<=x+1<=4 and BoardState[x+1][y] in brownRoad and visited[x+1][y]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x+1, y)
-                    elif(0<=x-1<=4 and BoardState[x-1][y] in brownRoad and visited[x-1][y]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x-1, y)
-                    elif(0<=y+1<=4 and BoardState[x][y+1] in brownRoad and visited[x][y+1]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x, y+1)
-                    elif(0<=y-1<=4 and BoardState[x][y-1] in brownRoad and visited[x][y-1]==False):
-                        ws2, wb2, wbb2, bs2, bb2, bbw2 = self.road_Score(player, visited, x, y-1)
-
-
-        print("end this scoring")
-        return whiteStraight+ws2, whiteBranch+wb2, whiteBlockedBrown+wbb2, brownStraight+bs2, brownBranch+bb2, brownBlockedWhite+bbw2
+   
 
 
 

@@ -22,51 +22,48 @@ class TakEnv(gym.Env):
 
     def reset(self):
         self.state = np.full(self.board_size, -1, dtype=np.int32)
+        self.white_capstone_placed = False
+        self.brown_capstone_placed = False
         return self.state.copy()
-    
+
     def is_action_allowed(self, player, action):
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
+        if pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
+            self.add_forbidden_action(action)
+            return False
+        elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
+            self.add_forbidden_action(action)
+            return False
+
         result = True
 
-        # Check if the action is placing a capstone (type 2 for white and type 5 for brown)
-        '''if action_type == 0 and (pieceType == 2 or pieceType == 5):
-            # Check if a capstone of the same type has already been placed
-            if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
-                result = False
-            else:
-                # Update the flag indicating that a capstone has been placed
-                if pieceType == 2:
-                    self.white_capstone_placed = True
-                elif pieceType == 5:
-                    self.brown_capstone_placed = True
-                # If a capstone is placed, remove the option to place another capstone
-                self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0]) '''
-        if(action_type==0):
-            if self.state[place1]!=-1:
+        if action_type == 0:
+            if self.state[place1] != -1:  # Check if the target tile is already occupied
                 result = False
             else:
                 result = True
-        else:
-            # For other action types, perform the existing checks
-            if action_type == 0:
-                if self.state[place1] != -1:
-                    result = False
-            elif action_type == 1:
-                if self.state[place1] == -1:
-                    result = False
-                elif self.state[place2] == 2 or self.state[place2] == 5:
-                    result = False
-                elif (player == "white" and self.state[place1] > 2):
-                    result = False
-                elif (player == "brown" and self.state[place1] < 3):
-                    result = False
+        elif action_type == 1:
+            if self.state[place1] == -1:
+                result = False
+            elif self.state[place2] == 2 or self.state[place2] == 5:
+                result = False
+            elif (player == "white" and self.state[place1] > 2):
+                result = False
+            elif (player == "brown" and self.state[place1] < 3):
+                result = False
+            elif self.state[place2] != -1:  # Check if the target tile is already occupied
+                result = False
+            else:
+                result = True
 
         if result == True:
             return True
         else:
             self.add_forbidden_action(action)
-            return False  
+            return False
+
+
     def get_all_actions(self):
         return list(range(self.action_space.n))
     
@@ -96,6 +93,10 @@ class TakEnv(gym.Env):
 
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
+        if pieceType == 2:
+            self.white_capstone_placed = True
+        elif pieceType == 5:
+            self.brown_capstone_placed = True
 
         if action_type==0:
             if 0<= place1 < self.board_size:

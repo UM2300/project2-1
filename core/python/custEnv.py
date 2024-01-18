@@ -96,14 +96,36 @@ class TakEnv(gym.Env):
 
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
+        if action_type == 0:
+            # Check if tile has a stone already
+            if self.state[place1] != -1:
+                # Find another free tile
+                new_place = np.where(self.state == -1)[0]
+                if len(new_place) > 0:
+                    place1 = new_place[0]
+                else:
+                    # No free tile is available, end the execution
+                    print("Time for stacks")
+                    return self.state, 0, True, {}
 
-        if action_type==0:
-            if 0<= place1 < self.board_size:
-                self.state[place1]=pieceType
-        elif action_type==1:
-            self.state[place2]=self.state[place1]
-            self.state[place1]=-1
+            # Update the state with the chosen action
+            self.state[place1] = pieceType
 
+        elif action_type == 1:
+            # Check if tile is empty or it's a capstone
+            if self.state[place1] == -1 or self.state[place2] == 2 or self.state[place2] == 5:
+                # Find another free tile
+                new_place = np.where(self.state == -1)[0]
+                if len(new_place) > 0:
+                    place1 = new_place[0]
+                else:
+                    # No free tile is available, end the execution
+                    print("Time for stacks")
+                    return self.state, 0, True, {}
+
+            # Update the state with the chosen action
+            self.state[place2] = self.state[place1]
+            self.state[place1] = -1
 
         reward = self.calculate_reward(player)
         done = self.is_game_over()

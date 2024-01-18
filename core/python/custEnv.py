@@ -51,20 +51,21 @@ class TakEnv(gym.Env):
                 result = False
             elif self.state[place2] == 2 or self.state[place2] == 5:
                 result = False
-            elif (player == "white" and self.state[place1] > 2):
+            elif (player == "white" and self.state[place1] > 2) or (player == "brown" and self.state[place1] < 3):
                 result = False
-            elif (player == "brown" and self.state[place1] < 3):
-                result = False
-            elif self.state[place2] != -1:  # Check if the target tile is already occupied
-                result = False
-            else:
-                result = True
 
-        if result == True:
+        if result:
+            # If the action is placing a capstone, update the respective flag
+            if pieceType == 2 and player == "white":
+                self.white_capstone_used = True
+            elif pieceType == 5 and player == "brown":
+                self.brown_capstone_used = True
             return True
         else:
             self.add_forbidden_action(action)
             return False
+
+
 
 
     def get_all_actions(self):

@@ -30,17 +30,15 @@ class TakEnv(gym.Env):
     def is_action_allowed(self, player, action):
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
-        if pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
-            self.add_forbidden_action(action)
-            return False
-        elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
-            self.add_forbidden_action(action)
-            return False
-
         result = True
-
         if action_type == 0:
             if self.state[place1] != -1:  # Check if the target tile is already occupied
+                result = False
+
+            
+            elif pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
+                result = False
+            elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
                 result = False
             else:
                 result = True
@@ -49,16 +47,15 @@ class TakEnv(gym.Env):
                 result = False
             elif self.state[place2] == 2 or self.state[place2] == 5:
                 result = False
-            elif (player == "white" and self.state[place1] > 2):
+            elif (player == "white" and self.state[place1] > 2) or (player == "brown" and self.state[place1] < 3):
                 result = False
-            elif (player == "brown" and self.state[place1] < 3):
-                result = False
-            elif self.state[place2] != -1:  # Check if the target tile is already occupied
-                result = False
-            else:
-                result = True
 
-        if result == True:
+        if result:
+            # If the action is placing a capstone, update the respective flag
+            if pieceType == 2 and player == "white":
+                self.white_capstone_used = True
+            elif pieceType == 5 and player == "brown":
+                self.brown_capstone_used = True
             return True
         else:
             self.add_forbidden_action(action)
@@ -148,17 +145,10 @@ class TakEnv(gym.Env):
 
         for x in range(5):
             for y in range(5):
-
                 visited = [[False] * 5 for _ in range(5)]
-
                 if(x==0 or x==4 or y==0 or y==4):
-
                     BoardState=self.state.reshape((5,5))
-
-                    #ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
-
                     ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
-
 
                     ws*=3
                     wb*=2
@@ -170,9 +160,6 @@ class TakEnv(gym.Env):
                     whitescore=whitescore+ws+wb+wbb
                     brownscore=brownscore+bs+bb+bbw
 
-                
-
-        
         if player=="brown":
             whitescore=whitescore*-1
         else:
@@ -290,6 +277,31 @@ class TakEnv(gym.Env):
             right=False
 
         return above or below or left or right
+    
+
+
+    def load_board_from_file(self, file_path):
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        # Process lines to create a board state
+        board_state = []
+        for line in lines:
+            row = [int(cell) for cell in line.strip().split()]
+            board_state.extend(row)
+
+        # Ensure that the board state has the correct length
+        expected_length = self.board_size * self.board_size
+        if len(board_state) != expected_length:
+            raise ValueError(f"Invalid board state length. Expected {expected_length}, got {len(board_state)}.")
+
+        # Convert the list to a NumPy array
+        board_vector = np.array(board_state, dtype=np.int32)
+
+        # Update the internal state
+        self.state = board_vector
+
+        return self.state.copy()
     
    
 

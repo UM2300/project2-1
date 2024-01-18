@@ -30,18 +30,18 @@ class TakEnv(gym.Env):
         result = True
 
         # Check if the action is placing a capstone (type 2 for white and type 5 for brown)
-        #if action_type == 0 and (pieceType == 2 or pieceType == 5):
+        '''if action_type == 0 and (pieceType == 2 or pieceType == 5):
             # Check if a capstone of the same type has already been placed
-        #    if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
-        #        result = False
-        #    else:
-        #        # Update the flag indicating that a capstone has been placed
-        #        if pieceType == 2:
-        #            self.white_capstone_placed = True
-        #        elif pieceType == 5:
-        #            self.brown_capstone_placed = True
-        #        # If a capstone is placed, remove the option to place another capstone
-        #        self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0])
+            if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
+                result = False
+            else:
+                # Update the flag indicating that a capstone has been placed
+                if pieceType == 2:
+                    self.white_capstone_placed = True
+                elif pieceType == 5:
+                    self.brown_capstone_placed = True
+                # If a capstone is placed, remove the option to place another capstone
+                self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0]) '''
         if(action_type==0):
             if self.state[place1]!=-1:
                 result = False

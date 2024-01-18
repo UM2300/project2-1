@@ -1,6 +1,8 @@
 package com.mygdx.game.Agents;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
@@ -42,17 +44,35 @@ public class callPython {
     }
 
     private static void callPythonML() {
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py"); 
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py");
         processBuilder.redirectErrorStream(true);
 
         try {
             Process process = processBuilder.start();
 
-            try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = processReader.readLine()) != null) {
+            try (Scanner processScanner = new Scanner(process.getInputStream())) {
+                StringBuilder outputBuilder = new StringBuilder();
+                boolean captureOutput = false;
+
+                while (processScanner.hasNextLine()) {
+                    String line = processScanner.nextLine();
+                    outputBuilder.append(line).append("\n");
                     System.out.println(line);
+
+                    // Check if the line contains the start of the relevant information
+                    if (line.contains("Game Board State:")) {
+                        captureOutput = true;
+                    }
+
+                    // Stop capturing output after the end of the relevant information
+                    if (line.contains("Episode") && line.contains("completed in")) {
+                        captureOutput = false;
+                        break;  // Exit the loop after capturing the relevant part
+                    }
                 }
+
+                // Save the captured output to a file (you can modify the filename as needed)
+                saveOutputToFile(outputBuilder.toString(), "output.txt");
             }
 
             int exitCode = process.waitFor();
@@ -61,4 +81,14 @@ public class callPython {
             e.printStackTrace();
         }
     }
+
+    private static void saveOutputToFile(String output, String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(output);
+            System.out.println("Output saved to " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

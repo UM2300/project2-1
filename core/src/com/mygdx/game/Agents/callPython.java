@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 public class callPython {
     public static void main(String[] args) throws Exception {
         //StringBuilder result = new StringBuilder("0");
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\src\\com\\mygdx\\game\\Agents\\python_test.py");
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py");
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();

@@ -16,41 +16,57 @@ class TakEnv(gym.Env):
         self.board_size=board_size
         self.state=np.full(board_size, -1, dtype=np.int32)
         self.forbidden_actions=[]
+        # Keep track of the number of capstones placed for each player
+        self.white_capstone_placed = False
+        self.brown_capstone_placed = False
 
     def reset(self):
         self.state = np.full(self.board_size, -1, dtype=np.int32)
         return self.state.copy()
     
     def is_action_allowed(self, player, action):
-
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
         result = True
-        
+
+        # Check if the action is placing a capstone (type 2 for white and type 5 for brown)
+        #if action_type == 0 and (pieceType == 2 or pieceType == 5):
+            # Check if a capstone of the same type has already been placed
+        #    if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
+        #        result = False
+        #    else:
+        #        # Update the flag indicating that a capstone has been placed
+        #        if pieceType == 2:
+        #            self.white_capstone_placed = True
+        #        elif pieceType == 5:
+        #            self.brown_capstone_placed = True
+        #        # If a capstone is placed, remove the option to place another capstone
+        #        self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0])
         if(action_type==0):
             if self.state[place1]!=-1:
                 result = False
             else:
                 result = True
-            
-        elif(action_type==1):
-            if self.state[place1]==-1:
-                result = False
-            elif self.state[place2]==2 or self.state[place2]==5:
-                result = False
-            elif (player=="white" and self.state[place1] > 2):
-                result = False
-            elif (player=="brown" and self.state[place1] < 3):
-                result = False
-            else: 
-                result = True
+        else:
+            # For other action types, perform the existing checks
+            if action_type == 0:
+                if self.state[place1] != -1:
+                    result = False
+            elif action_type == 1:
+                if self.state[place1] == -1:
+                    result = False
+                elif self.state[place2] == 2 or self.state[place2] == 5:
+                    result = False
+                elif (player == "white" and self.state[place1] > 2):
+                    result = False
+                elif (player == "brown" and self.state[place1] < 3):
+                    result = False
 
-        if result==True:
+        if result == True:
             return True
         else:
             self.add_forbidden_action(action)
-            return False
-            
+            return False  
     def get_all_actions(self):
         return list(range(self.action_space.n))
     

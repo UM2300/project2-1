@@ -30,18 +30,18 @@ class TakEnv(gym.Env):
         result = True
 
         # Check if the action is placing a capstone (type 2 for white and type 5 for brown)
-        #if action_type == 0 and (pieceType == 2 or pieceType == 5):
+        '''if action_type == 0 and (pieceType == 2 or pieceType == 5):
             # Check if a capstone of the same type has already been placed
-        #    if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
-        #        result = False
-        #    else:
-        #        # Update the flag indicating that a capstone has been placed
-        #        if pieceType == 2:
-        #            self.white_capstone_placed = True
-        #        elif pieceType == 5:
-        #            self.brown_capstone_placed = True
-        #        # If a capstone is placed, remove the option to place another capstone
-        #        self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0])
+            if (pieceType == 2 and self.white_capstone_placed) or (pieceType == 5 and self.brown_capstone_placed):
+                result = False
+            else:
+                # Update the flag indicating that a capstone has been placed
+                if pieceType == 2:
+                    self.white_capstone_placed = True
+                elif pieceType == 5:
+                    self.brown_capstone_placed = True
+                # If a capstone is placed, remove the option to place another capstone
+                self.forbidden_actions.extend([i for i in range(self.action_space.n) if actionConv.conversion(i, player)[0] == 0]) '''
         if(action_type==0):
             if self.state[place1]!=-1:
                 result = False
@@ -96,36 +96,14 @@ class TakEnv(gym.Env):
 
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
-        if action_type == 0:
-            # Check if tile has a stone already
-            if self.state[place1] != -1:
-                # Find another free tile
-                new_place = np.where(self.state == -1)[0]
-                if len(new_place) > 0:
-                    place1 = new_place[0]
-                else:
-                    # No free tile is available, end the execution
-                    print("Time for stacks")
-                    return self.state, 0, True, {}
 
-            # Update the state with the chosen action
-            self.state[place1] = pieceType
+        if action_type==0:
+            if 0<= place1 < self.board_size:
+                self.state[place1]=pieceType
+        elif action_type==1:
+            self.state[place2]=self.state[place1]
+            self.state[place1]=-1
 
-        elif action_type == 1:
-            # Check if tile is empty or it's a capstone
-            if self.state[place1] == -1 or self.state[place2] == 2 or self.state[place2] == 5:
-                # Find another free tile
-                new_place = np.where(self.state == -1)[0]
-                if len(new_place) > 0:
-                    place1 = new_place[0]
-                else:
-                    # No free tile is available, end the execution
-                    print("Time for stacks")
-                    return self.state, 0, True, {}
-
-            # Update the state with the chosen action
-            self.state[place2] = self.state[place1]
-            self.state[place1] = -1
 
         reward = self.calculate_reward(player)
         done = self.is_game_over()

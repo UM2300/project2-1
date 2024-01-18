@@ -44,35 +44,44 @@ public class callPython {
     }
 
     private static void callPythonML() {
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py");
-        processBuilder.redirectErrorStream(true);
+        // Call main.py
+        ProcessBuilder mainProcessBuilder = new ProcessBuilder("python", "core\\python\\main.py");
+        mainProcessBuilder.redirectErrorStream(true);
 
         try {
-            Process process = processBuilder.start();
+            Process process = mainProcessBuilder.start();
 
-            try (Scanner processScanner = new Scanner(process.getInputStream())) {
-                StringBuilder outputBuilder = new StringBuilder();
-                boolean captureOutput = false;
-
-                while (processScanner.hasNextLine()) {
-                    String line = processScanner.nextLine();
-                    outputBuilder.append(line).append("\n");
+            try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = processReader.readLine()) != null) {
                     System.out.println(line);
-
-                    // Check if the line contains the start of the relevant information
-                    if (line.contains("Game Board State:")) {
-                        captureOutput = true;
-                    }
-
-                    // Stop capturing output after the end of the relevant information
-                    if (line.contains("Episode") && line.contains("completed in")) {
-                        captureOutput = false;
-                        break;  // Exit the loop after capturing the relevant part
-                    }
                 }
-
-                // Save the captured output to a file (you can modify the filename as needed)
-                saveOutputToFile(outputBuilder.toString(), "output.txt");
+            // Call board_matrix method from custEnv.py
+            ProcessBuilder boardMatrixProcessBuilder = new ProcessBuilder("python", "core\\python\\custEnv.py", "print_game_state");
+            boardMatrixProcessBuilder.redirectErrorStream(true);
+    
+            try {
+                Process boardMatrixProcess = boardMatrixProcessBuilder.start();
+    
+                try (BufferedReader processReader2 = new BufferedReader(new InputStreamReader(boardMatrixProcess.getInputStream()));
+                     BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+    
+                    String line2;
+    
+                    while ((line2 = processReader2.readLine()) != null) {
+                        System.out.println(line2);
+                        writer.write(line2);
+                        writer.newLine();
+                    }
+    
+                    System.out.println("Output saved to output.txt");
+                }
+    
+                int boardMatrixExitCode = boardMatrixProcess.waitFor();
+                System.out.println("Otput save exited with code: " + boardMatrixExitCode);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
             }
 
             int exitCode = process.waitFor();
@@ -80,15 +89,7 @@ public class callPython {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-    }
 
-    private static void saveOutputToFile(String output, String filename) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write(output);
-            System.out.println("Output saved to " + filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 

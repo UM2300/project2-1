@@ -29,17 +29,20 @@ class TakEnv(gym.Env):
     def is_action_allowed(self, player, action):
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
-        if pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
-            self.add_forbidden_action(action)
-            return False
-        elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
-            self.add_forbidden_action(action)
-            return False
-
         result = True
+
+        
+
+        
 
         if action_type == 0:
             if self.state[place1] != -1:  # Check if the target tile is already occupied
+                result = False
+
+            
+            elif pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
+                result = False
+            elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
                 result = False
             else:
                 result = True

@@ -23,7 +23,7 @@ def road_Score(player, visited, x, y, BoardState):
 
                 while (checkAdj(x,y,"white",visited, BoardState) and x!=4):
                     
-                    print("while loop")
+                    print("loop x==0 white")
 
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
@@ -44,6 +44,9 @@ def road_Score(player, visited, x, y, BoardState):
                 brownStraight += 1
 
                 while (checkAdj(x,y,"brown",visited, BoardState) and x!=4):
+
+                    print("loop x==0 brown")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -65,6 +68,9 @@ def road_Score(player, visited, x, y, BoardState):
                 whiteStraight += 1
 
                 while (checkAdj(x,y,"white",visited, BoardState) and x!=0):
+
+                    print("x==4 white")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -84,6 +90,9 @@ def road_Score(player, visited, x, y, BoardState):
                 brownStraight += 1
 
                 while (checkAdj(x,y,"brown",visited, BoardState) and x!=0):
+
+                    print("x==4 brown")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -105,6 +114,9 @@ def road_Score(player, visited, x, y, BoardState):
                 whiteStraight += 1
 
                 while (checkAdj(x,y,"white",visited, BoardState) and y!=4):
+                    
+                    print("y==0 white")
+                    
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -123,7 +135,10 @@ def road_Score(player, visited, x, y, BoardState):
             elif(BoardState[x][y]==3 or BoardState[x][y]==5):
                 brownStraight += 1
 
-                while (checkAdj(x,y,"brown",visited, BoardState) and x!=0):
+                while (checkAdj(x,y,"brown",visited, BoardState) and y!=4):
+
+                    print("y==0 brown")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -145,6 +160,9 @@ def road_Score(player, visited, x, y, BoardState):
                 whiteStraight += 1
 
                 while (checkAdj(x,y,"white",visited, BoardState) and y!=0):
+
+                    print("y==4 white")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 
@@ -163,7 +181,10 @@ def road_Score(player, visited, x, y, BoardState):
             elif(BoardState[x][y]==3 or BoardState[x][y]==5):
                 brownStraight += 1
 
-                while (checkAdj(x,y,"brown",visited, BoardState) and x!=0):
+                while (checkAdj(x,y,"brown",visited, BoardState) and y!=0):
+
+                    print("y==4 brown")
+
                     visited[x][y]=True
                     prevRoadChords.append((x,y))
 

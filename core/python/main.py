@@ -37,7 +37,7 @@ class DQNAgent:
 
     def act(self, state, player):
         attempt_counter = 0
-        max_attempts = 100
+        max_attempts = 300
 
         if np.random.rand() <= self.epsilon:
             chosenAction = np.random.choice(self.action_size)
@@ -48,7 +48,7 @@ class DQNAgent:
 
             if attempt_counter >= max_attempts:
                     # Handle no-action-available scenario
-                return None  # or appropriate action/signaling
+                return np.random.choice(self.action_size) # or appropriate action/signaling
 
             return chosenAction
 
@@ -117,8 +117,9 @@ current_player = "white"
 
 num_episodes = 10
 
+start_time1 = time.time()
 for episode in range(num_episodes):
-    start_time = time.time()
+    start_time2 = time.time()
     state = env.reset()
     state = np.reshape(state, [1, state_size])
 
@@ -151,6 +152,11 @@ for episode in range(num_episodes):
         # Set the next state as the current state for the next iteration
         state = next_state
 
-    end_time = time.time()  # End the timer
-    duration = end_time - start_time  # Calculate the duration
-    print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
+        episode_end_time = time.time()  # End timer for the episode
+        episode_duration = episode_end_time - start_time2
+        print(f"Episode {episode + 1} completed in {episode_duration:.2f} seconds")
+
+end_time = time.time()
+total_duration = end_time - start_time1
+print(f"Total time taken for all episodes: {total_duration:.2f} seconds")
+

@@ -31,36 +31,35 @@ class TakEnv(gym.Env):
 
         result = True
 
-        if pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
+        # Check for capstone placement and enforce the one-capstone rule
+        if pieceType == 2 and player == "white" and self.white_capstone_placed:
             result = False
-        elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
+        elif pieceType == 5 and player == "brown" and self.brown_capstone_placed:
             result = False
 
-
-        if action_type == 0:
+        if result and action_type == 0:
             if self.state[place1] != -1:  # Check if the target tile is already occupied
                 result = False
-            else:
-                result = True
-        elif action_type == 1:
-            if self.state[place1] == -1:
+        elif result and action_type == 1:
+            if self.state[place1] == -1 or self.state[place2] != -1:
                 result = False
             elif self.state[place2] == 2 or self.state[place2] == 5:
                 result = False
-            elif (player == "white" and self.state[place1] > 2):
+            elif (player == "white" and self.state[place1] > 2) or (player == "brown" and self.state[place1] < 3):
                 result = False
-            elif (player == "brown" and self.state[place1] < 3):
-                result = False
-            elif self.state[place2] != -1:  # Check if the target tile is already occupied
-                result = False
-            else:
-                result = True
 
-        if result == True:
+        if result:
+            # If the action is placing a capstone, update the respective flag
+            if pieceType == 2 and player == "white":
+                self.white_capstone_used = True
+            elif pieceType == 5 and player == "brown":
+                self.brown_capstone_used = True
             return True
         else:
             self.add_forbidden_action(action)
             return False
+
+
 
 
     def get_all_actions(self):

@@ -1,8 +1,6 @@
 package com.mygdx.game.Agents;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
@@ -42,54 +40,24 @@ public class callPython {
         gameController.playGame();
         //gameController.experiment();
     }
-
     private static void callPythonML() {
-        // Call main.py
-        ProcessBuilder mainProcessBuilder = new ProcessBuilder("python", "core\\python\\main.py");
-        mainProcessBuilder.redirectErrorStream(true);
-
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py"); 
+        processBuilder.redirectErrorStream(true);
         try {
-            Process process = mainProcessBuilder.start();
+            Process process = processBuilder.start();
 
             try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = processReader.readLine()) != null) {
                     System.out.println(line);
                 }
-            // Call board_matrix method from custEnv.py
-            ProcessBuilder boardMatrixProcessBuilder = new ProcessBuilder("python", "core\\python\\custEnv.py", "print_game_state");
-            boardMatrixProcessBuilder.redirectErrorStream(true);
-    
-            try {
-                Process boardMatrixProcess = boardMatrixProcessBuilder.start();
-    
-                try (BufferedReader processReader2 = new BufferedReader(new InputStreamReader(boardMatrixProcess.getInputStream()));
-                     BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
-    
-                    String line2;
-    
-                    while ((line2 = processReader2.readLine()) != null) {
-                        System.out.println(line2);
-                        writer.write(line2);
-                        writer.newLine();
-                    }
-    
-                    System.out.println("Output saved to output.txt");
-                }
-    
-                int boardMatrixExitCode = boardMatrixProcess.waitFor();
-                System.out.println("Otput save exited with code: " + boardMatrixExitCode);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
             }
-            }
-
             int exitCode = process.waitFor();
             System.out.println("Python script exited with code: " + exitCode);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
+
 

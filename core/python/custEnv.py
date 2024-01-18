@@ -1,3 +1,4 @@
+import sys
 import gym
 from gym import spaces
 import numpy as np
@@ -246,6 +247,18 @@ class TakEnv(gym.Env):
         board_matrix = self.state.reshape((board_size, board_size))
         print("\nGame Board State:")
         print(board_matrix)
+        # Save the output to a file
+        with open('core\src\com\mygdx\game\Agents\printBoard.txt', 'w') as f:
+            # Redirect stdout to the file
+            sys.stdout = f
+
+            # Print the game board state
+            for row in board_matrix:
+                print(*row)
+            #print(board_matrix)
+
+            # Reset stdout to the default value
+            sys.stdout = sys.__stdout__
 
 
     def checkAdj(self,x,y,color, visited):

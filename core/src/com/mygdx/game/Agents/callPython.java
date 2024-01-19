@@ -61,20 +61,20 @@ public class callPython {
 
 
     public void callPythonMove() {
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py", "chooseMove");
-        processBuilder.redirectErrorStream(true);
+        ProcessBuilder processBuilder2 = new ProcessBuilder("python", "core\\python\\main.py", "chooseMove");
+        processBuilder2.redirectErrorStream(true);
     
         try {
-            Process process = processBuilder.start();
+            Process runner = processBuilder2.start();
     
-            try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            try (BufferedReader processReader2 = new BufferedReader(new InputStreamReader(runner.getInputStream()))) {
                 String line;
-                while ((line = processReader.readLine()) != null) {
+                while ((line = processReader2.readLine()) != null) {
                     System.out.println(line);
                 }
             }
     
-            int exitCode = process.waitFor();
+            int exitCode = runner.waitFor();
             System.out.println("Python script exited with code: " + exitCode);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

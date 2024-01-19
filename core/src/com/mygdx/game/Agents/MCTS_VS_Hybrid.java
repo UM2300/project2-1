@@ -41,19 +41,23 @@ public class MCTS_VS_Hybrid {
             if(isWhiteTurn==false){
 
                 if(checkStack()){
-
+                    MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
+                    logicBoard = nextMove.getGameState();
                 }
                 else{
                     pyCall.callPythonMove();
+                    MCTSNode nextMove = new MCTSNode(logicBoard);
+                    nextMove.readGameStateFromFile();
+                    logicBoard=nextMove.getGameState();
                 }
 
             }
             else{
-                
+                MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
+                logicBoard = nextMove.getGameState();
             }
 
-            MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
-            logicBoard = nextMove.getGameState();
+            
 
             // Check win conditions
             logicBoard.checkWinCondition();

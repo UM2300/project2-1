@@ -117,6 +117,16 @@ class DQNAgent:
             self.epsilon *= self.epsilon_decay
 
 
+    def chooseMove(self, state):
+
+        env.readBoard()
+        state_reshaped = np.reshape(state, [1, -1])
+        action = agentBrown.actFinal(state_reshaped, "brown")
+        next_state, reward, done, _ = env.step(action, "brown")
+        state=next_state
+        env.print_game_state()
+
+
 env = custEnv.TakEnv()
 state_size = env.observation_space.shape[0]
 
@@ -128,7 +138,7 @@ agentBrown = DQNAgent(state_size, action_size)
 
 current_player = "white"
 
-num_episodes = 5
+num_episodes = 2
 
 for episode in range(num_episodes):
     start_time = time.time()
@@ -168,12 +178,4 @@ for episode in range(num_episodes):
     duration = end_time - start_time  # Calculate the duration
     print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
 
-
-    def chooseMove():
-
-        env.readBoard()
-        state_reshaped = np.reshape(state, [1, -1])
-        action = agentBrown.actFinal(state_reshaped, "brown")
-        next_state, reward, done, _ = env.step(action, "brown")
-        state=next_state
-        env.print_game_state()
+agentBrown.chooseMove(state)

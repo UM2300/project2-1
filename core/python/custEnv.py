@@ -284,15 +284,17 @@ class TakEnv(gym.Env):
     
 
     def readBoard(self):
-        with open("core\src\com\mygdx\game\Agents\printBoard.txt", "r") as file:
+        with open('core\\src\\com\\mygdx\\game\\Agents\\GameState.txt', 'r') as file:
             lines = file.readlines()
 
-        board_state = [int(line.strip()) for line in lines]
+        board_state = []
+        for line in lines:
+            # Split the line into a list of strings, then convert each string to an integer
+            numbers = [int(num) for num in line.strip().split()]
+            board_state.extend(numbers)
 
-        board_state_np = np.array(board_state, dtype=np.int32)
-        self.state = board_state_np
+        self.state = np.array(board_state, dtype=np.int32)
 
-        return self.state.copy()
    
 
 

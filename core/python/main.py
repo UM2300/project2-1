@@ -115,7 +115,7 @@ agentBrown = DQNAgent(state_size, action_size)
 
 current_player = "white"
 
-num_episodes = 4
+num_episodes = 1
 
 for episode in range(num_episodes):
     start_time = time.time()

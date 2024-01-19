@@ -32,15 +32,9 @@ class TakEnv(gym.Env):
 
         result = True
 
-        
-
-        
-
         if action_type == 0:
             if self.state[place1] != -1:  # Check if the target tile is already occupied
                 result = False
-
-            
             elif pieceType == 2 and self.white_capstone_placed:  # Check if white's capstone is already placed
                 result = False
             elif pieceType == 5 and self.brown_capstone_placed:  # Check if brown's capstone is already placed
@@ -158,10 +152,7 @@ class TakEnv(gym.Env):
 
                     BoardState=self.state.reshape((5,5))
 
-                    #ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
-
                     ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
-
 
                     ws*=3
                     wb*=2
@@ -173,9 +164,6 @@ class TakEnv(gym.Env):
                     whitescore=whitescore+ws+wb+wbb
                     brownscore=brownscore+bs+bb+bbw
 
-                
-
-        
         if player=="brown":
             whitescore=whitescore*-1
         else:
@@ -294,6 +282,17 @@ class TakEnv(gym.Env):
 
         return above or below or left or right
     
+
+    def readBoard(self):
+        with open("core\src\com\mygdx\game\Agents\printBoard.txt", "r") as file:
+            lines = file.readlines()
+
+        board_state = [int(line.strip()) for line in lines]
+
+        board_state_np = np.array(board_state, dtype=np.int32)
+        self.state = board_state_np
+
+        return self.state.copy()
    
 
 

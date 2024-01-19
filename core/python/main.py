@@ -37,7 +37,7 @@ class DQNAgent:
 
     def act(self, state, player):
         attempt_counter = 0
-        max_attempts = 100
+        max_attempts = 300
 
         if np.random.rand() <= self.epsilon:
             chosenAction = np.random.choice(self.action_size)
@@ -48,7 +48,7 @@ class DQNAgent:
 
             if attempt_counter >= max_attempts:
                     # Handle no-action-available scenario
-                return None  # or appropriate action/signaling
+                return np.random.choice(self.action_size)  # or appropriate action/signaling
 
             return chosenAction
 
@@ -115,7 +115,7 @@ agentBrown = DQNAgent(state_size, action_size)
 
 current_player = "white"
 
-num_episodes = 1
+num_episodes = 5
 
 for episode in range(num_episodes):
     start_time = time.time()

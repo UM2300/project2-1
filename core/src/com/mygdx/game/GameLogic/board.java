@@ -1,5 +1,6 @@
 package com.mygdx.game.GameLogic;
 
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,10 +18,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 /*
  * This class represents the logic behind the rules of Tak
@@ -831,6 +828,29 @@ public class board {
             }
         }
 
+    }
+
+    public void checkMoveState() {
+        String filename = "core/src/com/mygdx/game/Agents/GameState.txt";
+
+        try (FileWriter writer = new FileWriter(filename, false)) {
+            for (ArrayList<Integer>[] arrayLists : board) {
+                for (int j = 0; j < board.length; j++) {
+                    ArrayList<Integer> list = arrayLists[j];
+
+                    if (!list.isEmpty()) {
+                        for (Integer item : list) {
+                            writer.write(item + " ");
+                        }
+                    } else {
+                        writer.write("-1 ");
+                    }
+                }
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

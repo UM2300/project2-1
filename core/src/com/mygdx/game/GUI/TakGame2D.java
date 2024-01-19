@@ -1479,6 +1479,7 @@ public class TakGame2D {
 
     public void MCTSCall(){
         if(mcts){
+            logicBoard.checkMoveState();
             board NewState = mctsAgent.findNextMove(logicBoard).getGameState();
             setLogicBoard(NewState);
             // add a line to assign the MCTS resulting board to the actual playing boardd

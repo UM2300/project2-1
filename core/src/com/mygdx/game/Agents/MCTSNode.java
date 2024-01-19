@@ -110,6 +110,13 @@ public class MCTSNode {
             System.out.println();
         }
     }
+    public static void main(String[] args) {
+        MCTSNode mctsNode = new MCTSNode(new board());
+        mctsNode.readGameStateFromFile();
+
+        // Print the read board for manual verification
+        mctsNode.printGameState();
+    }
 
 }
 

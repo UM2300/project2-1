@@ -22,6 +22,7 @@ public class Baseline_VS_MCTS {
         this.logicBoard = new board();
         this.baselineAgent = new Baseline_Agent(logicBoard);
         this.mctsAgent = new MCTSAgent();
+
     }
 
     public void playGame() {
@@ -80,8 +81,9 @@ public class Baseline_VS_MCTS {
     
     public static void main(String[] args) {
         Baseline_VS_MCTS gameController = new Baseline_VS_MCTS();
-        //gameController.playGame();
-        gameController.experiment();
+        gameController.playGame();
+        //gameController.experiment();
+        
     }
 
 }

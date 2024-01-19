@@ -1,6 +1,9 @@
 package com.mygdx.game.Agents;
 import com.mygdx.game.GameLogic.board;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MCTSNode {
@@ -16,6 +19,25 @@ public class MCTSNode {
         this.gameState = gameState;
         this.children = new ArrayList<>();
         this.evalScore = new EvalFunc().evaluation(getGameState()); // Calculate evaluation score
+    }
+    public void readGameStateFromFile() {
+        try (BufferedReader br = new BufferedReader(new FileReader("core\\src\\com\\mygdx\\game\\Agents\\printBoard.txt"))) {
+            String line;
+            int row = 0;
+            while ((line = br.readLine()) != null && row < 5) {
+                // Split the line into space-separated values
+                String[] values = line.trim().split("\\s+");
+
+                for (int col = 0; col < Math.min(values.length, 5); col++) {
+                    // Convert each value to Integer and add it to the corresponding ArrayList
+                    gameState.board[row][col].add(Integer.parseInt(values[col]));
+                }
+
+                row++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -77,8 +99,17 @@ public class MCTSNode {
     public int getTerminalStateScore() {
         return terminalStateScore;
     }
+    public void printGameState() {
+        ArrayList<Integer>[][] readBoard = this.getGameState().board;
 
-
+        // Print the read board for manual verification
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(readBoard[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 
 }
 

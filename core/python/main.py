@@ -62,6 +62,19 @@ class DQNAgent:
                 for next_action in np.argsort(act_values[0])[::-1]:
                     if env.is_action_allowed(current_player, next_action):
                         return next_action
+                    
+
+    def actFinal(self, state, player):
+
+        act_values = self.model.predict(state.reshape(1, -1))
+        chosenAction = np.argmax(act_values[0])
+
+        if (env.is_action_allowed(player, chosenAction) == True):
+            return chosenAction
+        else:
+            for next_action in np.argsort(act_values[0])[::-1]:
+                if env.is_action_allowed(current_player, next_action):
+                    return next_action
 
     def replay(self, batch_size):
         minibatch = random.sample(self.memory, batch_size)
@@ -154,3 +167,13 @@ for episode in range(num_episodes):
     end_time = time.time()  # End the timer
     duration = end_time - start_time  # Calculate the duration
     print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
+
+
+    def chooseMove():
+
+        env.readBoard()
+        state_reshaped = np.reshape(state, [1, -1])
+        action = agentBrown.actFinal(state_reshaped, "brown")
+        next_state, reward, done, _ = env.step(action, "brown")
+        state=next_state
+        env.print_game_state()

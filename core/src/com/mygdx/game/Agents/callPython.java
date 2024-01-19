@@ -58,6 +58,30 @@ public class callPython {
             e.printStackTrace();
         }
     }
+
+
+    public void callPythonMove() {
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py", "chooseMove");
+        processBuilder.redirectErrorStream(true);
+    
+        try {
+            Process process = processBuilder.start();
+    
+            try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = processReader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+    
+            int exitCode = process.waitFor();
+            System.out.println("Python script exited with code: " + exitCode);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
 }
 
 

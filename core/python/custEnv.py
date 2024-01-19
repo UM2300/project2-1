@@ -31,6 +31,11 @@ class TakEnv(gym.Env):
         action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
 
         result = True
+
+        
+
+        
+
         if action_type == 0:
             if self.state[place1] != -1:  # Check if the target tile is already occupied
                 result = False
@@ -60,6 +65,8 @@ class TakEnv(gym.Env):
         else:
             self.add_forbidden_action(action)
             return False
+
+
 
 
     def get_all_actions(self):
@@ -145,10 +152,17 @@ class TakEnv(gym.Env):
 
         for x in range(5):
             for y in range(5):
+
                 visited = [[False] * 5 for _ in range(5)]
+
                 if(x==0 or x==4 or y==0 or y==4):
+
                     BoardState=self.state.reshape((5,5))
+
+                    #ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
+
                     ws, wb, wbb, bs, bb, bbw = rewardHelpers.road_Score(player, visited, x, y, BoardState)
+
 
                     ws*=3
                     wb*=2
@@ -160,6 +174,9 @@ class TakEnv(gym.Env):
                     whitescore=whitescore+ws+wb+wbb
                     brownscore=brownscore+bs+bb+bbw
 
+                
+
+        
         if player=="brown":
             whitescore=whitescore*-1
         else:
@@ -277,31 +294,6 @@ class TakEnv(gym.Env):
             right=False
 
         return above or below or left or right
-    
-
-
-    def load_board_from_file(self, file_path):
-        with open(file_path, 'r') as file:
-            lines = file.readlines()
-
-        # Process lines to create a board state
-        board_state = []
-        for line in lines:
-            row = [int(cell) for cell in line.strip().split()]
-            board_state.extend(row)
-
-        # Ensure that the board state has the correct length
-        expected_length = self.board_size * self.board_size
-        if len(board_state) != expected_length:
-            raise ValueError(f"Invalid board state length. Expected {expected_length}, got {len(board_state)}.")
-
-        # Convert the list to a NumPy array
-        board_vector = np.array(board_state, dtype=np.int32)
-
-        # Update the internal state
-        self.state = board_vector
-
-        return self.state.copy()
     
    
 

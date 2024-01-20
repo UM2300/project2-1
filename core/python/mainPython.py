@@ -16,6 +16,7 @@ class QNetwork(Sequential):
         self.add(Dense(num_actions, activation='linear'))
         self.compile(optimizer=Adam(lr=0.001), loss='mean_squared_error')
 
+    @classmethod
     def from_config(cls, config):
         state_size = config['state_size'] if 'state_size' in config else 25
         num_actions = config['num_actions'] if 'num_actions' in config else 155

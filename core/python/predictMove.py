@@ -36,6 +36,8 @@ def main(model_path, game_state_file):
 
     env = custEnv.TakEnv()
 
+    env.readBoard()
+
     action = actFinal(game_state, "brown", env, "brown", model)
 
     
@@ -43,6 +45,7 @@ def main(model_path, game_state_file):
     next_state, reward, done, _ = env.step(action, "brown")
     state=next_state
     env.print_game_state()
+    print("done")
 
 
 def actFinal(state, player, env, current_player, model):

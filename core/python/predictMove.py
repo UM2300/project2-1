@@ -1,50 +1,50 @@
 import numpy as np
 from keras.models import load_model
 
+from mainPython import QNetwork
+
+import custEnv
+
+from gym import spaces
+
 
 def load_trained_model(model_path):
-    """
-    Load the trained neural network model from the specified path.
-    """
-    return load_model(model_path)
+
+    return load_model(model_path, custom_objects={'QNetwork': QNetwork.from_config})
 
 def convert_game_state(game_state_text):
-    """
-    Convert the text-based game state into a NumPy array suitable for the neural network.
-    """
-    # Example conversion logic; this needs to be adapted to your specific case
+    
     game_state_array = np.array([int(x) for x in game_state_text.split() if x.isdigit()])
-    return game_state_array.reshape(1, -1)  # Reshape as needed for the model
+    return game_state_array.reshape(1, -1)  
 
 def predict_next_move(model, game_state):
-    """
-    Predict the next move using the loaded model and the provided game state.
-    """
+
     return model.predict(game_state)
 
 def main(model_path, game_state_file):
-    """
-    Main method to load the model, read game state from a file, and predict the next move.
-    """
-    # Load the model
+
+
     model = load_trained_model(model_path)
 
-    # Read game state from file
     with open(game_state_file, 'r') as file:
         game_state_text = file.read()
 
-    # Convert and reshape the game state
     game_state = convert_game_state(game_state_text)
 
-    # Predict the next move
     predicted_move = predict_next_move(model, game_state)
     print("Predicted Move:", predicted_move)
+
+    env = custEnv.TakEnv()
+
+    next_state, reward, done, _ = env.step(predicted_move, "brown")
+    state=next_state
+    env.print_game_state()
 
 
 if __name__ == "__main__":
     # Paths can be adjusted as needed
-    model_path = 'core/python/agentBrown_model.h5'
-    game_state_file = 'com/mygdx/game/Agents/GameState.txt'
+    model_path = 'core\\python\\agentBrown_model.keras'
+    game_state_file = 'core\\src\\com\\mygdx\\game\\Agents\\GameState.txt'
     main(model_path, game_state_file)
 
 

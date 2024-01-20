@@ -2,8 +2,6 @@ package com.mygdx.game.Agents;
 
 import com.mygdx.game.GameLogic.board;
 
-import com.mygdx.game.Agents.callPython;
-
 public class MCTS_VS_Hybrid {
     private board logicBoard;
     private MCTSAgent mctsAgent;
@@ -38,17 +36,14 @@ public class MCTS_VS_Hybrid {
             System.out.println(isWhiteTurn ? "White's turn" : "Brown's turn");
 
 
-            if(isWhiteTurn==false){
+            if(!isWhiteTurn){
 
                 if(checkStack()){
                     MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
                     logicBoard = nextMove.getGameState();
                 }
                 else{
-                    pyCall.callPythonMove();
-                    MCTSNode nextMove = new MCTSNode(logicBoard);
-                    nextMove.readGameStateFromFile();
-                    logicBoard=nextMove.getGameState();
+
                 }
 
             }
@@ -56,6 +51,7 @@ public class MCTS_VS_Hybrid {
                 MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
                 logicBoard = nextMove.getGameState();
             }
+            logicBoard.checkMoveState();
 
             
 

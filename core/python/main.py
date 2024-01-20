@@ -3,6 +3,7 @@ import tensorflow as tf
 import time
 import keras
 
+
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -117,14 +118,7 @@ class DQNAgent:
             self.epsilon *= self.epsilon_decay
 
 
-    def chooseMove(self, state):
 
-        env.readBoard()
-        state_reshaped = np.reshape(state, [1, -1])
-        action = agentBrown.actFinal(state_reshaped, "brown")
-        next_state, reward, done, _ = env.step(action, "brown")
-        state=next_state
-        env.print_game_state()
 
 
 env = custEnv.TakEnv()
@@ -178,4 +172,7 @@ for episode in range(num_episodes):
     duration = end_time - start_time  # Calculate the duration
     print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
 
-agentBrown.chooseMove(state)
+agentWhite.model.save('core/python/agentWhite_model.h5')
+agentBrown.model.save('core/python/agentBrown_model.h5')
+
+

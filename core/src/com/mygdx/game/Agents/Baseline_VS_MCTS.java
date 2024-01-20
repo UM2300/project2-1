@@ -43,7 +43,7 @@ public class Baseline_VS_MCTS {
                 logicBoard = mctsMove.getGameState(); 
                 //System.out.println("MCTS Agent (BROWN) made a move.");
             }
-
+            logicBoard.checkFinalState();
             counter++;
             turn = !turn; // Toggle the turn
 

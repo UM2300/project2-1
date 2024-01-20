@@ -1,4 +1,8 @@
 sourceCompatibility = 1.8
+dependencies {
+    implementation 'net.sf.py4j:py4j:0.10.9.7'
+    implementation 'net.sf.py4j:py4j:0.10.9.7'
+}
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 

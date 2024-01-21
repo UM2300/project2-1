@@ -4,6 +4,10 @@ import com.mygdx.game.GameLogic.board;
 
 import java.util.ArrayList;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class MCTSNode {
     private board gameState; // The game state at this node
     private MCTSNode parent; // The parent node
@@ -59,6 +63,32 @@ public class MCTSNode {
 
         return bestChild;
     }
+
+    public void readGameStateFromFile() {
+        try (BufferedReader br = new BufferedReader(new FileReader("core\\src\\com\\mygdx\\game\\Agents\\GameState.txt"))) {
+            String line;
+            int row = 0;
+            while ((line = br.readLine()) != null && row < 5) {
+                // Split the line into space-separated values
+                String[] values = line.trim().split("\\s+");
+
+                for (int col = 0; col < Math.min(values.length, 5); col++) {
+                    // Convert each value to Integer and add it to the corresponding ArrayList
+                    
+                    gameState.board[row][col].clear();
+                    if(Integer.parseInt(values[col])!=-1){
+                        gameState.board[row][col].add(Integer.parseInt(values[col]));
+                    }
+                    
+                }
+
+                row++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public int getWinScore() {
         return this.evalScore;

@@ -239,7 +239,7 @@ class TakEnv(gym.Env):
         print("\nGame Board State:")
         print(board_matrix)
         # Save the output to a file
-        with open('core\src\com\mygdx\game\Agents\printBoard.txt', 'w') as f:
+        with open('core\src\com\mygdx\game\Agents\GameState.txt', 'w') as f:
             # Redirect stdout to the file
             sys.stdout = f
 

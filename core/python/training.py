@@ -16,7 +16,9 @@ agentBrown = DQNAgent(state_size, action_size)
 
 current_player = "white"
 
-num_episodes = 2
+num_episodes = 300
+
+total_time_taken = 0
 
 for episode in range(num_episodes):
     start_time = time.time()
@@ -54,7 +56,10 @@ for episode in range(num_episodes):
 
     end_time = time.time()  # End the timer
     duration = end_time - start_time  # Calculate the duration
+    total_time_taken += duration
     print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
 
-agentWhite.model.save('core/python/agentWhite_model.h5')
-agentBrown.model.save('core/python/agentBrown_model.h5')
+print(f"Total time taken for {num_episodes} episodes: {total_time_taken:.2f} seconds")
+
+agentWhite.model.save('/Users/alexandruvalah/Desktop/project2-1/core/python/agentWhite_model.h5')
+agentBrown.model.save('/Users/alexandruvalah/Desktop/project2-1/core/python/agentBrown_model.h5')

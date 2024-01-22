@@ -74,14 +74,15 @@ def main(model_path, game_state_file):
     action = actFinal(game_state, "brown", env, "brown", model, capstoneAvailable)
 
     next_state, reward, done, _ = env.step(action, "brown")
-    state = next_state
+    state=next_state
     env.print_game_state()
     print("done")
 
 
 def actFinal(state, player, env, current_player, model, capstone):
-    act_values = model.predict(state.reshape(1, -1))
-    chosenAction = np.argmax(act_values[0])
+
+        act_values = model.predict(state.reshape(1, -1))
+        chosenAction = np.argmax(act_values[0])
 
         if (capstone==True and env.is_action_allowed(player, chosenAction) == True):
             return chosenAction
@@ -89,13 +90,14 @@ def actFinal(state, player, env, current_player, model, capstone):
             return chosenAction
         else:
             for next_action in np.argsort(act_values[0])[::-1]:
-                if capstone==True and env.is_action_allowed(current_player, next_action):
-                    return next_action
-                elif capstone==False and env.is_action_allowed_no_cap(current_player, next_action):
+                if env.is_action_allowed(current_player, next_action):
                     return next_action
 
 
 if __name__ == "__main__":
+    # Paths can be adjusted as needed
     model_path = 'core\\python\\agentBrown_model.h5'
     game_state_file = 'core\\src\\com\\mygdx\\game\\Agents\\GameState.txt'
     main(model_path, game_state_file)
+
+

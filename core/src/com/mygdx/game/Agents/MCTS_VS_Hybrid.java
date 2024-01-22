@@ -18,6 +18,8 @@ public class MCTS_VS_Hybrid {
     private board logicBoard;
     private MCTSAgent mctsAgent;
     private boolean isWhiteTurn;
+    private int MCTSwinCount = 0;
+    private int HybridWinCount = 0;
 
     public MCTS_VS_Hybrid() {
         this.logicBoard = new board();
@@ -57,7 +59,8 @@ public class MCTS_VS_Hybrid {
     }
 
     public void playGame() {
-
+        int moveCounter1 = 0;
+        int moveCounter2 = 0;
         callPython pyCall = new callPython();
         resetFile();
 
@@ -84,6 +87,7 @@ public class MCTS_VS_Hybrid {
                                                 //writing to file after the move is done as well
                     wasMLTurn = true;
                 }
+                moveCounter1++;
             }
             else{
                 if(wasMLTurn){   // this part is to get the new game state from text file if the prev move was made by DQN
@@ -95,15 +99,26 @@ public class MCTS_VS_Hybrid {
                 MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
                 logicBoard = nextMove.getGameState();
                 logicBoard.checkMoveState();
+                moveCounter2++;
             }
             //logicBoard.checkMoveState();
-
+            
             
             // Check win conditions
             logicBoard.checkWinCondition();
 
             if (logicBoard.isGameEnded()) {
                 System.out.println("Game Ended: " + logicBoard.getWinner());
+                if (logicBoard.getWinner().equals("WHITE won!")) {
+                    MCTSwinCount++;
+                    System.out.println("MCTS win count: " + MCTSwinCount);
+                    System.out.println("MCTS move count: " + moveCounter1);
+                }
+                else {
+                    HybridWinCount++;
+                    System.out.println("Hybrid win count: " + HybridWinCount);
+                    System.out.println("Hybrid move count: " + moveCounter2);
+                }
                 break;
             }
 
@@ -111,11 +126,23 @@ public class MCTS_VS_Hybrid {
             isWhiteTurn = !isWhiteTurn;
             logicBoard.setCurrentPlayer(isWhiteTurn ? "WHITE" : "BROWN");
         }
-        logicBoard.checkFinalState();
+        //logicBoard.checkFinalState();
     }
+
+    public void experiment() {
+        int gameCounter = 0;
+        while (gameCounter < 10) {
+            System.out.println("Game " + gameCounter + " start");
+            playGame();
+            System.out.println("Game " + gameCounter + " end");
+            gameCounter++;
+        }
+    }
+    
 
     public static void main(String[] args) {
         MCTS_VS_Hybrid game = new MCTS_VS_Hybrid();
         game.playGame();
+       // game.experiment();
     }
 }

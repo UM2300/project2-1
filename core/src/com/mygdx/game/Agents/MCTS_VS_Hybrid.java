@@ -32,7 +32,7 @@ public class MCTS_VS_Hybrid {
         boolean result=false;
         for (int i=0; i<5; i++){
             for(int j=0; j<5; j++){
-                if(!this.logicBoard.getBoard()[i][j].isEmpty() && this.logicBoard.getBoard()[i][j].size()>2){
+                if(!this.logicBoard.getBoard()[i][j].isEmpty() && this.logicBoard.getBoard()[i][j].size()>=2){
                     result = true;
                 }
             }

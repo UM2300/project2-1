@@ -43,20 +43,20 @@ public class MCTSAgent {
          // Time limit in milliseconds (seconds = TIME_LIMIT/1000)
          long TIME_LIMIT = 1000;
          while (System.currentTimeMillis() - startTime < TIME_LIMIT) {
-             MCTSNode promisingNode = selectPromisingNode(rootNode);
-             if (!promisingNode.getGameState().isGameEnded()) {
-                 expandNode(promisingNode, currentBoard);
-             }
 
-             MCTSNode nodeToExplore = promisingNode;
-             if (!promisingNode.getChildren().isEmpty()) {
-                 nodeToExplore = promisingNode.getRandomChildNode();
-             }
+            MCTSNode promisingNode = selectPromisingNode(rootNode);
+            if (!promisingNode.getGameState().isGameEnded()) {
+                expandNode(promisingNode, currentBoard);
+            }
 
-             int playoutResult = simulateRandomPlayout(nodeToExplore);
-             backPropagate(nodeToExplore, playoutResult);
-         }
+            MCTSNode nodeToExplore = promisingNode;
+            if (!promisingNode.getChildren().isEmpty()) {
+                nodeToExplore = promisingNode.getRandomChildNode();
+            }
 
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backPropagate(nodeToExplore, playoutResult);
+        } 
          return rootNode.getChildWithMaxScore();
      }
 

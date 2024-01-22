@@ -49,10 +49,6 @@ class DQNAgent:
                 attempt_counter += 1
                 chosenAction = np.random.choice(self.action_size)
 
-            if attempt_counter >= max_attempts:
-                    # Handle no-action-available scenario
-                return np.random.choice(self.action_size)  # or appropriate action/signaling
-
             return chosenAction
 
         else:

@@ -62,14 +62,14 @@ public class MCTS_VS_Hybrid {
         resetFile();
 
         boolean wasMLTurn = false;
-        boolean MCTSPlays = true;
+        boolean MCTSPlays = false;
 
         while (!logicBoard.isGameEnded()) {
             // Print statement to indicate which player is making the move
             System.out.println(isWhiteTurn ? "White's turn" : "Brown's turn");
 
             if(checkStack()){
-                MCTSPlays=false;
+                MCTSPlays=true;
             }
 
             if(!isWhiteTurn){

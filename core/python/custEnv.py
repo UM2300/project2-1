@@ -8,16 +8,12 @@ import rewardHelpers
 class TakEnv(gym.Env):
     def __init__(self, board_size=25):
         super(TakEnv, self).__init__()
-
-        # Define the action and observation space
         self.action_space = spaces.Discrete(board_size * 3 + 9*4 + 12*3 + 4*2)
-
-        self.observation_space = spaces.Box(low=-1, high=5, shape=(25,), dtype=np.int32)  # Specify the state space
-
+        self.observation_space = spaces.Box(low=-1, high=5, shape=(25,), dtype=np.int32) 
         self.board_size=board_size
         self.state=np.full(board_size, -1, dtype=np.int32)
         self.forbidden_actions=[]
-        # Keep track of the number of capstones placed for each player
+        
         self.white_capstone_placed = False
         self.brown_capstone_placed = False
 

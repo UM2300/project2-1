@@ -48,6 +48,7 @@ Option A:
 7. Option 2 is Easy Mode, where you can play against our baseline agent
 
 8. Option 3 is Hard Mode, where you can play against our more advanced MCTS agent
+   *** PLEASE NOTE: In this game mode, it should take 10 seconds before your piece is placed onto the board, this is because MCTS is given 10 seconds to "think" before making a move.
 
 9. On each game mode you have a menu button where you can choose to exit game (exit), return to main menu (restart), or continue (continue)
 

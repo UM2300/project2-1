@@ -1,12 +1,10 @@
+import random
+from collections import deque
+
 import numpy as np
-import tensorflow as tf
-
-
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.optimizers import Adam
-from collections import deque
-import random
 
 
 class QNetwork(Sequential):
@@ -23,7 +21,6 @@ class QNetwork(Sequential):
         return cls(state_size=state_size, num_actions=num_actions)
 
 
-
 class DQNAgent:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
@@ -36,9 +33,31 @@ class DQNAgent:
         self.model = QNetwork(state_size, action_size)
 
     def remember(self, state, action, reward, next_state, done):
+        """
+        Stores an experience tuple in the agent's memory for experience replay.
+
+        Parameters:
+            state (np.array): The observed state.
+            action (int): The action taken.
+            reward (float): The reward received.
+            next_state (np.array): The next observed state.
+            done (bool): Whether the episode has ended.
+        """
         self.memory.append((state, action, reward, next_state, done))
 
     def act(self, state, player, env, current_player):
+        """
+        Decides an action based on the current state using an epsilon-greedy policy.
+
+        Parameters:
+            state (np.array): The current state observed by the agent.
+            player (str): The player making the decision.
+            env: The environment in which the agent is acting.
+            current_player (str): The current player from the perspective of the environment.
+
+        Returns:
+            int: The chosen action.
+        """
         attempt_counter = 0
         max_attempts = 300
 
@@ -61,7 +80,6 @@ class DQNAgent:
                 for next_action in np.argsort(act_values[0])[::-1]:
                     if env.is_action_allowed(current_player, next_action):
                         return next_action
-                    
 
     def actFinal(self, state, player, env, current_player):
 
@@ -76,6 +94,12 @@ class DQNAgent:
                     return next_action
 
     def replay(self, batch_size):
+        """
+        Trains the network using a minibatch from the agent's memory.
+
+        Parameters:
+            batch_size (int): The size of the minibatch to use for training.
+        """
         minibatch = random.sample(self.memory, batch_size)
         for state, action, reward, next_state, done in minibatch:
             target = reward
@@ -87,8 +111,13 @@ class DQNAgent:
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
-
     def train(self, batch_size=32):
+        """
+        Performs a training step for the agent, sampling a minibatch and updating the network.
+
+        Parameters:
+            batch_size (int): The size of the minibatch to train on.
+        """
         if len(self.memory) < batch_size:
             return
 
@@ -114,9 +143,3 @@ class DQNAgent:
 
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
-
-
-
-
-
-

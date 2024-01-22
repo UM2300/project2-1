@@ -27,6 +27,10 @@ public class MCTS_VS_Hybrid {
         this.isWhiteTurn = true; // Start with White
     }
 
+    /**
+     * Checks if any stack on the board has two or more pieces
+     * @return true if any stack on the board has two or more pieces, otherwise false.
+     */
     public boolean checkStack(){
 
         boolean result=false;
@@ -41,6 +45,9 @@ public class MCTS_VS_Hybrid {
         return result;
     }
 
+    /**
+     * Resets the game state file to its initial state
+     */
     public static void resetFile(){
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("core\\src\\com\\mygdx\\game\\Agents\\GameState.txt"))) {
@@ -58,6 +65,9 @@ public class MCTS_VS_Hybrid {
         }
     }
 
+    /**
+     * Executes the game logic
+     */
     public void playGame() {
         int moveCounter1 = 0;
         int moveCounter2 = 0;

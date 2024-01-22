@@ -57,6 +57,39 @@ class TakEnv(gym.Env):
             self.add_forbidden_action(action)
             return False
 
+    def is_action_allowed_no_cap(self, player, action):
+        action_type, pieceType, place1, place2 = actionConv.conversion(action, player)
+
+        result = True
+
+        if action_type == 0:
+            if self.state[place1] != -1:  # Check if the target tile is already occupied
+                result = False
+            elif pieceType == 2:
+                result = False
+            elif pieceType == 5:
+                result = False
+            else:
+                result = True
+        elif action_type == 1:
+            if self.state[place1] == -1:
+                result = False
+            elif self.state[place2] == 2 or self.state[place2] == 5:
+                result = False
+            elif (player == "white" and self.state[place1] > 2):
+                result = False
+            elif (player == "brown" and self.state[place1] < 3):
+                result = False
+            elif self.state[place2] != -1:  # Check if the target tile is already occupied
+                result = False
+            else:
+                result = True
+
+        if result == True:
+            return True
+        else:
+            self.add_forbidden_action(action)
+            return False
 
     def get_all_actions(self):
         return list(range(self.action_space.n))
@@ -290,6 +323,42 @@ class TakEnv(gym.Env):
             board_state.extend(numbers)
 
         self.state = np.array(board_state, dtype=np.int32)
+
+    def checkBrownCap(self):
+        with open('core\\src\\com\\mygdx\\game\\Agents\\GameState.txt', 'r') as file:
+            lines = file.readlines()
+
+        board_state = []
+        for line in lines:
+            # Split the line into a list of strings, then convert each string to an integer
+            numbers = [int(num) for num in line.strip().split()]
+            board_state.extend(numbers)
+
+        self.state = np.array(board_state, dtype=np.int32)
+
+        # Check if '5' is present in the board state
+        if 5 in board_state:
+            return False
+        else:
+            return True
+        
+    def checkWhiteCap(self):
+        with open('core\\src\\com\\mygdx\\game\\Agents\\GameState.txt', 'r') as file:
+            lines = file.readlines()
+
+        board_state = []
+        for line in lines:
+            # Split the line into a list of strings, then convert each string to an integer
+            numbers = [int(num) for num in line.strip().split()]
+            board_state.extend(numbers)
+
+        self.state = np.array(board_state, dtype=np.int32)
+
+        # Check if '5' is present in the board state
+        if 2 in board_state:
+            return False
+        else:
+            return True
 
    
 

@@ -61,7 +61,9 @@ def actFinal(state, player, env, current_player, model, capstone):
             return chosenAction
         else:
             for next_action in np.argsort(act_values[0])[::-1]:
-                if env.is_action_allowed(current_player, next_action):
+                if capstone==True and env.is_action_allowed(current_player, next_action):
+                    return next_action
+                elif capstone==False and env.is_action_allowed_no_cap(current_player, next_action):
                     return next_action
 
 

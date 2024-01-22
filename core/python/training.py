@@ -1,9 +1,10 @@
-import custEnv
-from mainPython import DQNAgent
 import time
+
 import numpy as np
 from gym import spaces
 
+import custEnv
+from mainPython import DQNAgent
 
 env = custEnv.TakEnv()
 state_size = env.observation_space.shape[0]
@@ -49,15 +50,13 @@ for episode in range(num_episodes):
         else:
             current_player = "white"
 
-
-
         # Set the next state as the current state for the next iteration
         state = next_state
 
-    end_time = time.time()  # End the timer
-    duration = end_time - start_time  # Calculate the duration
+    end_time = time.time()
+    duration = end_time - start_time
     total_time_taken += duration
-    print(f"Episode {episode + 1} completed in {duration:.2f} seconds")  # Print the duration for each episode
+    print(f"Episode {episode + 1} completed in {duration:.2f} seconds")
 
 print(f"Total time taken for {num_episodes} episodes: {total_time_taken:.2f} seconds")
 

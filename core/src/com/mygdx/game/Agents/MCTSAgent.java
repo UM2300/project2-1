@@ -14,11 +14,11 @@ import static com.mygdx.game.Agents.HelperFunctions.containsBoard;
 public class MCTSAgent {
     private int maxPiece = 3;
 
-    public void setMaxPiece(int maxPiece){
-        this.maxPiece=maxPiece;
+    public void setMaxPiece(int maxPiece) {
+        this.maxPiece = maxPiece;
     }
 
-    public int getMaxPiece(){
+    public int getMaxPiece() {
         return this.maxPiece;
     }
 
@@ -30,19 +30,20 @@ public class MCTSAgent {
      * @return The best move as determined by the MCTS algorithm.
      */
 
-     /** Complexity: O(bh + m + d + n)
-      * bh is from selectPromisingNode
-      * m is from simulateRandomPlayout
-      * d is from backPropagate
-      */
-     public MCTSNode findNextMove(board currentBoard) {
-         MCTSNode rootNode = new MCTSNode(currentBoard);
-         rootNode.setParent(null);
+    /**
+     * Complexity: O(bh + m + d + n)
+     * bh is from selectPromisingNode
+     * m is from simulateRandomPlayout
+     * d is from backPropagate
+     */
+    public MCTSNode findNextMove(board currentBoard) {
+        MCTSNode rootNode = new MCTSNode(currentBoard);
+        rootNode.setParent(null);
 
-         long startTime = System.currentTimeMillis();
-         // Time limit in milliseconds (seconds = TIME_LIMIT/1000)
-         long TIME_LIMIT = 1000;
-         while (System.currentTimeMillis() - startTime < TIME_LIMIT) {
+        long startTime = System.currentTimeMillis();
+        // Time limit in milliseconds (seconds = TIME_LIMIT/1000)
+        long TIME_LIMIT = 1000;
+        while (System.currentTimeMillis() - startTime < TIME_LIMIT) {
 
             MCTSNode promisingNode = selectPromisingNode(rootNode);
             if (!promisingNode.getGameState().isGameEnded()) {
@@ -56,9 +57,9 @@ public class MCTSAgent {
 
             int playoutResult = simulateRandomPlayout(nodeToExplore);
             backPropagate(nodeToExplore, playoutResult);
-        } 
-         return rootNode.getChildWithMaxScore();
-     }
+        }
+        return rootNode.getChildWithMaxScore();
+    }
 
 
     /**
@@ -69,7 +70,8 @@ public class MCTSAgent {
      * @return The most promising node as determined by the evaluation function.
      */
 
-      /**Complexity: O(bh)
+    /**
+     * Complexity: O(bh)
      * b = max number of children for any node
      * h = the height of the tree
      */
@@ -77,7 +79,7 @@ public class MCTSAgent {
 
         MCTSNode node = rootNode;
 
-        int childNum=node.getChildren().size();
+        int childNum = node.getChildren().size();
 
         if (node.getChildren().size() != 0) {
             do {
@@ -96,7 +98,8 @@ public class MCTSAgent {
      * @return The child node with the highest evaluation score.
      */
 
-     /**Complexity: O(bh)
+    /**
+     * Complexity: O(bh)
      * b = max number of children for any node
      * h = the height of the tree
      */
@@ -120,7 +123,7 @@ public class MCTSAgent {
      * The expansion process involves simulating potential game states by applying moves to the current game state.
      * The legal moves are generated until a specified limit is reached, and child nodes are created for each unique resulting game state.
      *
-     * @param node The MCTS node to be expanded.
+     * @param node         The MCTS node to be expanded.
      * @param currentBoard The current game board state represented by the MCTS node.
      */
     // Complexity: O(n)
@@ -137,13 +140,13 @@ public class MCTSAgent {
 
             String currentPlayer = clonedState.getCurrentPlayer();
 
-            Baseline_Agent baselineAgent = new Baseline_Agent(clonedState,getMaxPiece());
+            Baseline_Agent baselineAgent = new Baseline_Agent(clonedState, getMaxPiece());
 
             boolean test = boardsAreEqual(currentState.getBoard(), clonedState.getBoard());
 
-            while(boardsAreEqual(currentState.getBoard(), clonedState.getBoard())){
+            while (boardsAreEqual(currentState.getBoard(), clonedState.getBoard())) {
                 baselineAgent.chooseMove(clonedState, currentPlayer);
-                if(baselineAgent.getPieceMultiplier()!=getMaxPiece()){
+                if (baselineAgent.getPieceMultiplier() != getMaxPiece()) {
                     setMaxPiece(baselineAgent.getPieceMultiplier());
                 }
             }
@@ -168,8 +171,7 @@ public class MCTSAgent {
     }
 
 
-
-/**
+    /**
      * Simulates a random playout from the given MCTS (Monte Carlo Tree Search) node until a terminal game state is reached.
      * The simulation involves making random moves using a baseline agent until the game reaches a terminal state.
      * The evaluation of the terminal state is calculated using an evaluation function, and the score is assigned to the node.
@@ -181,16 +183,15 @@ public class MCTSAgent {
     // m is the average number of iterations required to reach a terminal game state
     private int simulateRandomPlayout(MCTSNode node) {
         board clonedBoard = node.getGameState().clone();
-        Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard,maxPiece);
+        Baseline_Agent baselineAgent = new Baseline_Agent(clonedBoard, maxPiece);
         clonedBoard.togglePlayer();
         String currentPlayer = clonedBoard.getCurrentPlayer();
 
         // Continue simulation to terminal state
         if (!clonedBoard.isGameEnded()) {
             do {
-                //clonedBoard.togglePlayer();
                 baselineAgent.chooseMove(clonedBoard, currentPlayer);
-                if(baselineAgent.getPieceMultiplier()!=getMaxPiece()){
+                if (baselineAgent.getPieceMultiplier() != getMaxPiece()) {
                     setMaxPiece(baselineAgent.getPieceMultiplier());
                 }
                 currentPlayer = clonedBoard.getCurrentPlayer();
@@ -203,11 +204,11 @@ public class MCTSAgent {
         return terminalScore; // Or return a combined score
     }
 
-/**
+    /**
      * Backpropagates the result of a simulated playout from a terminal state up the Monte Carlo Tree Search (MCTS) tree.
      * Starting from the given node, the method traverses up the tree to update the scores of all parent nodes based on the terminal state score.
      *
-     * @param nodeToExplore The MCTS node from which the backpropagation starts.
+     * @param nodeToExplore      The MCTS node from which the backpropagation starts.
      * @param terminalStateScore The score obtained from the terminal state reached during the simulation.
      */
     // Complexity: O(d)
@@ -221,10 +222,6 @@ public class MCTSAgent {
             tempNode = tempNode.getParent(); // Move to the parent node
         }
     }
-
-
-
-
 
 
 }

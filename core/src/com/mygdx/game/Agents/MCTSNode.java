@@ -1,12 +1,11 @@
 package com.mygdx.game.Agents;
+
 import com.mygdx.game.GameLogic.board;
-
-
-import java.util.ArrayList;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MCTSNode {
     private board gameState; // The game state at this node
@@ -74,12 +73,12 @@ public class MCTSNode {
 
                 for (int col = 0; col < Math.min(values.length, 5); col++) {
                     // Convert each value to Integer and add it to the corresponding ArrayList
-                    
+
                     gameState.board[row][col].clear();
-                    if(Integer.parseInt(values[col])!=-1){
+                    if (Integer.parseInt(values[col]) != -1) {
                         gameState.board[row][col].add(Integer.parseInt(values[col]));
                     }
-                    
+
                 }
 
                 row++;
@@ -93,10 +92,12 @@ public class MCTSNode {
     public int getWinScore() {
         return this.evalScore;
     }
+
     public void setExpandedNodeScore(int score) {
         this.expandedNodeScore = score;
     }
-    public int getExpandedNodeScore(){
+
+    public int getExpandedNodeScore() {
         return expandedNodeScore;
     }
 

@@ -28,8 +28,8 @@ public class MCTS_VS_Hybrid {
     }
 
     /**
-     * Checks if a stack is present on the current state of the board
-     * @return true if there IS a stack present on the board, false if NO stack is present on the board
+     * Checks if any stack on the board has two or more pieces
+     * @return true if any stack on the board has two or more pieces, otherwise false.
      */
     public boolean checkStack(){
 
@@ -46,9 +46,7 @@ public class MCTS_VS_Hybrid {
     }
 
     /**
-     * Resets the content of the "GameState.txt" file by overwriting it with a default state.
-     * The default state is represented as a 5x5 grid of "-1" values, separated by spaces.
-     * Each row is terminated with a newline character.
+     * Resets the game state file to its initial state
      */
     public static void resetFile(){
 

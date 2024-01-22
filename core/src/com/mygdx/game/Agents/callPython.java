@@ -40,8 +40,9 @@ public class callPython {
         gameController.playGame();
         //gameController.experiment();
     }
+
     private static void callPythonML() {
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py"); 
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "core\\python\\main.py");
         processBuilder.redirectErrorStream(true);
         try {
             Process process = processBuilder.start();
@@ -63,46 +64,46 @@ public class callPython {
     public void callPythonTrain() {
         ProcessBuilder processBuilder2 = new ProcessBuilder("python", "core\\python\\training.py");
         processBuilder2.redirectErrorStream(true);
-    
+
         try {
             Process runner = processBuilder2.start();
-    
+
             try (BufferedReader processReader2 = new BufferedReader(new InputStreamReader(runner.getInputStream()))) {
                 String line;
                 while ((line = processReader2.readLine()) != null) {
                     System.out.println(line);
                 }
             }
-    
+
             int exitCode = runner.waitFor();
             System.out.println("Python script exited with code: " + exitCode);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-    
+
 
     public void callPythonPredict() {
         ProcessBuilder processBuilder2 = new ProcessBuilder("python", "core\\python\\predictMove.py");
         processBuilder2.redirectErrorStream(true);
-    
+
         try {
             Process runner = processBuilder2.start();
-    
+
             try (BufferedReader processReader2 = new BufferedReader(new InputStreamReader(runner.getInputStream()))) {
                 String line;
                 while ((line = processReader2.readLine()) != null) {
                     System.out.println(line);
                 }
             }
-    
+
             int exitCode = runner.waitFor();
             System.out.println("Python script exited with code: " + exitCode);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-    
+
 
 }
 

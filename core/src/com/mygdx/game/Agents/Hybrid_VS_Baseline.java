@@ -1,29 +1,23 @@
 package com.mygdx.game.Agents;
 
-import com.badlogic.gdx.Files;
-import com.mygdx.game.GameLogic.board;
-import java.nio.file.StandardCopyOption;
-
-import java.nio.file.CopyOption;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
+import java.util.logging.LogManager;
 
+import com.mygdx.game.GameLogic.board;
 
-public class MCTS_VS_Hybrid {
+public class Hybrid_VS_Baseline {
     private board logicBoard;
     private MCTSAgent mctsAgent;
+    private Baseline_Agent baselineAgent;
     private boolean isWhiteTurn;
-    private int MCTSwinCount = 0;
+    private int BaselineWinCount = 0;
     private int HybridWinCount = 0;
 
-    public MCTS_VS_Hybrid() {
+    public Hybrid_VS_Baseline() {
         this.logicBoard = new board();
         this.mctsAgent = new MCTSAgent();
+        this.baselineAgent = new Baseline_Agent(logicBoard);
         this.isWhiteTurn = true; // Start with White
     }
 
@@ -68,7 +62,7 @@ public class MCTS_VS_Hybrid {
     }
 
     /**
-     * Simulates a game of the Hybrid agent vs MCTS agent
+     * Simulates a game of the Hybrid agent vs baseline agent
      */
     public void playGame() {
         int moveCounter1 = 0;
@@ -98,6 +92,7 @@ public class MCTS_VS_Hybrid {
                     pyCall.callPythonPredict(); //board reading into python happens automatically in this step
                                                 //writing to file after the move is done as well
                     wasMLTurn = true;
+                    logicBoard.checkFinalState();
                 }
                 moveCounter1++;
             }
@@ -108,12 +103,10 @@ public class MCTS_VS_Hybrid {
                     logicBoard = temp.getGameState();
                     wasMLTurn = false;
                 }
-                MCTSNode nextMove = mctsAgent.findNextMove(logicBoard);
-                logicBoard = nextMove.getGameState();
-                logicBoard.checkMoveState();
+                baselineAgent.chooseMove(logicBoard, "WHITE");
                 moveCounter2++;
             }
-            //logicBoard.checkMoveState();
+            logicBoard.checkMoveState();
             
             
             // Check win conditions
@@ -122,9 +115,9 @@ public class MCTS_VS_Hybrid {
             if (logicBoard.isGameEnded()) {
                 System.out.println("Game Ended: " + logicBoard.getWinner());
                 if (logicBoard.getWinner().equals("WHITE won!")) {
-                    MCTSwinCount++;
-                    System.out.println("MCTS win count: " + MCTSwinCount);
-                    System.out.println("MCTS move count: " + moveCounter1);
+                    BaselineWinCount++;
+                    System.out.println("Baseline win count: " + BaselineWinCount);
+                    System.out.println("Baseline move count: " + moveCounter1);
                 }
                 else {
                     HybridWinCount++;
@@ -139,7 +132,7 @@ public class MCTS_VS_Hybrid {
             logicBoard.setCurrentPlayer(isWhiteTurn ? "WHITE" : "BROWN");
             logicBoard.checkFinalState();
         }
-        //logicBoard.checkFinalState();
+        // logicBoard.checkFinalState();
     }
 
     /**
@@ -157,8 +150,11 @@ public class MCTS_VS_Hybrid {
     
 
     public static void main(String[] args) {
-        MCTS_VS_Hybrid game = new MCTS_VS_Hybrid();
+        Hybrid_VS_Baseline game = new Hybrid_VS_Baseline();
         game.playGame();
        // game.experiment();
     }
 }
+
+    
+

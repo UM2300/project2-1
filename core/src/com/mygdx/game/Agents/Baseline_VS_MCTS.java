@@ -25,6 +25,9 @@ public class Baseline_VS_MCTS {
 
     }
 
+    /**
+     * Simulates a game of Baseline agent vs MCTS agent
+     */
     public void playGame() {
         turn = true; // Assuming Baseline (WHITE) starts first
         logicBoard = new board();
@@ -68,15 +71,15 @@ public class Baseline_VS_MCTS {
         logicBoard.checkFinalState();
     }
 
+    /**
+     * Simulates 100 games of baseline vs MCTS for experimental purposes
+     */
     public void experiment() {
 
         while (gameCounter < 100) {
             playGame();
             gameCounter++;
         }
-        // System.out.println("MCTS FINAL win count: " + MCTSwinCount + " out of 100");
-        // System.out.println("Baseline FINAL win count: " + BaselineWinCount + " out of 100");
-        
     }
     
     public static void main(String[] args) {

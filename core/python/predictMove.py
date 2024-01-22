@@ -55,9 +55,9 @@ def actFinal(state, player, env, current_player, model, capstone):
         act_values = model.predict(state.reshape(1, -1))
         chosenAction = np.argmax(act_values[0])
 
-        if (capstone==False and env.is_action_allowed(player, chosenAction) == True):
+        if (capstone==True and env.is_action_allowed(player, chosenAction) == True):
             return chosenAction
-        elif (capstone==True and env.is_action_allowed_no_cap(player, chosenAction) == True):
+        elif (capstone==False and env.is_action_allowed_no_cap(player, chosenAction) == True):
             return chosenAction
         else:
             for next_action in np.argsort(act_values[0])[::-1]:

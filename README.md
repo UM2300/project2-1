@@ -3,21 +3,22 @@
 README
 
 -> First of all run "pip install -r requirements.txt" in IDE terminal.
-->Run TakGame2D to test the second version of the game.
+-> Run TakGame2D to test the second version of the game.
     project2-1\core\src\com\mygdx\game\GUI\TakGame2D.java
 
-A 2D version of a human vs human playable board game of Tak - Group 02
-Requirements: Installation of Java on laptop
+A 2D version of a human vs human, human vs agent playable board game of Tak - Group 02
+Requirements: Installation of Java and Python on laptop
 
 
 This repo is split into: 
 - GUI
 - GameLogic
+- Agents
 - seperate png files for images
 - README
 
 
-In order to run the simulation:
+--- In order to run the GAME (GUI): ---
 
 Download the .zip or clone this repository to Desktop by using the command below.
 
@@ -77,5 +78,15 @@ Option B:
 
 9. Once a player/agent has met a winning condition, the game is over and an end screen is displayed.
 
+
+--- In order to run EXPERIMENTS of the different agents playing against each other:---
+
+Follow the instructions given above regarding opening the project.
+
+1. For Baseline vs MCTS, run the "Baseline_VS_MCTS.java" file.
+
+2. For MCTS vs Hybrid, run the "MCTS_VS_Hybrid.java" file.
+
+3. For Hybrid vs Baseline, run the "Hybrid_VS_Baseline.java" file.
 
 Enjoy!

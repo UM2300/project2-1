@@ -60,5 +60,5 @@ for episode in range(num_episodes):
 
 print(f"Total time taken for {num_episodes} episodes: {total_time_taken:.2f} seconds")
 
-agentWhite.model.save('/Users/alexandruvalah/Desktop/project2-1/core/python/agentWhite_model.h5')
-agentBrown.model.save('/Users/alexandruvalah/Desktop/project2-1/core/python/agentBrown_model.h5')
+agentWhite.model.save('core\\python\\agentBrown_model.h5')
+agentBrown.model.save('core\\python\\agentWhite_model.h5')

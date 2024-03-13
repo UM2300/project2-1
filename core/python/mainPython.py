@@ -11,7 +11,7 @@ class QNetwork(Sequential):
     def __init__(self, state_size, num_actions):
         super(QNetwork, self).__init__()
         self.add(Dense(64, activation='relu', input_dim=state_size))
-        self.add(Dense(num_actions, activation='linear')
+        self.add(Dense(num_actions, activation='linear'))
         self.compile(optimizer=Adam(lr=0.001), loss='mean_squared_error')
 
     @classmethod
